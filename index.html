@@ -53,10 +53,11 @@
 <!-- Main -->
 <div id="main">
 
-    <!-- One -->
-    <section id="signup" class="form-section">
-        <article style="margin: 20px auto; max-width: 400px; background-color: black; padding: 20px; border-radius: 10px;">
+    <!-- Container for Side by Side Forms -->
+    <div style="display: flex; justify-content: center; gap: 20px;">
 
+        <!-- Sign Up Form -->
+        <section id="signup" class="form-section" style="flex: 1; max-width: 400px; background-color: black; padding: 20px; border-radius: 10px;">
             <header class="major">
                 <h3 style="text-align: center; color: white;">Sign Up</h3>
             </header>
@@ -75,16 +76,13 @@
                     <li><input type="submit" value="Sign Up" class="primary" style="color: black; background-color: white;"/></li>
                 </ul>
             </form>
-        </article>
-    </section>
+        </section>
 
-    <!-- Two -->
-    <article style="margin: 20px auto; max-width: 400px; background-color: black; padding: 20px; border-radius: 10px;">
-
-        <header class="major">
-            <h3 style="text-align: center; color: white;">Log In</h3>
-        </header>
-        <section id="login" class="form-section">
+        <!-- Log In Form -->
+        <article id="login" class="form-section" style="flex: 1; max-width: 400px; background-color: black; padding: 20px; border-radius: 10px;">
+            <header class="major">
+                <h3 style="text-align: center; color: white;">Log In</h3>
+            </header>
             <form method="post" action="backend/login.php" style="text-align: left;">
                 <div class="fields">
                     <div class="field">
@@ -100,8 +98,9 @@
                     <li><input type="submit" value="Log In" class="primary" style="color: black; background-color: white;"/></li>
                 </ul>
             </form>
-        </section>
-    </article>
+        </article>
+
+    </div>
 
 </div>
 
