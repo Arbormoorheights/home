@@ -1,182 +1,186 @@
 <!DOCTYPE HTML>
 
 <html>
-<head>
-    <title>Arbormoor Heights Property Management</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-    <link rel="stylesheet" href="assets/css/main.css" />
-    <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-    <style>
-        .form-section {
-            margin: 2em auto;
-            max-width: 600px;
-            padding: 1em;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background: #f9f9f9;
-        }
-        .form-section h3 {
-            text-align: center;
-            margin-bottom: 1em;
-        }
-        .form-section .fields {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1em;
-        }
-        .form-section .field {
-            flex: 1 1 100%;
-        }
-        .form-section .field.half {
-            flex: 1 1 48%;
-        }
-        .form-section .actions {
-            text-align: center;
-            margin-top: 1em;
-        }
-    </style>
-</head>
-<body class="is-preload">
+	<head>
+		<title>Arbormoor Heights Property Management Website</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
 
-    <!-- Wrapper -->
-    <div id="wrapper">
+		<!-- Wrapper -->
+			<div id="wrapper">
 
-        <!-- Header -->
-        <header id="header" class="alt">
-            <a href="index.html" class="logo"><strong>Property Gateway</strong> <span>by Arbormoor Heights</span></a>
-            <nav>
-                <a href="#menu">Menu</a>
-            </nav>
-        </header>
+				<!-- Header -->
+					<header id="header" class="alt">
+						<a href="index.html" class="logo"><strong>Property Gateway</strong> <span>by Arbormoor Heights</span></a>
+						<nav>
+							<a href="#menu">Menu</a>
+						</nav>
+					</header>
 
-        <!-- Menu -->
-        <nav id="menu">
-            <ul class="links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="landing.html">Make Payment Online</a></li>
-                <li><a href="generic.html">Request Service</a></li>
-                <li><a href="elements.html">Contact Us</a></li>
-            </ul>
-            <ul class="actions stacked">
-                <li><a href="#signup" class="button primary fit">Sign Up</a></li>
-                <li><a href="#login" class="button fit">Log In</a></li>
-            </ul>
-        </nav>
+				<!-- Menu -->
+					<nav id="menu">
+						<ul class="links">
+							<li><a href="index.html">Home</a></li>
+							<li><a href="landing.html">Make Payment Online</a></li>
+							<li><a href="generic.html">Request Service</a></li>
+							<li><a href="elements.html">Contact Us</a></li>
+						</ul>
+						<ul class="actions stacked">
+							<li><a href="#" class="button primary fit">Get Started</a></li>
+							<li><a href="#" class="button fit">Log In</a></li>
+						</ul>
+					</nav>
 
-        <!-- Banner -->
-        <section id="banner" class="major">
-            <div class="inner">
-                <header class="major">
-                    <h1>Welcome to Arbormoor Heights</h1>
-                </header>
-                <div class="content">
-                    <p>Streamlining your rental experience</p>
-                    <ul class="actions">
-                        <li><a href="#signup" class="button next scrolly">Get Started</a></li>
-                    </ul>
-                </div>
+				<!-- Banner -->
+					<section id="banner" class="major">
+						<div class="inner">
+							<header class="major">
+								<h1>Arbormoor Heights</h1>
+							</header>
+							<div class="content">
+								<p>Streamlining your rental experience<br />
+								</p>
+								<ul class="actions">
+									<li><a href="#one" class="button next scrolly">Get Started</a></li>
+								</ul>
+							</div>
+						</div>
+					</section>
+
+				<!-- Main -->
+					<div id="main">
+
+						<!-- One -->
+							<section id="signup" class="form-section">
+							<article>
+									<span class="image">
+										<img src="images/pic01.jpg" alt="" />
+									</span>
+									<header class="major">
+    <h3>Sign Up</h3>
+    <form method="post" action="signup.php">
+        <div class="fields">
+            <div class="field">
+                <label for="email">Email</label>
+                <input type="email" name="email" id="email" required />
             </div>
-        </section>
-
-        <!-- Main -->
-        <div id="main">
-
-            <!-- Sign Up Section -->
-            <section id="signup" class="form-section">
-                <h3>Sign Up</h3>
-                <p>Create an account to access online payments and service requests.</p>
-                <form method="post" action="signup.php">
-                    <div class="fields">
-                        <div class="field half">
-                            <label for="name">Name</label>
-                            <input type="text" name="name" id="name" required />
-                        </div>
-                        <div class="field half">
-                            <label for="email">Email</label>
-                            <input type="email" name="email" id="email" required />
-                        </div>
-                        <div class="field">
-                            <label for="password">Password</label>
-                            <input type="password" name="password" id="password" required />
-                        </div>
-                    </div>
-                    <ul class="actions">
-                        <li><input type="submit" value="Sign Up" class="primary" /></li>
-                    </ul>
-                </form>
-            </section>
-
-            <!-- Log In Section -->
-            <section id="login" class="form-section">
-                <h3>Log In</h3>
-                <p>Access your account to make payments or request services.</p>
-                <form method="post" action="login.php">
-                    <div class="fields">
-                        <div class="field">
-                            <label for="email">Email</label>
-                            <input type="email" name="email" id="email" required />
-                        </div>
-                        <div class="field">
-                            <label for="password">Password</label>
-                            <input type="password" name="password" id="password" required />
-                        </div>
-                    </div>
-                    <ul class="actions">
-                        <li><input type="submit" value="Log In" class="primary" /></li>
-                    </ul>
-                </form>
-            </section>
-
-            <!-- Payment Options Section -->
-            <section id="payments" class="form-section">
-                <h3>Make a Payment</h3>
-                <p>Securely pay your rent online via Zelle or credit card.</p>
-                <form method="post" action="payment.php">
-                    <div class="fields">
-                        <div class="field">
-                            <label for="amount">Payment Amount</label>
-                            <input type="number" name="amount" id="amount" required />
-                        </div>
-                        <div class="field">
-                            <label for="method">Payment Method</label>
-                            <select name="method" id="method" required>
-                                <option value="zelle">Zelle</option>
-                                <option value="credit_card">Credit Card</option>
-                            </select>
-                        </div>
-                    </div>
-                    <ul class="actions">
-                        <li><input type="submit" value="Submit Payment" class="primary" /></li>
-                    </ul>
-                </form>
-            </section>
-
+            <div class="field">
+                <label for="password">Password</label>
+                <input type="password" name="password" id="password" required />
+            </div>
         </div>
+        <ul class="actions">
+            <li><input type="submit" value="Sign Up" class="primary" /></li>
+        </ul>
+										</article>
+    </form>
+</section>
+								<article>
+									<span class="image">
+										<img src="images/pic02.jpg" alt="" />
+									</span>
+									<header class="major">
+										<h3><a href="landing.html" class="link">Request Service</a></h3>
+										<p>Report any issues and request service to remedy the issues</p>
+									</header>
+								</article>
+							</section>
 
-        <!-- Footer -->
-        <footer id="footer">
-            <div class="inner">
-                <ul class="icons">
-                    <li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
-                    <li><a href="#" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
-                </ul>
-                <ul class="copyright">
-                    <li>&copy; 2025</li><li>Design: Arbormoor Heights LLC</li>
-                </ul>
-            </div>
-        </footer>
+						<!-- Two -->
+							<section id="two">
+								<div class="inner">
+									<header class="major">
+										<h2>Our Eula</h2>
+									</header>
+									<p>We understand that your home is your haven, and we're here to make sure it stays that way. Our simple online portal allows you to easily request services, report any issues, or make payments at your convenience. We're committed to being responsive and making the process as smooth as possible, so you can focus on what matters most—feeling comfortable and cared for in your home.</p>
+									<ul class="actions">
+										<li><a href="landing.html" class="button next">Get Started</a></li>
+									</ul>
+								</div>
+							</section>
 
-    </div>
+					</div>
 
-    <!-- Scripts -->
-    <script src="assets/js/jquery.min.js"></script>
-    <script src="assets/js/jquery.scrolly.min.js"></script>
-    <script src="assets/js/jquery.scrollex.min.js"></script>
-    <script src="assets/js/browser.min.js"></script>
-    <script src="assets/js/breakpoints.min.js"></script>
-    <script src="assets/js/util.js"></script>
-    <script src="assets/js/main.js"></script>
+				<!-- Contact -->
+					<section id="contact">
+						<div class="inner">
+							<section>
+								<form method="post" action="#">
+									<div class="fields">
+										<div class="field half">
+											<label for="name">Name</label>
+											<input type="text" name="name" id="name" />
+										</div>
+										<div class="field half">
+											<label for="email">Email</label>
+											<input type="text" name="email" id="email" />
+										</div>
+										<div class="field">
+											<label for="message">Message</label>
+											<textarea name="message" id="message" rows="6"></textarea>
+										</div>
+									</div>
+									<ul class="actions">
+										<li><input type="submit" value="Send Message" class="primary" /></li>
+										<li><input type="reset" value="Clear" /></li>
+									</ul>
+								</form>
+							</section>
+							<section class="split">
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-envelope"></span>
+										<h3>Email</h3>
+										<a href="#">information@untitled.tld</a>
+									</div>
+								</section>
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-phone"></span>
+										<h3>Phone</h3>
+										<span>(310) 927-0857</span>
+									</div>
+								</section>
+								<section>
+									<div class="contact-method">
+										<span class="icon solid alt fa-home"></span>
+										<h3>Address</h3>
+										<span>7901 4TH ST N STE 300<br />
+										St. Petersburg, FL 33702<br />
+										United States of America</span>
+									</div>
+								</section>
+							</section>
+						</div>
+					</section>
 
-</body>
+				<!-- Footer -->
+					<footer id="footer">
+						<div class="inner">
+							<ul class="icons">
+								<li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
+								<li><a href="#" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
+							</ul>
+							<ul class="copyright">
+								<li>&copy; 2025</li><li>Design: <a href="https://html5up.net">Arbormoor Heights LLC</a></li>
+							</ul>
+						</div>
+					</footer>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
 </html>
