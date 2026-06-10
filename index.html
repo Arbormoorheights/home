@@ -1,142 +1,1482 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Arbormoor Heights — Tenant Resources</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ivory: #f4efe6;
+    --ivory-deep: #ebe3d4;
+    --paper: #faf7f1;
+    --ink: #1a2620;
+    --ink-soft: #2d3a32;
+    --forest: #1f3a2f;
+    --forest-deep: #142821;
+    --moss: #4a5f4c;
+    --sage: #8ba896;
+    --brass: #b08545;
+    --brass-light: #c89a5e;
+    --brass-pale: #e8d4a8;
+    --rule: #c9bfac;
+    --rule-soft: #d9d0bd;
+    --muted: #6b6555;
+    --zelle: #6d1ed4;
+    --zelle-soft: #f3edff;
+  }
 
-<html>
-	<head>
-		<title>Arbormoor Heights Property Management Website</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/css/main.css" />
-		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
-	</head>
-	<body class="is-preload">
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
 
-		<!-- Wrapper -->
-			<div id="wrapper">
+  body {
+    font-family: 'Inter Tight', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.55;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
 
-				<!-- Header -->
-					<header id="header" class="alt">
-						<a href="index.html" class="logo"><strong>Property Gateway</strong> <span>by Arbormoor Heights</span></a>
-					</header>
+  .serif { font-family: 'Fraunces', serif; }
+  .italic { font-style: italic; }
 
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.1 0 0 0 0 0.1 0 0 0 0.12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.3;
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: multiply;
+  }
 
-				<!-- Banner -->
-					<section id="banner" class="major">
-						<div class="inner">
-							<header class="major">
-								<h1>Arbormoor Heights</h1>
-							</header>
-							<div class="content">
-								<p>Streamlining your rental experience<br />
-								</p>
-							</div>
-						</div>
-					</section>
+  /* ============ NAV ============ */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 20px 40px;
+    background: rgba(250, 247, 241, 0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--rule-soft);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 
-				<!-- Main -->
-					<div id="main">
+  .logo {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 21px;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .logo-mark {
+    width: 32px; height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .logo-mark svg { width: 100%; height: 100%; }
+  .logo small {
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    display: block;
+    margin-top: 2px;
+  }
 
-						<!-- One -->
-							<section id="one" class="tiles">
-								<article>
-									<span class="image">
-										<img src="images/pic01.jpg" alt="" />
-									</span>
-									<header class="major">
-										<h3>Pay Online</h3>
-										<p>Pay online with Zelle: arbormoorheights@gmail.com</p>
-									</header>
-								</article>
-							</section>
+  .nav-links {
+    display: flex;
+    gap: 34px;
+    list-style: none;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .nav-links a {
+    color: var(--ink);
+    text-decoration: none;
+    position: relative;
+    padding-bottom: 2px;
+    transition: color 0.3s;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 1px;
+    width: 0;
+    background: var(--brass);
+    transition: width 0.4s ease;
+  }
+  .nav-links a:hover { color: var(--forest); }
+  .nav-links a:hover::after { width: 100%; }
 
-						<!-- Two -->
-							<section id="two">
-								<div class="inner">
-									<header class="major">
-										<h2>Our Value</h2>
-									</header>
-									<p>We understand that your home is your haven, and we're here to make sure it stays that way. Our simple online portal allows you to easily request services, report any issues, or make payments at your convenience. We're committed to being responsive and making the process as smooth as possible, so you can focus on what matters most—feeling comfortable and cared for in your home.</p>
+  .nav-cta {
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 11px 22px;
+    background: var(--forest);
+    color: var(--paper);
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .nav-cta:hover { background: var(--ink); }
 
-								</div>
-							</section>
+  /* ============ HERO ============ */
+  .hero {
+    min-height: 88vh;
+    padding: 140px 40px 80px;
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 60px;
+    align-items: center;
+    background: linear-gradient(180deg, var(--paper) 0%, var(--ivory) 100%);
+  }
 
-					</div>
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 12px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--forest);
+    margin-bottom: 32px;
+    font-weight: 500;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.1s forwards;
+  }
+  .eyebrow::before {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: var(--brass);
+  }
 
-				<!-- Contact -->
-					<section id="contact">
-						<div class="inner">
-							<section>
-								<form method="post" action="#">
-									<div class="fields">
-										<div class="field half">
-											<label for="name">Name</label>
-											<input type="text" name="name" id="name" />
-										</div>
-										<div class="field half">
-											<label for="email">Email</label>
-											<input type="text" name="email" id="email" />
-										</div>
-										<div class="field">
-											<label for="message">Message</label>
-											<textarea name="message" id="message" rows="6"></textarea>
-										</div>
-									</div>
-									<ul class="actions">
-										<li><input type="submit" value="Send Message" class="primary" /></li>
-										<li><input type="reset" value="Clear" /></li>
-									</ul>
-								</form>
-							</section>
-							<section class="split">
-								<section>
-									<div class="contact-method">
-										<span class="icon solid alt fa-envelope"></span>
-										<h3>Email</h3>
-										<a href="#">arbormoorheights@gmail.com</a>
-									</div>
-								</section>
-								<section>
-									<div class="contact-method">
-										<span class="icon solid alt fa-phone"></span>
-										<h3>Phone</h3>
-										<span>(310) 927-0857</span>
-									</div>
-								</section>
-								<section>
-									<div class="contact-method">
-										<span class="icon solid alt fa-home"></span>
-										<h3>Address</h3>
-										<span>7901 4TH ST N STE 300<br />
-										St. Petersburg, FL 33702<br />
-										United States of America</span>
-									</div>
-								</section>
-							</section>
-						</div>
-					</section>
+  h1.hero-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: clamp(44px, 5.8vw, 80px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 30px;
+    opacity: 0;
+    animation: fadeUp 1s 0.25s forwards;
+  }
+  h1.hero-title .accent {
+    font-style: italic;
+    color: var(--forest);
+  }
 
-				<!-- Footer -->
-					<footer id="footer">
-						<div class="inner">
-							<ul class="icons">
-								<li><a href="#" class="icon brands alt fa-twitter"><span class="label">Twitter</span></a></li>
-								<li><a href="#" class="icon brands alt fa-linkedin-in"><span class="label">LinkedIn</span></a></li>
-							</ul>
-							<ul class="copyright">
-								<li>&copy; 2025</li><li>Design: <a href="https://arbormoorheights.github.io/home/">Arbormoor Heights LLC</a></li>
-							</ul>
-						</div>
-					</footer>
+  .hero-lead {
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+    max-width: 510px;
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeUp 1s 0.4s forwards;
+  }
 
-			</div>
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 1s 0.55s forwards;
+  }
 
-		<!-- Scripts -->
-			<script src="assets/js/jquery.min.js"></script>
-			<script src="assets/js/jquery.scrolly.min.js"></script>
-			<script src="assets/js/jquery.scrollex.min.js"></script>
-			<script src="assets/js/browser.min.js"></script>
-			<script src="assets/js/breakpoints.min.js"></script>
-			<script src="assets/js/util.js"></script>
-			<script src="assets/js/main.js"></script>
+  .btn-primary {
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 17px 30px;
+    background: var(--forest);
+    color: var(--paper);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+  .btn-primary:hover {
+    background: var(--ink);
+    padding-right: 36px;
+  }
+  .btn-primary .arrow { transition: transform 0.3s; }
+  .btn-primary:hover .arrow { transform: translateX(4px); }
 
-	</body>
+  .btn-secondary {
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 17px 6px;
+    background: transparent;
+    color: var(--ink);
+    border: none;
+    border-bottom: 1px solid var(--ink);
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+  }
+  .btn-secondary:hover { color: var(--brass); border-color: var(--brass); }
+
+  /* Hero card */
+  .hero-visual {
+    position: relative;
+    height: 480px;
+    opacity: 0;
+    animation: fadeIn 1.4s 0.6s forwards;
+  }
+
+  .keycard {
+    position: absolute;
+    top: 30px;
+    right: 0;
+    width: 92%;
+    background: var(--forest);
+    color: var(--ivory);
+    padding: 34px 32px 28px;
+    border: 1px solid var(--forest-deep);
+    box-shadow: 0 30px 60px -20px rgba(20, 40, 33, 0.3);
+    transform: rotate(1.5deg);
+  }
+  .keycard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(232, 212, 168, 0.2);
+  }
+  .keycard-header .label {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--brass-light);
+  }
+  .keycard-header .label .v {
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    color: var(--ivory);
+    letter-spacing: normal;
+    text-transform: none;
+    display: block;
+    margin-top: 4px;
+  }
+  .keycard-mark {
+    width: 44px; height: 44px;
+    border: 1px solid var(--brass-light);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .keycard h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: 36px;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  .keycard h3 .italic { color: var(--brass-light); }
+  .keycard .features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 24px;
+    font-size: 13px;
+  }
+  .keycard .features > div {
+    display: flex;
+    align-items: start;
+    gap: 9px;
+    color: rgba(244, 239, 230, 0.9);
+  }
+  .keycard .features .check {
+    color: var(--brass-light);
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .keycard-stub {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 56%;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    padding: 22px 24px;
+    transform: rotate(-2deg);
+    box-shadow: 0 20px 40px -15px rgba(20, 40, 33, 0.18);
+  }
+  .stub-label {
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+  }
+  .stub-title {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--forest);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+  .stub-meta {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--rule);
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .stub-meta span:last-child { color: var(--forest); font-weight: 500; }
+
+  /* ============ QUICK ACTIONS ============ */
+  .quick-actions {
+    background: var(--forest);
+    padding: 0;
+  }
+  .qa-inner {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .qa-item {
+    padding: 36px 30px;
+    border-right: 1px solid rgba(232, 212, 168, 0.15);
+    color: var(--ivory);
+    text-decoration: none;
+    display: block;
+    transition: background 0.3s;
+    position: relative;
+  }
+  .qa-item:last-child { border-right: none; }
+  .qa-item:hover { background: var(--forest-deep); }
+  .qa-item.featured {
+    background: var(--brass);
+    color: var(--ink);
+  }
+  .qa-item.featured:hover { background: var(--brass-light); }
+  .qa-num {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--brass-light);
+    margin-bottom: 14px;
+    display: block;
+  }
+  .qa-item.featured .qa-num { color: var(--forest); }
+  .qa-title {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.15;
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+  }
+  .qa-title .italic { color: var(--brass-light); }
+  .qa-item.featured .qa-title .italic { color: var(--forest); }
+  .qa-desc {
+    font-size: 13px;
+    line-height: 1.5;
+    color: rgba(244, 239, 230, 0.75);
+    margin-bottom: 18px;
+  }
+  .qa-item.featured .qa-desc { color: var(--ink-soft); }
+  .qa-arrow {
+    font-size: 18px;
+    letter-spacing: 0;
+    transition: transform 0.3s;
+    display: inline-block;
+  }
+  .qa-item:hover .qa-arrow { transform: translateX(6px); }
+
+  /* ============ INTRO ============ */
+  .welcome {
+    padding: 120px 40px 90px;
+    background: var(--paper);
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 80px;
+    max-width: 1300px;
+    margin: 0 auto;
+    align-items: start;
+  }
+
+  .section-label {
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--brass);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .section-label::before {
+    content: '';
+    width: 30px;
+    height: 1px;
+    background: var(--brass);
+  }
+
+  .welcome h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(36px, 4.2vw, 56px);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+  .welcome h2 .italic { color: var(--forest); }
+
+  .welcome-body {
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--ink-soft);
+  }
+  .welcome-body p + p { margin-top: 18px; }
+
+  /* ============ SERVICES ============ */
+  .services-wrap {
+    background: var(--ivory);
+    padding: 110px 0 90px;
+  }
+  .services-header {
+    padding: 0 40px;
+    max-width: 1300px;
+    margin: 0 auto 70px;
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 60px;
+    align-items: end;
+  }
+  .services-header h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(36px, 4.5vw, 60px);
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.025em;
+  }
+  .services-header h2 .italic { color: var(--forest); }
+  .services-header .desc {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+    max-width: 520px;
+  }
+
+  .services {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 0 40px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--rule);
+    border-left: 1px solid var(--rule);
+  }
+  .service {
+    padding: 36px 32px 40px;
+    border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    background: var(--paper);
+    transition: background 0.4s;
+    position: relative;
+  }
+  .service:hover { background: var(--ivory-deep); }
+  .service-num {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--brass);
+    margin-bottom: 18px;
+  }
+  .service h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    margin-bottom: 14px;
+    color: var(--ink);
+  }
+  .service h3 .italic { color: var(--forest); }
+  .service p {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin-bottom: 20px;
+  }
+  .service .link {
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--forest);
+    text-decoration: none;
+    border-bottom: 1px solid var(--forest);
+    padding-bottom: 2px;
+    font-weight: 500;
+    transition: all 0.3s;
+  }
+  .service .link:hover { color: var(--brass); border-color: var(--brass); }
+
+  /* ============ PAYMENT BAND ============ */
+  .pay-band {
+    padding: 130px 40px;
+    background: var(--forest-deep);
+    color: var(--ivory);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .pay-band::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 30% 30%, rgba(176, 133, 69, 0.18), transparent 50%),
+      radial-gradient(circle at 70% 70%, rgba(176, 133, 69, 0.1), transparent 55%);
+    pointer-events: none;
+  }
+  .pay-inner { max-width: 720px; margin: 0 auto; position: relative; z-index: 1; }
+  .pay-band .section-label { justify-content: center; color: var(--brass-light); }
+  .pay-band .section-label::before { background: var(--brass-light); }
+  .pay-band h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(40px, 5vw, 68px);
+    font-weight: 300;
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    margin-bottom: 24px;
+  }
+  .pay-band h2 .italic { color: var(--brass-light); }
+  .pay-band p {
+    font-size: 18px;
+    line-height: 1.6;
+    color: rgba(244, 239, 230, 0.78);
+    margin-bottom: 44px;
+  }
+  .pay-btn {
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 15px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 22px 42px;
+    background: var(--brass);
+    color: var(--ink);
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .pay-btn:hover { background: var(--brass-light); padding-right: 50px; }
+  .pay-btn .arrow { transition: transform 0.3s; }
+  .pay-btn:hover .arrow { transform: translateX(6px); }
+  .pay-details {
+    margin-top: 36px;
+    display: flex;
+    justify-content: center;
+    gap: 36px;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--brass-pale);
+  }
+  .pay-details span { display: inline-flex; align-items: center; gap: 8px; }
+  .pay-details .dot { width: 4px; height: 4px; background: var(--brass-light); border-radius: 50%; }
+
+  /* ============ FAQ ============ */
+  .faq-wrap {
+    padding: 130px 40px;
+    background: var(--paper);
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .faq-header { text-align: center; margin-bottom: 70px; }
+  .faq-header .section-label { justify-content: center; }
+  .faq-header h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(36px, 4.2vw, 56px);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+  }
+  .faq-header h2 .italic { color: var(--forest); }
+
+  .faq-list { max-width: 820px; margin: 0 auto; }
+  .faq-item {
+    border-bottom: 1px solid var(--rule);
+    padding: 28px 0;
+    cursor: pointer;
+  }
+  .faq-item:first-child { border-top: 1px solid var(--rule); }
+  .faq-q {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    gap: 30px;
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.3;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .faq-toggle {
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    color: var(--brass);
+    font-size: 28px;
+    font-weight: 300;
+    line-height: 1;
+    flex-shrink: 0;
+    transition: transform 0.4s;
+  }
+  .faq-item.open .faq-toggle { transform: rotate(45deg); }
+  .faq-a {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease, padding 0.4s ease;
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+    padding-right: 50px;
+  }
+  .faq-item.open .faq-a { max-height: 300px; padding-top: 18px; }
+
+  /* ============ FOOTER ============ */
+  footer {
+    background: var(--ink);
+    color: var(--ivory-deep);
+    padding: 80px 40px 40px;
+  }
+  .footer-inner {
+    max-width: 1300px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1fr;
+    gap: 60px;
+    padding-bottom: 50px;
+    border-bottom: 1px solid rgba(232, 212, 168, 0.15);
+  }
+  .footer-brand .logo { color: var(--ivory-deep); font-size: 24px; }
+  .footer-brand .logo small { color: rgba(235, 227, 212, 0.6); }
+  .footer-brand p {
+    margin-top: 22px;
+    max-width: 320px;
+    font-size: 14px;
+    line-height: 1.65;
+    color: rgba(235, 227, 212, 0.7);
+  }
+  .footer-col h4 {
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--brass-light);
+    font-weight: 500;
+    margin-bottom: 22px;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col li { margin-bottom: 11px; }
+  .footer-col a {
+    color: rgba(235, 227, 212, 0.85);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.3s;
+  }
+  .footer-col a:hover { color: var(--brass-light); }
+  .footer-bottom {
+    max-width: 1300px;
+    margin: 28px auto 0;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: rgba(235, 227, 212, 0.5);
+    letter-spacing: 0.04em;
+  }
+
+  /* ============ PAGES (Zelle modal/page) ============ */
+  .page {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: var(--ivory);
+    overflow-y: auto;
+    animation: slideUp 0.6s ease forwards;
+  }
+  .page.active { display: block; }
+
+  .page-nav {
+    padding: 22px 40px;
+    background: rgba(244, 239, 230, 0.9);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--rule-soft);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .back-link {
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: 'Inter Tight', sans-serif;
+  }
+  .back-link:hover { color: var(--brass); }
+  .back-link .arr { transition: transform 0.3s; display: inline-block; }
+  .back-link:hover .arr { transform: translateX(-4px); }
+
+  /* Zelle Page */
+  .zelle-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 40px 100px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .zelle-info .eyebrow {
+    color: var(--zelle);
+    margin-bottom: 28px;
+  }
+  .zelle-info .eyebrow::before { background: var(--zelle); }
+  .zelle-info h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(40px, 5vw, 64px);
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -0.025em;
+    margin-bottom: 26px;
+  }
+  .zelle-info h1 .italic { color: var(--forest); }
+  .zelle-info .lead {
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+    margin-bottom: 36px;
+  }
+  .zelle-details {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    padding: 28px 30px;
+    margin-bottom: 30px;
+  }
+  .zelle-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 13px 0;
+    border-bottom: 1px dashed var(--rule-soft);
+    font-size: 14px;
+  }
+  .zelle-detail-row:last-child { border-bottom: none; }
+  .zelle-detail-row .lbl {
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-size: 11px;
+  }
+  .zelle-detail-row .val {
+    font-family: 'Fraunces', serif;
+    color: var(--forest);
+    font-size: 17px;
+    font-weight: 500;
+  }
+  .copy-btn {
+    background: none;
+    border: 1px solid var(--rule);
+    padding: 5px 11px;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    color: var(--ink);
+    margin-left: 12px;
+    font-family: 'Inter Tight', sans-serif;
+    transition: all 0.3s;
+  }
+  .copy-btn:hover { background: var(--forest); color: var(--paper); border-color: var(--forest); }
+  .copy-btn.copied { background: var(--brass); color: var(--ink); border-color: var(--brass); }
+
+  .zelle-steps {
+    list-style: none;
+    counter-reset: step;
+  }
+  .zelle-steps li {
+    counter-increment: step;
+    padding: 14px 0 14px 50px;
+    position: relative;
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .zelle-steps li:last-child { border-bottom: none; }
+  .zelle-steps li::before {
+    content: counter(step, upper-roman) ".";
+    position: absolute;
+    left: 0;
+    top: 14px;
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    color: var(--brass);
+    font-size: 16px;
+    width: 36px;
+  }
+  .zelle-steps li strong { color: var(--ink); font-weight: 500; }
+
+  /* QR card */
+  .qr-card {
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    padding: 40px;
+    box-shadow: 0 30px 60px -20px rgba(20, 40, 33, 0.15);
+    text-align: center;
+    position: relative;
+  }
+  .qr-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--rule-soft);
+  }
+  .qr-card-header .brand {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--forest);
+    text-align: left;
+    line-height: 1.2;
+  }
+  .qr-card-header .brand small {
+    display: block;
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 4px;
+    font-weight: 400;
+  }
+  .zelle-wordmark {
+    background: var(--zelle);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+
+  .qr-frame {
+    background: white;
+    padding: 22px;
+    border: 1px solid var(--rule-soft);
+    display: inline-block;
+    margin-bottom: 26px;
+    position: relative;
+  }
+  .qr-frame svg { display: block; }
+  .qr-corner {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--brass);
+  }
+  .qr-corner.tl { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+  .qr-corner.tr { top: -2px; right: -2px; border-left: none; border-bottom: none; }
+  .qr-corner.bl { bottom: -2px; left: -2px; border-right: none; border-top: none; }
+  .qr-corner.br { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+
+  .qr-instruct {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-style: italic;
+    color: var(--ink);
+    margin-bottom: 8px;
+    font-weight: 400;
+  }
+  .qr-sub {
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  /* ============ ANIMATIONS ============ */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(40px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ============ RESPONSIVE ============ */
+  @media (max-width: 1024px) {
+    .hero { grid-template-columns: 1fr; padding: 130px 28px 60px; }
+    .hero-visual { height: 400px; margin-top: 30px; }
+    .qa-inner { grid-template-columns: 1fr 1fr; }
+    .qa-item { border-bottom: 1px solid rgba(232, 212, 168, 0.15); }
+    .qa-item:nth-child(2) { border-right: none; }
+    .welcome { grid-template-columns: 1fr; gap: 30px; padding: 90px 28px 70px; }
+    .services-header { grid-template-columns: 1fr; gap: 24px; padding: 0 28px; }
+    .services { grid-template-columns: 1fr 1fr; padding: 0 28px; }
+    .footer-inner { grid-template-columns: 1fr 1fr; gap: 40px; }
+    .zelle-page { grid-template-columns: 1fr; padding: 40px 28px 80px; gap: 50px; }
+    .qr-card { max-width: 440px; margin: 0 auto; }
+    nav { padding: 18px 22px; }
+    .nav-links { display: none; }
+  }
+  @media (max-width: 640px) {
+    .hero { padding: 120px 20px 50px; }
+    .qa-inner { grid-template-columns: 1fr; }
+    .qa-item { border-right: none; }
+    .welcome { padding: 70px 20px 60px; }
+    .services-wrap { padding: 70px 0 50px; }
+    .services-header { padding: 0 20px; }
+    .services { grid-template-columns: 1fr; padding: 0 20px; }
+    .pay-band { padding: 80px 20px; }
+    .pay-details { flex-direction: column; gap: 14px; }
+    .faq-wrap { padding: 80px 20px; }
+    .faq-q { font-size: 18px; }
+    .footer-inner { grid-template-columns: 1fr; gap: 32px; padding: 0 0 40px; }
+    footer { padding: 60px 20px 30px; }
+    .footer-bottom { flex-direction: column; gap: 10px; }
+    .hero-actions { flex-direction: column; align-items: stretch; }
+    .btn-primary, .btn-secondary { width: 100%; justify-content: center; text-align: center; }
+    .page-nav { padding: 18px 22px; }
+    .zelle-page { padding: 30px 20px 60px; }
+    .qr-card { padding: 28px 24px; }
+    .zelle-info h1 { font-size: 38px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ MAIN PAGE ============ -->
+<div id="main-page">
+
+<nav>
+  <div class="logo">
+    <span class="logo-mark">
+      <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="20" cy="20" r="18.5" fill="none" stroke="#1a2620" stroke-width="1.5"/>
+        <path d="M 12 26 L 12 18 L 20 12 L 28 18 L 28 26 Z" fill="none" stroke="#1a2620" stroke-width="1.5" stroke-linejoin="round"/>
+        <circle cx="20" cy="22" r="2" fill="#b08545"/>
+      </svg>
+    </span>
+    <span>Arbormoor Heights
+      <small>Property Management · LLC</small>
+    </span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#services">Resident Services</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="#" onclick="openZelle(event)">Pay Rent</a></li>
+  </ul>
+  <a href="#" class="nav-cta" onclick="openZelle(event)">Pay Rent</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <div class="eyebrow">Welcome Home, Resident</div>
+    <h1 class="hero-title">
+      Everything you need,<br>
+      <span class="accent italic">all in one place.</span>
+    </h1>
+    <p class="hero-lead">
+      Pay your rent, request maintenance, and reach your property manager — quickly, securely, and on your own schedule. We've built every resident touchpoint to respect your time.
+    </p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary" onclick="openZelle(event)">
+        Pay Rent via Zelle
+        <span class="arrow">→</span>
+      </a>
+      <a href="#services" class="btn-secondary">Other resident resources</a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="keycard">
+      <div class="keycard-header">
+        <div class="label">
+          Resident Keycard
+          <span class="v">Arbormoor Heights</span>
+        </div>
+        <div class="keycard-mark">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M 7 14 L 7 10 L 12 6 L 17 10 L 17 14 Z" stroke="#e8d4a8" stroke-width="1.3" stroke-linejoin="round"/>
+            <circle cx="12" cy="11.5" r="1.2" fill="#e8d4a8"/>
+          </svg>
+        </div>
+      </div>
+      <h3>Care, <span class="italic">on call.</span><br>Right at your fingertips.</h3>
+      <div class="features">
+        <div><span class="check">✦</span> Rent via Zelle</div>
+        <div><span class="check">✦</span> 24-hr emergencies</div>
+        <div><span class="check">✦</span> Online requests</div>
+        <div><span class="check">✦</span> Direct manager line</div>
+      </div>
+    </div>
+    <div class="keycard-stub">
+      <div class="stub-label">Quick Pay</div>
+      <div class="stub-title">Zelle · One tap.</div>
+      <div class="stub-meta">
+        <span>Pay to</span>
+        <span>Arbormoor Heights</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUICK ACTIONS BAR -->
+<section class="quick-actions">
+  <div class="qa-inner">
+    <a href="#" class="qa-item featured" onclick="openZelle(event)">
+      <span class="qa-num">i.</span>
+      <h3 class="qa-title">Pay Rent <span class="italic">via Zelle</span></h3>
+      <p class="qa-desc">Scan a QR code to send rent securely from your bank's app — no fees, no waiting.</p>
+      <span class="qa-arrow">→</span>
+    </a>
+    <a href="#" class="qa-item">
+      <span class="qa-num">ii.</span>
+      <h3 class="qa-title">Request <span class="italic">Maintenance</span></h3>
+      <p class="qa-desc">Submit a repair request — emergencies answered within four hours, day or night.</p>
+      <span class="qa-arrow">→</span>
+    </a>
+    <a href="#" class="qa-item">
+      <span class="qa-num">iii.</span>
+      <h3 class="qa-title">Renew <span class="italic">Your Lease</span></h3>
+      <p class="qa-desc">Coming up on your renewal date? Start the conversation early and lock in your terms.</p>
+      <span class="qa-arrow">→</span>
+    </a>
+    <a href="#" class="qa-item">
+      <span class="qa-num">iv.</span>
+      <h3 class="qa-title">Contact <span class="italic">Your Manager</span></h3>
+      <p class="qa-desc">Direct line to a real person who knows your unit, your lease, and your history.</p>
+      <span class="qa-arrow">→</span>
+    </a>
+  </div>
+</section>
+
+<!-- WELCOME -->
+<section class="welcome reveal">
+  <div>
+    <div class="section-label">A Word to Our Residents</div>
+    <h2>You're not a unit number. <span class="italic">You're a neighbor.</span></h2>
+  </div>
+  <div class="welcome-body">
+    <p>We know what it's like to rent. The slow responses, the confusing portals, the feeling that no one is actually on the other end of the line. We built Arbormoor Heights to be the opposite of all that.</p>
+    <p>Rent is collected simply. Maintenance is handled quickly. Questions are answered by someone who already knows your name. The goal is straightforward: make your tenancy so smooth you forget property management exists — until the day you want to renew.</p>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services-wrap" id="services">
+  <div class="services-header reveal">
+    <h2>Resources at <span class="italic">your service.</span></h2>
+    <p class="desc">Every tool, form, and contact point you need as a resident — designed to be quick to find and easy to use, whether you're paying rent or reporting a leak at 2 AM.</p>
+  </div>
+
+  <div class="services">
+    <div class="service">
+      <div class="service-num">i.</div>
+      <h3>Pay rent <span class="italic">via Zelle</span></h3>
+      <p>Send rent directly from your bank's mobile app using our Zelle QR code. Instant, secure, and completely free of processing fees.</p>
+      <a href="#" class="link" onclick="openZelle(event)">Open QR code →</a>
+    </div>
+
+    <div class="service">
+      <div class="service-num">ii.</div>
+      <h3>Submit a <span class="italic">maintenance request</span></h3>
+      <p>Describe the issue, upload a photo, and we'll dispatch a vetted vendor. Routine items handled within 48 hours; emergencies within four.</p>
+      <a href="#" class="link">Submit request →</a>
+    </div>
+
+    <div class="service">
+      <div class="service-num">iii.</div>
+      <h3>Emergency <span class="italic">contact line</span></h3>
+      <p>Burst pipe, no heat in winter, electrical hazard, or lockout — our 24-hour emergency line connects you to a manager, not a voicemail.</p>
+      <a href="tel:+13109270857" class="link">Call (310) 927-0857 →</a>
+    </div>
+
+    <div class="service">
+      <div class="service-num">iv.</div>
+      <h3>Lease &amp; <span class="italic">document portal</span></h3>
+      <p>Access your signed lease, addenda, inspection reports, and renewal offers anytime. Everything organized and stored in one secure place.</p>
+      <a href="#" class="link">View documents →</a>
+    </div>
+
+    <div class="service">
+      <div class="service-num">v.</div>
+      <h3>Renewal &amp; <span class="italic">move-out</span></h3>
+      <p>Planning to stay? Start your renewal early. Moving on? We'll walk you through the move-out checklist and deposit return timeline.</p>
+      <a href="#" class="link">Begin process →</a>
+    </div>
+
+    <div class="service">
+      <div class="service-num">vi.</div>
+      <h3>Community &amp; <span class="italic">resident perks</span></h3>
+      <p>Local recommendations, seasonal reminders, and small benefits we extend to residents in good standing — because retention is earned, not assumed.</p>
+      <a href="#" class="link">Explore perks →</a>
+    </div>
+  </div>
+</section>
+
+<!-- PAY BAND -->
+<section class="pay-band">
+  <div class="pay-inner">
+    <div class="section-label">The Fastest Way to Pay</div>
+    <h2>Rent, <span class="italic">paid in seconds.</span></h2>
+    <p>Open your bank's app, scan our Zelle QR code, and send your rent. No portal logins. No processing fees. No checks in the mail. It's the quickest, simplest, and most secure way to pay — and the one we recommend to every resident.</p>
+    <a href="#" class="pay-btn" onclick="openZelle(event)">
+      Open Zelle Payment Page
+      <span class="arrow">→</span>
+    </a>
+    <div class="pay-details">
+      <span><span class="dot"></span> No fees</span>
+      <span><span class="dot"></span> Bank-secured</span>
+      <span><span class="dot"></span> Instant confirmation</span>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-wrap" id="faq">
+  <div class="faq-header reveal">
+    <div class="section-label">Frequently Asked</div>
+    <h2>Quick <span class="italic">answers.</span></h2>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-q"><span>When is rent due, and is there a grace period?</span><span class="faq-toggle">+</span></div>
+      <div class="faq-a">Rent is due on the 1st of the month. A standard five-day grace period applies; late fees begin on the 6th unless otherwise stated in your lease. Paying via Zelle ensures your payment posts the same day.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q"><span>What if I can't pay rent on time this month?</span><span class="faq-toggle">+</span></div>
+      <div class="faq-a">Contact your property manager <em>before</em> the 1st. We work with residents in good standing on short-term arrangements far more often than people expect. Communication earns flexibility; silence does not.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q"><span>How quickly will maintenance respond to my request?</span><span class="faq-toggle">+</span></div>
+      <div class="faq-a">Emergencies — water, gas, heat in winter, no-AC in extreme heat, electrical hazards, or anything affecting safety — are responded to within four hours. Routine requests are typically scheduled within 48 hours.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q"><span>Can I pay rent through other methods besides Zelle?</span><span class="faq-toggle">+</span></div>
+      <div class="faq-a">Yes — we accept ACH transfer, cashier's check, and money order. However, Zelle is our preferred method because it's instant, fee-free, secure, and creates a clear record on both sides. Personal checks are accepted but slow.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q"><span>When will I get my security deposit back after move-out?</span><span class="faq-toggle">+</span></div>
+      <div class="faq-a">Florida law requires us to return your deposit, or send an itemized notice of any claim against it, within 15 days of move-out (or 30 days if a claim is made). We aim to be well inside those windows.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q"><span>How do I start the lease renewal process?</span><span class="faq-toggle">+</span></div>
+      <div class="faq-a">We reach out approximately 60 days before your lease ends, but you're welcome to start the conversation any time. Residents in good standing typically receive favorable renewal terms.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="contact">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo">
+        <span class="logo-mark">
+          <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="20" cy="20" r="18.5" fill="none" stroke="#ebe3d4" stroke-width="1.5"/>
+            <path d="M 12 26 L 12 18 L 20 12 L 28 18 L 28 26 Z" fill="none" stroke="#ebe3d4" stroke-width="1.5" stroke-linejoin="round"/>
+            <circle cx="20" cy="22" r="2" fill="#b08545"/>
+          </svg>
+        </span>
+        <span>Arbormoor Heights
+          <small>Property Management · LLC</small>
+        </span>
+      </div>
+      <p>A Florida-based property management company headquartered in St. Petersburg, serving residents and owners with care, transparency, and timely service.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Residents</h4>
+      <ul>
+        <li><a href="#" onclick="openZelle(event)">Pay Rent (Zelle)</a></li>
+        <li><a href="#">Maintenance Request</a></li>
+        <li><a href="#">Lease Renewal</a></li>
+        <li><a href="#">Document Portal</a></li>
+        <li><a href="#">Move-Out Checklist</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="#">Emergency Line</a></li>
+        <li><a href="#">Office Hours</a></li>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Fair Housing</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="mailto:arbormoorheights@gmail.com">arbormoorheights@gmail.com</a></li>
+        <li><a href="tel:+13109270857">(310) 927-0857</a></li>
+        <li style="line-height: 1.55;"><a href="https://maps.google.com/?q=7901+4TH+ST+N+STE+300+St.+Petersburg+FL+33702" target="_blank">7901 4th St N, Ste 300<br>St. Petersburg, FL 33702<br>United States</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© MMXXVI Arbormoor Heights, LLC. All rights reserved.</span>
+    <span>Privacy · Terms · Fair Housing</span>
+  </div>
+</footer>
+
+</div>
+
+<!-- ============ ZELLE PAYMENT PAGE ============ -->
+<div id="zelle-page" class="page">
+  <div class="page-nav">
+    <button class="back-link" onclick="closeZelle()">
+      <span class="arr">←</span> Back to Resident Resources
+    </button>
+    <div class="logo" style="font-size: 18px;">
+      <span class="logo-mark" style="width: 26px; height: 26px;">
+        <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="20" cy="20" r="18.5" fill="none" stroke="#1a2620" stroke-width="1.5"/>
+          <path d="M 12 26 L 12 18 L 20 12 L 28 18 L 28 26 Z" fill="none" stroke="#1a2620" stroke-width="1.5" stroke-linejoin="round"/>
+          <circle cx="20" cy="22" r="2" fill="#b08545"/>
+        </svg>
+      </span>
+      Arbormoor Heights
+    </div>
+  </div>
+
+  <div class="zelle-page">
+    <div class="zelle-info">
+      <div class="eyebrow">Secure Rent Payment</div>
+      <h1>Pay rent via <span class="italic">Zelle.</span></h1>
+      <p class="lead">Scan the QR code with your bank's mobile app. The payment goes directly from your bank to ours — no third-party processor, no fees, no waiting. You'll receive instant confirmation from your bank, and we'll see the payment the same day.</p>
+
+      <div class="zelle-details">
+        <div class="zelle-detail-row">
+          <span class="lbl">Pay to</span>
+          <span style="display: flex; align-items: center;">
+            <span class="val">Arbormoor Heights, LLC</span>
+            <button class="copy-btn" onclick="copy(this, 'Arbormoor Heights, LLC')">Copy</button>
+          </span>
+        </div>
+        <div class="zelle-detail-row">
+          <span class="lbl">Zelle Email</span>
+          <span style="display: flex; align-items: center;">
+            <span class="val">arbormoorheights@gmail.com</span>
+            <button class="copy-btn" onclick="copy(this, 'arbormoorheights@gmail.com')">Copy</button>
+          </span>
+        </div>
+        <div class="zelle-detail-row">
+          <span class="lbl">Phone</span>
+          <span style="display: flex; align-items: center;">
+            <span class="val">(310) 927-0857</span>
+            <button class="copy-btn" onclick="copy(this, '3109270857')">Copy</button>
+          </span>
+        </div>
+        <div class="zelle-detail-row">
+          <span class="lbl">Memo</span>
+          <span class="val" style="font-style: italic; color: var(--muted); font-size: 14px;">Your unit # + month</span>
+        </div>
+      </div>
+
+      <ol class="zelle-steps">
+        <li>Open your <strong>bank's mobile app</strong> and find the Zelle option (usually under "Send Money" or "Transfers").</li>
+        <li>Tap <strong>"Send with QR code"</strong> or "Scan QR code."</li>
+        <li>Point your camera at the QR code on this page and confirm the recipient.</li>
+        <li>Enter the rent amount, add your <strong>unit number and month</strong> in the memo, and send.</li>
+      </ol>
+    </div>
+
+    <div class="qr-card">
+      <span class="qr-corner tl"></span>
+      <span class="qr-corner tr"></span>
+      <span class="qr-corner bl"></span>
+      <span class="qr-corner br"></span>
+
+      <div class="qr-card-header">
+        <div class="brand">
+          Arbormoor Heights, LLC
+          <small>Rent Payment</small>
+        </div>
+        <div class="zelle-wordmark">zelle</div>
+      </div>
+
+      <div class="qr-frame">
+        <!-- Stylized QR code placeholder -->
+        <svg width="240" height="240" viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+          <rect width="240" height="240" fill="white"/>
+          <!-- Position markers (corners) -->
+          <g fill="#1a2620">
+            <!-- Top-left -->
+            <rect x="10" y="10" width="56" height="56"/>
+            <rect x="18" y="18" width="40" height="40" fill="white"/>
+            <rect x="26" y="26" width="24" height="24"/>
+            <!-- Top-right -->
+            <rect x="174" y="10" width="56" height="56"/>
+            <rect x="182" y="18" width="40" height="40" fill="white"/>
+            <rect x="190" y="26" width="24" height="24"/>
+            <!-- Bottom-left -->
+            <rect x="10" y="174" width="56" height="56"/>
+            <rect x="18" y="182" width="40" height="40" fill="white"/>
+            <rect x="26" y="190" width="24" height="24"/>
+          </g>
+          <!-- Data modules (decorative pattern) -->
+          <g fill="#1a2620">
+            <rect x="74" y="10" width="8" height="8"/><rect x="90" y="10" width="8" height="8"/><rect x="106" y="10" width="8" height="8"/><rect x="130" y="10" width="8" height="8"/><rect x="146" y="10" width="8" height="8"/><rect x="162" y="10" width="8" height="8"/>
+            <rect x="82" y="18" width="8" height="8"/><rect x="98" y="18" width="8" height="8"/><rect x="122" y="18" width="8" height="8"/><rect x="138" y="18" width="8" height="8"/><rect x="162" y="18" width="8" height="8"/>
+            <rect x="74" y="26" width="8" height="8"/><rect x="90" y="26" width="8" height="8"/><rect x="114" y="26" width="8" height="8"/><rect x="130" y="26" width="8" height="8"/><rect x="154" y="26" width="8" height="8"/>
+            <rect x="82" y="34" width="8" height="8"/><rect x="98" y="34" width="8" height="8"/><rect x="106" y="34" width="8" height="8"/><rect x="122" y="34" width="8" height="8"/><rect x="146" y="34" width="8" height="8"/><rect x="162" y="34" width="8" height="8"/>
+            <rect x="74" y="42" width="8" height="8"/><rect x="98" y="42" width="8" height="8"/><rect x="114" y="42" width="8" height="8"/><rect x="138" y="42" width="8" height="8"/><rect x="154" y="42" width="8" height="8"/>
+            <rect x="82" y="50" width="8" height="8"/><rect x="90" y="50" width="8" height="8"/><rect x="106" y="50" width="8" height="8"/><rect x="130" y="50" width="8" height="8"/><rect x="146" y="50" width="8" height="8"/><rect x="162" y="50" width="8" height="8"/>
+            <rect x="74" y="58" width="8" height="8"/><rect x="106" y="58" width="8" height="8"/><rect x="122" y="58" width="8" height="8"/><rect x="138" y="58" width="8" height="8"/><rect x="154" y="58" width="8" height="8"/>
+
+            <rect x="10" y="74" width="8" height="8"/><rect x="34" y="74" width="8" height="8"/><rect x="58" y="74" width="8" height="8"/><rect x="82" y="74" width="8" height="8"/><rect x="98" y="74" width="8" height="8"/><rect x="114" y="74" width="8" height="8"/><rect x="138" y="74" width="8" height="8"/><rect x="162" y="74" width="8" height="8"/><rect x="178" y="74" width="8" height="8"/><rect x="194" y="74" width="8" height="8"/><rect x="218" y="74" width="8" height="8"/>
+            <rect x="18" y="82" width="8" height="8"/><rect x="42" y="82" width="8" height="8"/><rect x="66" y="82" width="8" height="8"/><rect x="90" y="82" width="8" height="8"/><rect x="106" y="82" width="8" height="8"/><rect x="130" y="82" width="8" height="8"/><rect x="146" y="82" width="8" height="8"/><rect x="170" y="82" width="8" height="8"/><rect x="186" y="82" width="8" height="8"/><rect x="210" y="82" width="8" height="8"/>
+            <rect x="26" y="90" width="8" height="8"/><rect x="50" y="90" width="8" height="8"/><rect x="74" y="90" width="8" height="8"/><rect x="98" y="90" width="8" height="8"/><rect x="122" y="90" width="8" height="8"/><rect x="138" y="90" width="8" height="8"/><rect x="154" y="90" width="8" height="8"/><rect x="178" y="90" width="8" height="8"/><rect x="202" y="90" width="8" height="8"/><rect x="226" y="90" width="8" height="8"/>
+            <rect x="10" y="98" width="8" height="8"/><rect x="42" y="98" width="8" height="8"/><rect x="58" y="98" width="8" height="8"/><rect x="82" y="98" width="8" height="8"/><rect x="106" y="98" width="8" height="8"/><rect x="130" y="98" width="8" height="8"/><rect x="154" y="98" width="8" height="8"/><rect x="170" y="98" width="8" height="8"/><rect x="194" y="98" width="8" height="8"/><rect x="218" y="98" width="8" height="8"/>
+            <rect x="34" y="106" width="8" height="8"/><rect x="66" y="106" width="8" height="8"/><rect x="90" y="106" width="8" height="8"/><rect x="114" y="106" width="8" height="8"/><rect x="138" y="106" width="8" height="8"/><rect x="162" y="106" width="8" height="8"/><rect x="186" y="106" width="8" height="8"/><rect x="210" y="106" width="8" height="8"/><rect x="226" y="106" width="8" height="8"/>
+            <rect x="18" y="114" width="8" height="8"/><rect x="50" y="114" width="8" height="8"/><rect x="74" y="114" width="8" height="8"/><rect x="98" y="114" width="8" height="8"/><rect x="122" y="114" width="8" height="8"/><rect x="146" y="114" width="8" height="8"/><rect x="170" y="114" width="8" height="8"/><rect x="194" y="114" width="8" height="8"/><rect x="218" y="114" width="8" height="8"/>
+            <rect x="10" y="122" width="8" height="8"/><rect x="42" y="122" width="8" height="8"/><rect x="66" y="122" width="8" height="8"/><rect x="82" y="122" width="8" height="8"/><rect x="106" y="122" width="8" height="8"/><rect x="138" y="122" width="8" height="8"/><rect x="162" y="122" width="8" height="8"/><rect x="178" y="122" width="8" height="8"/><rect x="202" y="122" width="8" height="8"/><rect x="226" y="122" width="8" height="8"/>
+            <rect x="26" y="130" width="8" height="8"/><rect x="50" y="130" width="8" height="8"/><rect x="74" y="130" width="8" height="8"/><rect x="98" y="130" width="8" height="8"/><rect x="114" y="130" width="8" height="8"/><rect x="146" y="130" width="8" height="8"/><rect x="170" y="130" width="8" height="8"/><rect x="186" y="130" width="8" height="8"/><rect x="210" y="130" width="8" height="8"/>
+            <rect x="34" y="138" width="8" height="8"/><rect x="58" y="138" width="8" height="8"/><rect x="82" y="138" width="8" height="8"/><rect x="106" y="138" width="8" height="8"/><rect x="130" y="138" width="8" height="8"/><rect x="154" y="138" width="8" height="8"/><rect x="178" y="138" width="8" height="8"/><rect x="202" y="138" width="8" height="8"/><rect x="226" y="138" width="8" height="8"/>
+            <rect x="18" y="146" width="8" height="8"/><rect x="50" y="146" width="8" height="8"/><rect x="74" y="146" width="8" height="8"/><rect x="90" y="146" width="8" height="8"/><rect x="114" y="146" width="8" height="8"/><rect x="138" y="146" width="8" height="8"/><rect x="162" y="146" width="8" height="8"/><rect x="194" y="146" width="8" height="8"/><rect x="218" y="146" width="8" height="8"/>
+            <rect x="10" y="154" width="8" height="8"/><rect x="42" y="154" width="8" height="8"/><rect x="66" y="154" width="8" height="8"/><rect x="82" y="154" width="8" height="8"/><rect x="106" y="154" width="8" height="8"/><rect x="122" y="154" width="8" height="8"/><rect x="146" y="154" width="8" height="8"/><rect x="170" y="154" width="8" height="8"/><rect x="186" y="154" width="8" height="8"/><rect x="210" y="154" width="8" height="8"/><rect x="226" y="154" width="8" height="8"/>
+            <rect x="26" y="162" width="8" height="8"/><rect x="58" y="162" width="8" height="8"/><rect x="74" y="162" width="8" height="8"/><rect x="98" y="162" width="8" height="8"/><rect x="122" y="162" width="8" height="8"/><rect x="138" y="162" width="8" height="8"/><rect x="162" y="162" width="8" height="8"/><rect x="178" y="162" width="8" height="8"/><rect x="194" y="162" width="8" height="8"/><rect x="218" y="162" width="8" height="8"/>
+
+            <rect x="74" y="174" width="8" height="8"/><rect x="90" y="174" width="8" height="8"/><rect x="114" y="174" width="8" height="8"/><rect x="138" y="174" width="8" height="8"/><rect x="154" y="174" width="8" height="8"/>
+            <rect x="82" y="182" width="8" height="8"/><rect x="106" y="182" width="8" height="8"/><rect x="122" y="182" width="8" height="8"/><rect x="146" y="182" width="8" height="8"/><rect x="162" y="182" width="8" height="8"/>
+            <rect x="74" y="190" width="8" height="8"/><rect x="98" y="190" width="8" height="8"/><rect x="114" y="190" width="8" height="8"/><rect x="138" y="190" width="8" height="8"/><rect x="154" y="190" width="8" height="8"/>
+            <rect x="82" y="198" width="8" height="8"/><rect x="106" y="198" width="8" height="8"/><rect x="130" y="198" width="8" height="8"/><rect x="146" y="198" width="8" height="8"/><rect x="170" y="198" width="8" height="8"/>
+            <rect x="74" y="206" width="8" height="8"/><rect x="98" y="206" width="8" height="8"/><rect x="122" y="206" width="8" height="8"/><rect x="138" y="206" width="8" height="8"/><rect x="162" y="206" width="8" height="8"/>
+            <rect x="90" y="214" width="8" height="8"/><rect x="106" y="214" width="8" height="8"/><rect x="130" y="214" width="8" height="8"/><rect x="154" y="214" width="8" height="8"/><rect x="170" y="214" width="8" height="8"/>
+            <rect x="74" y="222" width="8" height="8"/><rect x="98" y="222" width="8" height="8"/><rect x="122" y="222" width="8" height="8"/><rect x="146" y="222" width="8" height="8"/><rect x="162" y="222" width="8" height="8"/>
+          </g>
+          <!-- Center logo overlay -->
+          <g transform="translate(120, 120)">
+            <circle r="22" fill="white"/>
+            <circle r="20" fill="#6d1ed4"/>
+            <text x="0" y="6" text-anchor="middle" font-family="Inter Tight, sans-serif" font-size="13" font-weight="700" fill="white">zelle</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="qr-instruct">Scan with your bank's app</div>
+      <div class="qr-sub">Arbormoor Heights, LLC · Rent Payment</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // FAQ
+  document.querySelectorAll('.faq-item').forEach(item => {
+    item.addEventListener('click', () => {
+      item.classList.toggle('open');
+      item.querySelector('.faq-toggle').textContent = item.classList.contains('open') ? '×' : '+';
+    });
+  });
+
+  // Zelle page
+  function openZelle(e) {
+    if (e) e.preventDefault();
+    document.getElementById('main-page').style.display = 'none';
+    document.getElementById('zelle-page').classList.add('active');
+    window.scrollTo(0, 0);
+  }
+  function closeZelle() {
+    document.getElementById('zelle-page').classList.remove('active');
+    document.getElementById('main-page').style.display = 'block';
+    window.scrollTo(0, 0);
+  }
+
+  // Copy
+  function copy(btn, text) {
+    navigator.clipboard.writeText(text).then(() => {
+      const original = btn.textContent;
+      btn.textContent = 'Copied';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = original;
+        btn.classList.remove('copied');
+      }, 1800);
+    });
+  }
+</script>
+
+</body>
 </html>
