@@ -552,6 +552,89 @@
   }
   .service .link:hover { color: var(--brass); border-color: var(--brass); }
 
+  /* ============ POLICIES AT A GLANCE ============ */
+  .policies-wrap {
+    background: var(--paper);
+    padding: 110px 40px 90px;
+    border-top: 1px solid var(--rule-soft);
+  }
+  .policies-inner {
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+  .policies-header {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 60px;
+    margin-bottom: 60px;
+    align-items: end;
+  }
+  .policies-header h2 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(36px, 4.2vw, 56px);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+  }
+  .policies-header h2 .italic { color: var(--forest); }
+  .policies-header .desc {
+    font-size: 15.5px;
+    line-height: 1.65;
+    color: var(--ink-soft);
+    max-width: 500px;
+  }
+  .policies-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border-top: 1px solid var(--rule);
+    border-left: 1px solid var(--rule);
+  }
+  .policy {
+    padding: 28px 28px 30px;
+    border-right: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    background: var(--paper);
+    transition: background 0.4s;
+  }
+  .policy:hover { background: var(--ivory); }
+  .policy-label {
+    font-family: 'Inter Tight', sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--brass);
+    margin-bottom: 14px;
+    font-weight: 500;
+  }
+  .policy-value {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .policy-value .italic { color: var(--forest); }
+  .policy-note {
+    font-size: 13.5px;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+  .policies-footnote {
+    margin-top: 36px;
+    padding: 20px 24px;
+    background: var(--ivory-deep);
+    border-left: 3px solid var(--brass);
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+
   /* ============ PAYMENT BAND ============ */
   .pay-band {
     padding: 130px 40px;
@@ -678,7 +761,7 @@
     color: var(--ink-soft);
     padding-right: 50px;
   }
-  .faq-item.open .faq-a { max-height: 300px; padding-top: 18px; }
+  .faq-item.open .faq-a { max-height: 600px; padding-top: 18px; }
 
   /* ============ FOOTER ============ */
   footer {
@@ -982,6 +1065,9 @@
     .welcome { grid-template-columns: 1fr; gap: 30px; padding: 90px 28px 70px; }
     .services-header { grid-template-columns: 1fr; gap: 24px; padding: 0 28px; }
     .services { grid-template-columns: 1fr 1fr; padding: 0 28px; }
+    .policies-wrap { padding: 90px 28px 70px; }
+    .policies-header { grid-template-columns: 1fr; gap: 24px; }
+    .policies-grid { grid-template-columns: 1fr 1fr; }
     .footer-inner { grid-template-columns: 1fr 1fr; gap: 40px; }
     .zelle-page { grid-template-columns: 1fr; padding: 40px 28px 80px; gap: 50px; }
     .qr-card { max-width: 440px; margin: 0 auto; }
@@ -996,6 +1082,8 @@
     .services-wrap { padding: 70px 0 50px; }
     .services-header { padding: 0 20px; }
     .services { grid-template-columns: 1fr; padding: 0 20px; }
+    .policies-wrap { padding: 70px 20px 50px; }
+    .policies-grid { grid-template-columns: 1fr; }
     .pay-band { padding: 80px 20px; }
     .pay-details { flex-direction: column; gap: 14px; }
     .faq-wrap { padding: 80px 20px; }
@@ -1031,9 +1119,9 @@
     </span>
   </div>
   <ul class="nav-links">
-    <li><a href="#services">Resident Services</a></li>
+    <li><a href="#services">Resources</a></li>
+    <li><a href="#policies">Policies</a></li>
     <li><a href="#faq">FAQ</a></li>
-    <li><a href="#contact">Contact</a></li>
     <li><a href="#" onclick="openZelle(event)">Pay Rent</a></li>
   </ul>
   <a href="#" class="nav-cta" onclick="openZelle(event)">Pay Rent</a>
@@ -1134,6 +1222,71 @@
   </div>
 </section>
 
+<!-- POLICIES AT A GLANCE -->
+<section class="policies-wrap reveal" id="policies">
+  <div class="policies-inner">
+    <div class="policies-header">
+      <div>
+        <div class="section-label">Policies at a Glance</div>
+        <h2>The basics, <span class="italic">in one place.</span></h2>
+      </div>
+      <p class="desc">A quick reference to the policies that affect your tenancy day to day. Your specific lease takes precedence — these are the standard terms drawn from the Florida Realtors residential lease form and Florida Statute Chapter 83.</p>
+    </div>
+
+    <div class="policies-grid">
+      <div class="policy">
+        <div class="policy-label">Rent Due</div>
+        <div class="policy-value">1st of <span class="italic">each month</span></div>
+        <p class="policy-note">Five-day grace period. Late fees begin on the 6th per your lease.</p>
+      </div>
+      <div class="policy">
+        <div class="policy-label">Preferred Payment</div>
+        <div class="policy-value">Zelle <span class="italic">— instant</span></div>
+        <p class="policy-note">No fees, same-day confirmation. ACH, money order, and cashier's check also accepted.</p>
+      </div>
+      <div class="policy">
+        <div class="policy-label">Maintenance Response</div>
+        <div class="policy-value">4 hrs / <span class="italic">48 hrs</span></div>
+        <p class="policy-note">Emergencies within four hours. Routine requests within forty-eight.</p>
+      </div>
+      <div class="policy">
+        <div class="policy-label">Pet Policy</div>
+        <div class="policy-value">Per <span class="italic">your lease</span></div>
+        <p class="policy-note">Not permitted unless specifically authorized with a pet deposit on file.</p>
+      </div>
+      <div class="policy">
+        <div class="policy-label">Smoking</div>
+        <div class="policy-value">Not <span class="italic">permitted</span></div>
+        <p class="policy-note">Smoking is prohibited indoors unless explicitly stated otherwise in your lease.</p>
+      </div>
+      <div class="policy">
+        <div class="policy-label">Landlord Entry</div>
+        <div class="policy-value">12 hours' <span class="italic">notice</span></div>
+        <p class="policy-note">For non-emergency repairs or inspections, between 7:30 AM and 8:00 PM (§83.53).</p>
+      </div>
+      <div class="policy">
+        <div class="policy-label">Renter's Insurance</div>
+        <div class="policy-value">Strongly <span class="italic">recommended</span></div>
+        <p class="policy-note">Your belongings are not covered by the landlord's policy. Typically $10–20/month.</p>
+      </div>
+      <div class="policy">
+        <div class="policy-label">Lease Term</div>
+        <div class="policy-value">12 months <span class="italic">maximum</span></div>
+        <p class="policy-note">Florida law caps single-family leases at one year. Renewal requires a new written lease.</p>
+      </div>
+      <div class="policy">
+        <div class="policy-label">Deposit Return</div>
+        <div class="policy-value">15 / <span class="italic">30 days</span></div>
+        <p class="policy-note">15 days with no claim, 30 days with itemized claim notice. Provide forwarding address.</p>
+      </div>
+    </div>
+
+    <div class="policies-footnote">
+      Your tenancy is governed by the Florida Residential Landlord and Tenant Act (Chapter 83, Part II, Florida Statutes), a copy of which is attached to your signed lease. When in doubt, refer to your lease first, then reach out to us — we'd much rather answer a question than resolve a misunderstanding.
+    </div>
+  </div>
+</section>
+
 <!-- SERVICES -->
 <section class="services-wrap" id="services">
   <div class="services-header reveal">
@@ -1213,27 +1366,51 @@
   <div class="faq-list">
     <div class="faq-item">
       <div class="faq-q"><span>When is rent due, and is there a grace period?</span><span class="faq-toggle">+</span></div>
-      <div class="faq-a">Rent is due on the 1st of the month. A standard five-day grace period applies; late fees begin on the 6th unless otherwise stated in your lease. Paying via Zelle ensures your payment posts the same day.</div>
+      <div class="faq-a">Rent is due on the 1st of each month per your lease. A standard <strong>five-day grace period</strong> applies — late fees begin on the 6th. The late fee amount is specified in your lease (typically 4% of the monthly rent under the Florida Realtors standard form). Paying via Zelle ensures your payment posts the same day.</div>
     </div>
     <div class="faq-item">
       <div class="faq-q"><span>What if I can't pay rent on time this month?</span><span class="faq-toggle">+</span></div>
-      <div class="faq-a">Contact your property manager <em>before</em> the 1st. We work with residents in good standing on short-term arrangements far more often than people expect. Communication earns flexibility; silence does not.</div>
+      <div class="faq-a">Contact us <em>before</em> the 1st. We work with residents in good standing on short-term arrangements far more often than people expect. Communication earns flexibility; silence does not. Under Florida Statute §83.56(3), if rent goes unpaid for three business days after written demand, the landlord may begin eviction proceedings — so reaching out early matters.</div>
     </div>
     <div class="faq-item">
       <div class="faq-q"><span>How quickly will maintenance respond to my request?</span><span class="faq-toggle">+</span></div>
-      <div class="faq-a">Emergencies — water, gas, heat in winter, no-AC in extreme heat, electrical hazards, or anything affecting safety — are responded to within four hours. Routine requests are typically scheduled within 48 hours.</div>
+      <div class="faq-a"><strong>Emergencies</strong> — water leaks, gas, no heat in winter, no AC in extreme heat, electrical hazards, or anything affecting safety — are responded to within four hours. <strong>Routine requests</strong> are typically scheduled within 48 hours. Florida law (§83.51) requires landlords to maintain plumbing, structural components, locks, smoke detectors, and meet all applicable housing codes.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q"><span>What maintenance am I responsible for as a tenant?</span><span class="faq-toggle">+</span></div>
+      <div class="faq-a">Under Florida Statute §83.52, tenants must keep the unit clean and sanitary, remove garbage properly, operate plumbing and appliances reasonably, avoid damaging the premises, and refrain from disturbing neighbors. Your lease may also specify lawn care, pest control, or pool maintenance as tenant responsibilities — refer to Section 10 of your lease for the exact breakdown.</div>
     </div>
     <div class="faq-item">
       <div class="faq-q"><span>Can I pay rent through other methods besides Zelle?</span><span class="faq-toggle">+</span></div>
-      <div class="faq-a">Yes — we accept ACH transfer, cashier's check, and money order. However, Zelle is our preferred method because it's instant, fee-free, secure, and creates a clear record on both sides. Personal checks are accepted but slow.</div>
+      <div class="faq-a">Yes — we accept ACH transfer, cashier's check, and money order. However, Zelle is our preferred method because it's instant, fee-free, secure, and creates a clear record on both sides. Personal checks are accepted but slow; under §68.065, returned-check fees apply if a check bounces.</div>
     </div>
     <div class="faq-item">
       <div class="faq-q"><span>When will I get my security deposit back after move-out?</span><span class="faq-toggle">+</span></div>
-      <div class="faq-a">Florida law requires us to return your deposit, or send an itemized notice of any claim against it, within 15 days of move-out (or 30 days if a claim is made). We aim to be well inside those windows.</div>
+      <div class="faq-a">Florida Statute §83.49(3) requires landlords to either return your deposit within <strong>15 days</strong> of move-out, or send written notice of intent to impose a claim within <strong>30 days</strong>. If a claim is made, you have 15 days to object in writing. We aim to be well inside those windows. Make sure to provide your forwarding address at move-out so the notice reaches you.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q"><span>What's the pet and smoking policy?</span><span class="faq-toggle">+</span></div>
+      <div class="faq-a"><strong>Pets</strong> are not permitted unless specifically authorized in your lease and a pet deposit has been paid. If pets are allowed, the number, type, breed, and weight will be listed in Section 7 of your lease. <strong>Smoking</strong> is not permitted on the premises unless explicitly checked in your lease.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q"><span>How much notice do you give before entering the unit?</span><span class="faq-toggle">+</span></div>
+      <div class="faq-a">Per Florida Statute §83.53, we provide at least <strong>12 hours' notice</strong> before entering for non-emergency repairs or inspections, and only between 7:30 AM and 8:00 PM. The exceptions are emergencies (water leaks, fire, etc.) or for the protection of the property — in which case immediate entry is permitted. We do not abuse this right.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q"><span>Do I need renter's insurance?</span><span class="faq-toggle">+</span></div>
+      <div class="faq-a">Your lease (Section 18) recommends you carry both personal property insurance and liability insurance. Our policy covers the building structure; <em>your belongings are not covered by us</em>. Renter's insurance typically costs $10–20 per month and protects against theft, fire, water damage, and liability claims. It's a small expense for significant peace of mind.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q"><span>I'm an active-duty servicemember — what are my rights?</span><span class="faq-toggle">+</span></div>
+      <div class="faq-a">Under Florida Statute §83.682, active-duty servicemembers can terminate a lease with <strong>30 days' written notice</strong> in circumstances including permanent change of station orders (35+ miles), discharge or release from active duty, mandatory move into government quarters, or temporary duty orders exceeding 60 days. Provide a copy of your military orders or written verification from your commanding officer with the notice.</div>
     </div>
     <div class="faq-item">
       <div class="faq-q"><span>How do I start the lease renewal process?</span><span class="faq-toggle">+</span></div>
-      <div class="faq-a">We reach out approximately 60 days before your lease ends, but you're welcome to start the conversation any time. Residents in good standing typically receive favorable renewal terms.</div>
+      <div class="faq-a">We reach out approximately 60 days before your lease ends, but you're welcome to start the conversation any time. Florida law caps single-family leases at one year, so a renewal is a new written lease — not an automatic extension. Residents in good standing typically receive favorable renewal terms.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q"><span>What's the move-out process?</span><span class="faq-toggle">+</span></div>
+      <div class="faq-a">Give us <strong>at least 7 days' written notice</strong> before vacating, along with your forwarding address (Florida Statute §83.49(5)). Return all keys, garage openers, and HOA access devices to the address on your lease. We'll conduct a move-out inspection, document the unit's condition, and follow the 15/30-day deposit timeline noted above.</div>
     </div>
   </div>
 </section>
