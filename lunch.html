@@ -119,7 +119,7 @@
 <body>
 <header>
   <h1>Lunch Roulette</h1>
-  <p>Lunch spots within ~8 miles of 32746 · Lake Mary / Sanford / Longwood / Heathrow · ratings &amp; review counts from Google Maps</p>
+  <p>Lunch spots near 32746 · Lake Mary / Sanford / Longwood / Heathrow (+ two Oviedo picks) · ratings &amp; review counts from Google Maps</p>
 </header>
 
 <div class="wrap">
@@ -151,30 +151,47 @@
 
 <script>
 const RESTAURANTS = [
-  {name:"Pisco Peruvian Gastrobar", cuisine:"Peruvian", area:"Lake Mary", rating:4.9, reviews:3108, note:"Opens noon Mon–Fri"},
-  {name:"Cocina Maya Mexican Grill", cuisine:"Mexican · Mezcaleria", area:"Lake Mary", rating:4.8, reviews:3322, note:""},
-  {name:"Indian Express", cuisine:"Indian", area:"Longwood", rating:4.8, reviews:146, note:"Lunch 11:30–2:30 · Closed Mon"},
-  {name:"Ma-se Sushi Eatery", cuisine:"Sushi · Ramen", area:"Longwood", rating:4.8, reviews:385, note:"Lunch Tue–Sat · Closed Mon"},
+  {name:"Pisco Peruvian Gastrobar", cuisine:"Peruvian", area:"Lake Mary", rating:4.9, reviews:3108, note:"Opens noon Mon\u2013Fri"},
+  {name:"Queen's Cup Thai Cafe", cuisine:"Thai cafe \u00b7 Boba", area:"Lake Mary", rating:4.9, reviews:136, note:"Closed Sun"},
+  {name:"Cocina Maya Mexican Grill", cuisine:"Mexican \u00b7 Mezcaleria", area:"Lake Mary", rating:4.8, reviews:3322, note:""},
+  {name:"Kona Pok\u00e9", cuisine:"Poke bowls", area:"Sanford", rating:4.8, reviews:1001, note:""},
+  {name:"Indian Express", cuisine:"Indian", area:"Longwood", rating:4.8, reviews:146, note:"Lunch 11:30\u20132:30 \u00b7 Closed Mon"},
+  {name:"Ma-se Sushi Eatery", cuisine:"Sushi \u00b7 Ramen", area:"Longwood", rating:4.8, reviews:385, note:"Lunch Tue\u2013Sat \u00b7 Closed Mon"},
+  {name:"Dali's Lao Thai Caf\u00e9", cuisine:"Lao \u00b7 Thai", area:"Sanford", rating:4.7, reviews:508, note:"Opens noon \u00b7 Closed Sun"},
+  {name:"Yao's", cuisine:"Asian fusion", area:"Oviedo", rating:4.7, reviews:351, note:"Lunch Mon\u2013Fri 11\u20132 only"},
   {name:"MISSION BBQ", cuisine:"Barbecue", area:"Lake Mary", rating:4.7, reviews:259, note:""},
   {name:"FILO Mediterranean Kitchen", cuisine:"Mediterranean bowls", area:"Lake Mary", rating:4.7, reviews:201, note:""},
-  {name:"Ford's Garage", cuisine:"Burgers · American", area:"Sanford", rating:4.7, reviews:1014, note:""},
+  {name:"Ford's Garage", cuisine:"Burgers \u00b7 American", area:"Sanford", rating:4.7, reviews:1014, note:""},
   {name:"Hooked Fish Camp", cuisine:"Seafood", area:"Sanford", rating:4.7, reviews:459, note:""},
-  {name:"Moliendo Café", cuisine:"Colombian · Latin", area:"Longwood", rating:4.7, reviews:315, note:""},
+  {name:"Moliendo Caf\u00e9", cuisine:"Colombian \u00b7 Latin", area:"Longwood", rating:4.7, reviews:315, note:""},
+  {name:"Chick-fil-A", cuisine:"Chicken \u00b7 Fast food", area:"Lake Mary Blvd", rating:4.6, reviews:4396, note:"Closed Sun"},
+  {name:"Mellow Mushroom", cuisine:"Pizza", area:"Sanford", rating:4.6, reviews:3095, note:""},
+  {name:"Fresh Kitchen", cuisine:"Healthy bowls", area:"Lake Mary", rating:4.6, reviews:1332, note:""},
   {name:"F&D Cantina", cuisine:"Mexican", area:"Lake Mary", rating:4.6, reviews:2610, note:"Opens 11:30"},
   {name:"Made In Puerto Rico", cuisine:"Puerto Rican", area:"Lake Mary", rating:4.6, reviews:474, note:""},
-  {name:"The Yardery", cuisine:"Smash burgers · Outdoor bar", area:"Sanford", rating:4.6, reviews:786, note:"Closed Mon"},
+  {name:"The Yardery", cuisine:"Smash burgers \u00b7 Outdoor bar", area:"Sanford", rating:4.6, reviews:786, note:"Closed Mon"},
   {name:"Tainos Longwood", cuisine:"Puerto Rican bakery & lunch", area:"Longwood", rating:4.6, reviews:289, note:""},
-  {name:"Boca", cuisine:"American · Flatbreads", area:"Lake Mary", rating:4.5, reviews:380, note:""},
-  {name:"The Hangry Bison", cuisine:"Burgers · Gastropub", area:"Lake Mary", rating:4.5, reviews:437, note:""},
+  {name:"Boca", cuisine:"American \u00b7 Flatbreads", area:"Lake Mary", rating:4.5, reviews:380, note:""},
+  {name:"The Hangry Bison", cuisine:"Burgers \u00b7 Gastropub", area:"Lake Mary", rating:4.5, reviews:437, note:""},
   {name:"4 Rivers Smokehouse", cuisine:"Barbecue", area:"Longwood", rating:4.5, reviews:3596, note:""},
-  {name:"NewCity Bistro", cuisine:"Bistro · Café", area:"Lake Mary", rating:4.5, reviews:110, note:"Open till 4:30"},
-  {name:"The Bayou Kitchen & Lounge", cuisine:"Cajun · Soul food", area:"Downtown Sanford", rating:4.5, reviews:238, note:""},
-  {name:"The Breezeway", cuisine:"Bar & grill · Pork tenderloin", area:"Downtown Sanford", rating:4.4, reviews:2131, note:"Closed Mon"},
+  {name:"Krazy Greek Kitchen", cuisine:"Greek", area:"Lake Mary", rating:4.5, reviews:1834, note:""},
+  {name:"CAVA", cuisine:"Mediterranean bowls", area:"Lake Mary", rating:4.5, reviews:935, note:""},
+  {name:"NewCity Bistro", cuisine:"Bistro \u00b7 Caf\u00e9", area:"Lake Mary", rating:4.5, reviews:110, note:"Open till 4:30"},
+  {name:"The Bayou Kitchen & Lounge", cuisine:"Cajun \u00b7 Soul food", area:"Downtown Sanford", rating:4.5, reviews:238, note:""},
+  {name:"The Breezeway", cuisine:"Bar & grill \u00b7 Pork tenderloin", area:"Downtown Sanford", rating:4.4, reviews:2131, note:"Closed Mon"},
+  {name:"PDQ", cuisine:"Chicken tenders", area:"Sanford", rating:4.4, reviews:2907, note:""},
+  {name:"Shake Shack", cuisine:"Burgers \u00b7 Shakes", area:"Oviedo", rating:4.4, reviews:28, note:""},
   {name:"The Wildflower", cuisine:"Latin fusion", area:"Downtown Sanford", rating:4.3, reviews:263, note:""},
-  {name:"St Johns River Steak & Seafood", cuisine:"Steak · Seafood · Waterfront", area:"Sanford", rating:4.3, reviews:3651, note:""},
-  {name:"Peach Valley Café", cuisine:"Breakfast · Brunch", area:"Heathrow", rating:4.3, reviews:1313, note:"Open till 2:30"},
-  {name:"Jax 5th Ave", cuisine:"Wings · Sports bar", area:"Lake Mary", rating:4.2, reviews:1211, note:"Closed Mon"},
-  {name:"Sweet & Salty Island Grindz", cuisine:"Hawaiian", area:"Downtown Sanford", rating:4.2, reviews:308, note:"In Henry's Depot"}
+  {name:"St Johns River Steak & Seafood", cuisine:"Steak \u00b7 Seafood \u00b7 Waterfront", area:"Sanford", rating:4.3, reviews:3651, note:""},
+  {name:"Peach Valley Caf\u00e9", cuisine:"Breakfast \u00b7 Brunch", area:"Heathrow", rating:4.3, reviews:1313, note:"Open till 2:30"},
+  {name:"Jax 5th Ave", cuisine:"Wings \u00b7 Sports bar", area:"Lake Mary", rating:4.2, reviews:1211, note:"Closed Mon"},
+  {name:"Sweet & Salty Island Grindz", cuisine:"Hawaiian", area:"Downtown Sanford", rating:4.2, reviews:308, note:"In Henry's Depot"},
+  {name:"Subway", cuisine:"Subs \u00b7 Fast food", area:"International Pkwy", rating:4.2, reviews:162, note:""},
+  {name:"Arby's", cuisine:"Roast beef \u00b7 Fast food", area:"Lake Mary", rating:4.1, reviews:1584, note:""},
+  {name:"Dave's Hot Chicken", cuisine:"Hot chicken", area:"Lake Mary", rating:4.0, reviews:555, note:""},
+  {name:"Chipotle", cuisine:"Mexican \u00b7 Fast casual", area:"Sanford (WP Ball Blvd)", rating:4.0, reviews:1078, note:"Next to Kona Pok\u00e9"},
+  {name:"Steak 'n Shake", cuisine:"Burgers \u00b7 Shakes", area:"Sanford", rating:4.0, reviews:1551, note:""},
+  {name:"Bojangles", cuisine:"Chicken \u00b7 Biscuits", area:"Sanford", rating:3.9, reviews:980, note:"Open 24 hrs"}
 ];
 
 const favs = new Set();
@@ -221,8 +238,8 @@ function weightedPick(idx){
   if (!weighted.checked){
     return idx[Math.floor(Math.random()*idx.length)];
   }
-  // weight = (rating - 3.8)^2 so a 4.9 is meaningfully likelier than a 4.2
-  const w = idx.map(i=>Math.pow(RESTAURANTS[i].rating-3.8,2));
+  // weight = (rating - 3.5)^2 so a 4.9 is meaningfully likelier than a 3.9
+  const w = idx.map(i=>Math.pow(RESTAURANTS[i].rating-3.5,2));
   const total = w.reduce((a,b)=>a+b,0);
   let roll = Math.random()*total;
   for (let k=0;k<idx.length;k++){
