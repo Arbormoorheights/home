@@ -3,1602 +3,294 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Arbormoor Heights — Tenant Resources</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,300;1,9..144,400&family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet">
+<title>Lunch Roulette — 32746</title>
 <style>
-  :root {
-    --ivory: #f4efe6;
-    --ivory-deep: #ebe3d4;
-    --paper: #faf7f1;
-    --ink: #1a2620;
-    --ink-soft: #2d3a32;
-    --forest: #1f3a2f;
-    --forest-deep: #142821;
-    --moss: #4a5f4c;
-    --sage: #8ba896;
-    --brass: #b08545;
-    --brass-light: #c89a5e;
-    --brass-pale: #e8d4a8;
-    --rule: #c9bfac;
-    --rule-soft: #d9d0bd;
-    --muted: #6b6555;
-    --zelle: #6d1ed4;
-    --zelle-soft: #f3edff;
+  :root{
+    --bg:#0b0e17;
+    --panel:#121726;
+    --panel2:#0e1322;
+    --line:#1f2740;
+    --cyan:#36e6ff;
+    --pink:#ff4fd8;
+    --text:#e8ecf6;
+    --dim:#8b94ad;
+    --gold:#ffc94d;
   }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--bg);
+    background-image:radial-gradient(ellipse 80% 50% at 50% -10%, rgba(54,230,255,.08), transparent),
+                     radial-gradient(ellipse 60% 40% at 90% 110%, rgba(255,79,216,.07), transparent);
+    color:var(--text);
+    font-family:"Segoe UI",system-ui,-apple-system,sans-serif;
+    min-height:100vh;
+    padding:28px 20px 48px;
+  }
+  header{max-width:1100px;margin:0 auto 22px}
+  h1{
+    font-size:1.6rem;letter-spacing:.12em;text-transform:uppercase;font-weight:800;
+    background:linear-gradient(90deg,var(--cyan),var(--pink));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  header p{color:var(--dim);font-size:.85rem;margin-top:6px;letter-spacing:.02em}
+  .wrap{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.15fr 1fr;gap:18px}
+  @media (max-width:820px){.wrap{grid-template-columns:1fr}}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+  .panel{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:14px;
+    overflow:hidden;
+    display:flex;flex-direction:column;
+  }
+  .panel-head{
+    padding:14px 16px;border-bottom:1px solid var(--line);
+    display:flex;align-items:center;justify-content:space-between;gap:10px;
+    font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);font-weight:700;
+  }
+  .panel-head .count{color:var(--cyan);font-family:Consolas,monospace;letter-spacing:0}
 
-  body {
-    font-family: 'Inter Tight', sans-serif;
-    background: var(--paper);
-    color: var(--ink);
-    line-height: 1.55;
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
+  /* list */
+  .list{overflow-y:auto;max-height:72vh;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+  .row{
+    display:flex;align-items:center;gap:12px;
+    padding:12px 14px;border-bottom:1px solid var(--line);
+    transition:background .15s;
   }
+  .row:last-child{border-bottom:none}
+  .row:hover{background:var(--panel2)}
+  .row.highlight{background:rgba(54,230,255,.10);box-shadow:inset 3px 0 0 var(--cyan)}
+  .fav-btn{
+    background:none;border:none;cursor:pointer;font-size:1.15rem;line-height:1;
+    color:#3a4360;transition:color .15s,transform .1s;flex-shrink:0;padding:4px;
+  }
+  .fav-btn:hover{transform:scale(1.2)}
+  .fav-btn.on{color:var(--pink);text-shadow:0 0 8px rgba(255,79,216,.6)}
+  .info{flex:1;min-width:0}
+  .name{font-weight:600;font-size:.95rem}
+  .meta{color:var(--dim);font-size:.75rem;margin-top:2px}
+  .rating{
+    font-family:Consolas,monospace;font-size:.85rem;color:var(--gold);
+    flex-shrink:0;text-align:right;
+  }
+  .rating .n{display:block;color:var(--dim);font-size:.68rem}
 
-  .serif { font-family: 'Fraunces', serif; }
-  .italic { font-style: italic; }
+  /* picker */
+  .picker-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:34px 22px;gap:20px;min-height:380px}
+  .slot{
+    width:100%;min-height:170px;border-radius:12px;
+    border:1px solid var(--line);
+    background:var(--panel2);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:22px;text-align:center;gap:8px;position:relative;
+  }
+  .slot.landed{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan),0 0 28px rgba(54,230,255,.25)}
+  .slot .placeholder{color:var(--dim);font-size:.85rem;letter-spacing:.05em}
+  .slot .pick-name{font-size:1.45rem;font-weight:800;letter-spacing:.01em}
+  .slot.landed .pick-name{
+    background:linear-gradient(90deg,var(--cyan),var(--pink));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .slot .pick-meta{color:var(--dim);font-size:.82rem}
+  .slot .pick-rating{color:var(--gold);font-family:Consolas,monospace;font-size:.95rem}
+  .slot .pick-fav{color:var(--pink);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase}
 
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.1 0 0 0 0 0.1 0 0 0 0.12 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    opacity: 0.3;
-    pointer-events: none;
-    z-index: 9999;
-    mix-blend-mode: multiply;
+  .spin-btn{
+    font:inherit;font-weight:800;letter-spacing:.18em;text-transform:uppercase;font-size:.9rem;
+    color:#06121a;background:linear-gradient(90deg,var(--cyan),var(--pink));
+    border:none;border-radius:10px;padding:14px 38px;cursor:pointer;
+    transition:transform .1s,box-shadow .15s;
+    box-shadow:0 0 18px rgba(54,230,255,.35);
   }
+  .spin-btn:hover{transform:translateY(-1px);box-shadow:0 0 26px rgba(255,79,216,.45)}
+  .spin-btn:active{transform:translateY(1px)}
+  .spin-btn:disabled{opacity:.5;cursor:default;transform:none}
 
-  /* ============ NAV ============ */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    z-index: 100;
-    padding: 20px 40px;
-    background: rgba(250, 247, 241, 0.88);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--rule-soft);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+  .opts{display:flex;gap:18px;flex-wrap:wrap;justify-content:center;color:var(--dim);font-size:.8rem}
+  .opts label{display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none}
+  .opts input{accent-color:var(--pink)}
+  .note{color:var(--dim);font-size:.7rem;text-align:center;max-width:340px;line-height:1.5}
 
-  .logo {
-    font-family: 'Fraunces', serif;
-    font-weight: 400;
-    font-size: 21px;
-    letter-spacing: -0.01em;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-  }
-  .logo-mark {
-    width: 32px; height: 32px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .logo-mark svg { width: 100%; height: 100%; }
-  .logo small {
-    font-family: 'Inter Tight', sans-serif;
-    font-size: 10px;
-    letter-spacing: 0.2em;
-    color: var(--muted);
-    text-transform: uppercase;
-    display: block;
-    margin-top: 2px;
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 34px;
-    list-style: none;
-    font-size: 13px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
-  .nav-links a {
-    color: var(--ink);
-    text-decoration: none;
-    position: relative;
-    padding-bottom: 2px;
-    transition: color 0.3s;
-  }
-  .nav-links a::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0;
-    height: 1px;
-    width: 0;
-    background: var(--brass);
-    transition: width 0.4s ease;
-  }
-  .nav-links a:hover { color: var(--forest); }
-  .nav-links a:hover::after { width: 100%; }
-
-  .nav-cta {
-    font-family: 'Inter Tight', sans-serif;
-    font-size: 13px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    padding: 11px 22px;
-    background: var(--forest);
-    color: var(--paper);
-    border: none;
-    cursor: pointer;
-    transition: background 0.3s;
-    text-decoration: none;
-    display: inline-block;
-  }
-  .nav-cta:hover { background: var(--ink); }
-
-  /* ============ HERO ============ */
-  .hero {
-    min-height: 88vh;
-    padding: 140px 40px 80px;
-    position: relative;
-    display: grid;
-    grid-template-columns: 1.3fr 1fr;
-    gap: 60px;
-    align-items: center;
-    background: linear-gradient(180deg, var(--paper) 0%, var(--ivory) 100%);
-  }
-
-  .eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 14px;
-    font-size: 12px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--forest);
-    margin-bottom: 32px;
-    font-weight: 500;
-    opacity: 0;
-    animation: fadeUp 0.9s 0.1s forwards;
-  }
-  .eyebrow::before {
-    content: '';
-    width: 40px;
-    height: 1px;
-    background: var(--brass);
-  }
-
-  h1.hero-title {
-    font-family: 'Fraunces', serif;
-    font-weight: 300;
-    font-size: clamp(44px, 5.8vw, 80px);
-    line-height: 1;
-    letter-spacing: -0.02em;
-    color: var(--ink);
-    margin-bottom: 30px;
-    opacity: 0;
-    animation: fadeUp 1s 0.25s forwards;
-  }
-  h1.hero-title .accent {
-    font-style: italic;
-    color: var(--forest);
-  }
-
-  .hero-lead {
-    font-size: 17px;
-    line-height: 1.65;
-    color: var(--ink-soft);
-    max-width: 510px;
-    margin-bottom: 40px;
-    opacity: 0;
-    animation: fadeUp 1s 0.4s forwards;
-  }
-
-  .hero-actions {
-    display: flex;
-    gap: 16px;
-    align-items: center;
-    flex-wrap: wrap;
-    opacity: 0;
-    animation: fadeUp 1s 0.55s forwards;
-  }
-
-  .btn-primary {
-    font-family: 'Inter Tight', sans-serif;
-    font-size: 14px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    padding: 17px 30px;
-    background: var(--forest);
-    color: var(--paper);
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    text-decoration: none;
-  }
-  .btn-primary:hover {
-    background: var(--ink);
-    padding-right: 36px;
-  }
-  .btn-primary .arrow { transition: transform 0.3s; }
-  .btn-primary:hover .arrow { transform: translateX(4px); }
-
-  .btn-secondary {
-    font-family: 'Inter Tight', sans-serif;
-    font-size: 14px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    padding: 17px 6px;
-    background: transparent;
-    color: var(--ink);
-    border: none;
-    border-bottom: 1px solid var(--ink);
-    cursor: pointer;
-    transition: all 0.3s;
-    text-decoration: none;
-    display: inline-block;
-  }
-  .btn-secondary:hover { color: var(--brass); border-color: var(--brass); }
-
-  /* Hero card */
-  .hero-visual {
-    position: relative;
-    height: 480px;
-    opacity: 0;
-    animation: fadeIn 1.4s 0.6s forwards;
-  }
-
-  .keycard {
-    position: absolute;
-    top: 30px;
-    right: 0;
-    width: 92%;
-    background: var(--forest);
-    color: var(--ivory);
-    padding: 34px 32px 28px;
-    border: 1px solid var(--forest-deep);
-    box-shadow: 0 30px 60px -20px rgba(20, 40, 33, 0.3);
-    transform: rotate(1.5deg);
-  }
-  .keycard-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: start;
-    margin-bottom: 30px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid rgba(232, 212, 168, 0.2);
-  }
-  .keycard-header .label {
-    font-size: 10px;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--brass-light);
-  }
-  .keycard-header .label .v {
-    font-family: 'Fraunces', serif;
-    font-size: 14px;
-    color: var(--ivory);
-    letter-spacing: normal;
-    text-transform: none;
-    display: block;
-    margin-top: 4px;
-  }
-  .keycard-mark {
-    width: 44px; height: 44px;
-    border: 1px solid var(--brass-light);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .keycard h3 {
-    font-family: 'Fraunces', serif;
-    font-weight: 300;
-    font-size: 36px;
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-    margin-bottom: 24px;
-  }
-  .keycard h3 .italic { color: var(--brass-light); }
-  .keycard .features {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px 24px;
-    font-size: 13px;
-  }
-  .keycard .features > div {
-    display: flex;
-    align-items: start;
-    gap: 9px;
-    color: rgba(244, 239, 230, 0.9);
-  }
-  .keycard .features .check {
-    color: var(--brass-light);
-    font-size: 14px;
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
-
-  .keycard-stub {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 56%;
-    background: var(--paper);
-    border: 1px solid var(--rule);
-    padding: 22px 24px;
-    transform: rotate(-2deg);
-    box-shadow: 0 20px 40px -15px rgba(20, 40, 33, 0.18);
-  }
-  .stub-label {
-    font-size: 10px;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 10px;
-  }
-  .stub-title {
-    font-family: 'Fraunces', serif;
-    font-size: 22px;
-    font-weight: 400;
-    color: var(--forest);
-    line-height: 1.2;
-    letter-spacing: -0.01em;
-  }
-  .stub-meta {
-    margin-top: 12px;
-    padding-top: 12px;
-    border-top: 1px dashed var(--rule);
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    color: var(--muted);
-  }
-  .stub-meta span:last-child { color: var(--forest); font-weight: 500; }
-
-  /* ============ QUICK ACTIONS ============ */
-  .quick-actions {
-    background: var(--forest);
-    padding: 0;
-  }
-  .qa-inner {
-    max-width: 1300px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-  }
-  .qa-item {
-    padding: 36px 30px;
-    border-right: 1px solid rgba(232, 212, 168, 0.15);
-    color: var(--ivory);
-    text-decoration: none;
-    display: block;
-    transition: background 0.3s;
-    position: relative;
-  }
-  .qa-item:last-child { border-right: none; }
-  .qa-item:hover { background: var(--forest-deep); }
-  .qa-item.featured {
-    background: var(--brass);
-    color: var(--ink);
-  }
-  .qa-item.featured:hover { background: var(--brass-light); }
-  .qa-num {
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-size: 14px;
-    color: var(--brass-light);
-    margin-bottom: 14px;
-    display: block;
-  }
-  .qa-item.featured .qa-num { color: var(--forest); }
-  .qa-title {
-    font-family: 'Fraunces', serif;
-    font-size: 22px;
-    font-weight: 400;
-    line-height: 1.15;
-    margin-bottom: 8px;
-    letter-spacing: -0.01em;
-  }
-  .qa-title .italic { color: var(--brass-light); }
-  .qa-item.featured .qa-title .italic { color: var(--forest); }
-  .qa-desc {
-    font-size: 13px;
-    line-height: 1.5;
-    color: rgba(244, 239, 230, 0.75);
-    margin-bottom: 18px;
-  }
-  .qa-item.featured .qa-desc { color: var(--ink-soft); }
-  .qa-arrow {
-    font-size: 18px;
-    letter-spacing: 0;
-    transition: transform 0.3s;
-    display: inline-block;
-  }
-  .qa-item:hover .qa-arrow { transform: translateX(6px); }
-
-  /* ============ INTRO ============ */
-  .welcome {
-    padding: 120px 40px 90px;
-    background: var(--paper);
-    display: grid;
-    grid-template-columns: 1fr 1.6fr;
-    gap: 80px;
-    max-width: 1300px;
-    margin: 0 auto;
-    align-items: start;
-  }
-
-  .section-label {
-    font-size: 11px;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--brass);
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 20px;
-  }
-  .section-label::before {
-    content: '';
-    width: 30px;
-    height: 1px;
-    background: var(--brass);
-  }
-
-  .welcome h2 {
-    font-family: 'Fraunces', serif;
-    font-size: clamp(36px, 4.2vw, 56px);
-    font-weight: 300;
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-  }
-  .welcome h2 .italic { color: var(--forest); }
-
-  .welcome-body {
-    font-size: 17px;
-    line-height: 1.7;
-    color: var(--ink-soft);
-  }
-  .welcome-body p + p { margin-top: 18px; }
-
-  /* ============ SERVICES ============ */
-  .services-wrap {
-    background: var(--ivory);
-    padding: 110px 0 90px;
-  }
-  .services-header {
-    padding: 0 40px;
-    max-width: 1300px;
-    margin: 0 auto 70px;
-    display: grid;
-    grid-template-columns: 1fr 1.6fr;
-    gap: 60px;
-    align-items: end;
-  }
-  .services-header h2 {
-    font-family: 'Fraunces', serif;
-    font-size: clamp(36px, 4.5vw, 60px);
-    font-weight: 300;
-    line-height: 1;
-    letter-spacing: -0.025em;
-  }
-  .services-header h2 .italic { color: var(--forest); }
-  .services-header .desc {
-    font-size: 16px;
-    line-height: 1.65;
-    color: var(--ink-soft);
-    max-width: 520px;
-  }
-
-  .services {
-    max-width: 1300px;
-    margin: 0 auto;
-    padding: 0 40px;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0;
-    border-top: 1px solid var(--rule);
-    border-left: 1px solid var(--rule);
-  }
-  .service {
-    padding: 36px 32px 40px;
-    border-right: 1px solid var(--rule);
-    border-bottom: 1px solid var(--rule);
-    background: var(--paper);
-    transition: background 0.4s;
-    position: relative;
-  }
-  .service:hover { background: var(--ivory-deep); }
-  .service-num {
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-size: 14px;
-    color: var(--brass);
-    margin-bottom: 18px;
-  }
-  .service h3 {
-    font-family: 'Fraunces', serif;
-    font-size: 24px;
-    font-weight: 400;
-    line-height: 1.15;
-    letter-spacing: -0.015em;
-    margin-bottom: 14px;
-    color: var(--ink);
-  }
-  .service h3 .italic { color: var(--forest); }
-  .service p {
-    font-size: 14.5px;
-    line-height: 1.6;
-    color: var(--ink-soft);
-    margin-bottom: 20px;
-  }
-  .service .link {
-    font-size: 12px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--forest);
-    text-decoration: none;
-    border-bottom: 1px solid var(--forest);
-    padding-bottom: 2px;
-    font-weight: 500;
-    transition: all 0.3s;
-  }
-  .service .link:hover { color: var(--brass); border-color: var(--brass); }
-
-  /* ============ POLICIES AT A GLANCE ============ */
-  .policies-wrap {
-    background: var(--paper);
-    padding: 110px 40px 90px;
-    border-top: 1px solid var(--rule-soft);
-  }
-  .policies-inner {
-    max-width: 1300px;
-    margin: 0 auto;
-  }
-  .policies-header {
-    display: grid;
-    grid-template-columns: 1fr 1.4fr;
-    gap: 60px;
-    margin-bottom: 60px;
-    align-items: end;
-  }
-  .policies-header h2 {
-    font-family: 'Fraunces', serif;
-    font-size: clamp(36px, 4.2vw, 56px);
-    font-weight: 300;
-    line-height: 1.05;
-    letter-spacing: -0.025em;
-    color: var(--ink);
-  }
-  .policies-header h2 .italic { color: var(--forest); }
-  .policies-header .desc {
-    font-size: 15.5px;
-    line-height: 1.65;
-    color: var(--ink-soft);
-    max-width: 500px;
-  }
-  .policies-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0;
-    border-top: 1px solid var(--rule);
-    border-left: 1px solid var(--rule);
-  }
-  .policy {
-    padding: 28px 28px 30px;
-    border-right: 1px solid var(--rule);
-    border-bottom: 1px solid var(--rule);
-    background: var(--paper);
-    transition: background 0.4s;
-  }
-  .policy:hover { background: var(--ivory); }
-  .policy-label {
-    font-family: 'Inter Tight', sans-serif;
-    font-size: 10px;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--brass);
-    margin-bottom: 14px;
-    font-weight: 500;
-  }
-  .policy-value {
-    font-family: 'Fraunces', serif;
-    font-size: 26px;
-    font-weight: 400;
-    line-height: 1.15;
-    letter-spacing: -0.015em;
-    color: var(--ink);
-    margin-bottom: 10px;
-  }
-  .policy-value .italic { color: var(--forest); }
-  .policy-note {
-    font-size: 13.5px;
-    line-height: 1.55;
-    color: var(--muted);
-  }
-  .policies-footnote {
-    margin-top: 36px;
-    padding: 20px 24px;
-    background: var(--ivory-deep);
-    border-left: 3px solid var(--brass);
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    font-size: 15px;
-    line-height: 1.55;
-    color: var(--ink-soft);
-  }
-
-  /* ============ PAYMENT BAND ============ */
-  .pay-band {
-    padding: 130px 40px;
-    background: var(--forest-deep);
-    color: var(--ivory);
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .pay-band::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(circle at 30% 30%, rgba(176, 133, 69, 0.18), transparent 50%),
-      radial-gradient(circle at 70% 70%, rgba(176, 133, 69, 0.1), transparent 55%);
-    pointer-events: none;
-  }
-  .pay-inner { max-width: 720px; margin: 0 auto; position: relative; z-index: 1; }
-  .pay-band .section-label { justify-content: center; color: var(--brass-light); }
-  .pay-band .section-label::before { background: var(--brass-light); }
-  .pay-band h2 {
-    font-family: 'Fraunces', serif;
-    font-size: clamp(40px, 5vw, 68px);
-    font-weight: 300;
-    line-height: 1.02;
-    letter-spacing: -0.025em;
-    margin-bottom: 24px;
-  }
-  .pay-band h2 .italic { color: var(--brass-light); }
-  .pay-band p {
-    font-size: 18px;
-    line-height: 1.6;
-    color: rgba(244, 239, 230, 0.78);
-    margin-bottom: 44px;
-  }
-  .pay-btn {
-    font-family: 'Inter Tight', sans-serif;
-    font-size: 15px;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    padding: 22px 42px;
-    background: var(--brass);
-    color: var(--ink);
-    border: none;
-    cursor: pointer;
-    transition: all 0.3s;
-    display: inline-flex;
-    align-items: center;
-    gap: 14px;
-    text-decoration: none;
-    font-weight: 500;
-  }
-  .pay-btn:hover { background: var(--brass-light); padding-right: 50px; }
-  .pay-btn .arrow { transition: transform 0.3s; }
-  .pay-btn:hover .arrow { transform: translateX(6px); }
-  .pay-details {
-    margin-top: 36px;
-    display: flex;
-    justify-content: center;
-    gap: 36px;
-    font-size: 12px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--brass-pale);
-  }
-  .pay-details span { display: inline-flex; align-items: center; gap: 8px; }
-  .pay-details .dot { width: 4px; height: 4px; background: var(--brass-light); border-radius: 50%; }
-
-  /* ============ FAQ ============ */
-  .faq-wrap {
-    padding: 130px 40px;
-    background: var(--paper);
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-  .faq-header { text-align: center; margin-bottom: 70px; }
-  .faq-header .section-label { justify-content: center; }
-  .faq-header h2 {
-    font-family: 'Fraunces', serif;
-    font-size: clamp(36px, 4.2vw, 56px);
-    font-weight: 300;
-    line-height: 1.05;
-    letter-spacing: -0.025em;
-  }
-  .faq-header h2 .italic { color: var(--forest); }
-
-  .faq-list { max-width: 820px; margin: 0 auto; }
-  .faq-item {
-    border-bottom: 1px solid var(--rule);
-    padding: 28px 0;
-    cursor: pointer;
-  }
-  .faq-item:first-child { border-top: 1px solid var(--rule); }
-  .faq-q {
-    display: flex;
-    justify-content: space-between;
-    align-items: start;
-    gap: 30px;
-    font-family: 'Fraunces', serif;
-    font-size: 22px;
-    font-weight: 400;
-    line-height: 1.3;
-    color: var(--ink);
-    letter-spacing: -0.01em;
-  }
-  .faq-toggle {
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    color: var(--brass);
-    font-size: 28px;
-    font-weight: 300;
-    line-height: 1;
-    flex-shrink: 0;
-    transition: transform 0.4s;
-  }
-  .faq-item.open .faq-toggle { transform: rotate(45deg); }
-  .faq-a {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.5s ease, padding 0.4s ease;
-    font-size: 16px;
-    line-height: 1.65;
-    color: var(--ink-soft);
-    padding-right: 50px;
-  }
-  .faq-item.open .faq-a { max-height: 600px; padding-top: 18px; }
-
-  /* ============ FOOTER ============ */
-  footer {
-    background: var(--ink);
-    color: var(--ivory-deep);
-    padding: 80px 40px 40px;
-  }
-  .footer-inner {
-    max-width: 1300px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1.4fr 1fr 1fr 1fr;
-    gap: 60px;
-    padding-bottom: 50px;
-    border-bottom: 1px solid rgba(232, 212, 168, 0.15);
-  }
-  .footer-brand .logo { color: var(--ivory-deep); font-size: 24px; }
-  .footer-brand .logo small { color: rgba(235, 227, 212, 0.6); }
-  .footer-brand p {
-    margin-top: 22px;
-    max-width: 320px;
-    font-size: 14px;
-    line-height: 1.65;
-    color: rgba(235, 227, 212, 0.7);
-  }
-  .footer-col h4 {
-    font-family: 'Inter Tight', sans-serif;
-    font-size: 11px;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    color: var(--brass-light);
-    font-weight: 500;
-    margin-bottom: 22px;
-  }
-  .footer-col ul { list-style: none; }
-  .footer-col li { margin-bottom: 11px; }
-  .footer-col a {
-    color: rgba(235, 227, 212, 0.85);
-    text-decoration: none;
-    font-size: 14px;
-    transition: color 0.3s;
-  }
-  .footer-col a:hover { color: var(--brass-light); }
-  .footer-bottom {
-    max-width: 1300px;
-    margin: 28px auto 0;
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-    color: rgba(235, 227, 212, 0.5);
-    letter-spacing: 0.04em;
-  }
-
-  /* ============ PAGES (Zelle modal/page) ============ */
-  .page {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 200;
-    background: var(--ivory);
-    overflow-y: auto;
-    animation: slideUp 0.6s ease forwards;
-  }
-  .page.active { display: block; }
-
-  .page-nav {
-    padding: 22px 40px;
-    background: rgba(244, 239, 230, 0.9);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--rule-soft);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-  }
-  .back-link {
-    font-size: 13px;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--ink);
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    background: none;
-    border: none;
-    font-family: 'Inter Tight', sans-serif;
-  }
-  .back-link:hover { color: var(--brass); }
-  .back-link .arr { transition: transform 0.3s; display: inline-block; }
-  .back-link:hover .arr { transform: translateX(-4px); }
-
-  /* Zelle Page */
-  .zelle-page {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 60px 40px 100px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: center;
-  }
-  .zelle-info .eyebrow {
-    color: var(--zelle);
-    margin-bottom: 28px;
-  }
-  .zelle-info .eyebrow::before { background: var(--zelle); }
-  .zelle-info h1 {
-    font-family: 'Fraunces', serif;
-    font-size: clamp(40px, 5vw, 64px);
-    font-weight: 300;
-    line-height: 1;
-    letter-spacing: -0.025em;
-    margin-bottom: 26px;
-  }
-  .zelle-info h1 .italic { color: var(--forest); }
-  .zelle-info .lead {
-    font-size: 17px;
-    line-height: 1.65;
-    color: var(--ink-soft);
-    margin-bottom: 36px;
-  }
-  .zelle-details {
-    background: var(--paper);
-    border: 1px solid var(--rule);
-    padding: 28px 30px;
-    margin-bottom: 30px;
-  }
-  .zelle-detail-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 13px 0;
-    border-bottom: 1px dashed var(--rule-soft);
-    font-size: 14px;
-  }
-  .zelle-detail-row:last-child { border-bottom: none; }
-  .zelle-detail-row .lbl {
-    color: var(--muted);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    font-size: 11px;
-  }
-  .zelle-detail-row .val {
-    font-family: 'Fraunces', serif;
-    color: var(--forest);
-    font-size: 17px;
-    font-weight: 500;
-  }
-  .copy-btn {
-    background: none;
-    border: 1px solid var(--rule);
-    padding: 5px 11px;
-    font-size: 10px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    cursor: pointer;
-    color: var(--ink);
-    margin-left: 12px;
-    font-family: 'Inter Tight', sans-serif;
-    transition: all 0.3s;
-  }
-  .copy-btn:hover { background: var(--forest); color: var(--paper); border-color: var(--forest); }
-  .copy-btn.copied { background: var(--brass); color: var(--ink); border-color: var(--brass); }
-
-  .zelle-steps {
-    list-style: none;
-    counter-reset: step;
-  }
-  .zelle-steps li {
-    counter-increment: step;
-    padding: 14px 0 14px 50px;
-    position: relative;
-    font-size: 14.5px;
-    line-height: 1.5;
-    color: var(--ink-soft);
-    border-bottom: 1px solid var(--rule-soft);
-  }
-  .zelle-steps li:last-child { border-bottom: none; }
-  .zelle-steps li::before {
-    content: counter(step, upper-roman) ".";
-    position: absolute;
-    left: 0;
-    top: 14px;
-    font-family: 'Fraunces', serif;
-    font-style: italic;
-    color: var(--brass);
-    font-size: 16px;
-    width: 36px;
-  }
-  .zelle-steps li strong { color: var(--ink); font-weight: 500; }
-
-  /* QR card */
-  .qr-card {
-    background: var(--paper);
-    border: 1px solid var(--rule);
-    padding: 40px;
-    box-shadow: 0 30px 60px -20px rgba(20, 40, 33, 0.15);
-    text-align: center;
-    position: relative;
-  }
-  .qr-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 28px;
-    padding-bottom: 22px;
-    border-bottom: 1px solid var(--rule-soft);
-  }
-  .qr-card-header .brand {
-    font-family: 'Fraunces', serif;
-    font-size: 18px;
-    font-weight: 500;
-    color: var(--forest);
-    text-align: left;
-    line-height: 1.2;
-  }
-  .qr-card-header .brand small {
-    display: block;
-    font-family: 'Inter Tight', sans-serif;
-    font-size: 9px;
-    letter-spacing: 0.25em;
-    color: var(--muted);
-    text-transform: uppercase;
-    margin-top: 4px;
-    font-weight: 400;
-  }
-  .zelle-wordmark {
-    background: var(--zelle);
-    color: white;
-    padding: 6px 12px;
-    border-radius: 4px;
-    font-family: 'Inter Tight', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: 0.04em;
-  }
-
-  .qr-frame {
-    background: white;
-    padding: 22px;
-    border: 1px solid var(--rule-soft);
-    display: inline-block;
-    margin-bottom: 26px;
-    position: relative;
-  }
-  .qr-frame svg, .qr-frame img { display: block; }
-  .qr-corner {
-    position: absolute;
-    width: 16px;
-    height: 16px;
-    border: 2px solid var(--brass);
-  }
-  .qr-corner.tl { top: -2px; left: -2px; border-right: none; border-bottom: none; }
-  .qr-corner.tr { top: -2px; right: -2px; border-left: none; border-bottom: none; }
-  .qr-corner.bl { bottom: -2px; left: -2px; border-right: none; border-top: none; }
-  .qr-corner.br { bottom: -2px; right: -2px; border-left: none; border-top: none; }
-
-  .qr-instruct {
-    font-family: 'Fraunces', serif;
-    font-size: 18px;
-    font-style: italic;
-    color: var(--ink);
-    margin-bottom: 8px;
-    font-weight: 400;
-  }
-  .qr-sub {
-    font-size: 13px;
-    color: var(--muted);
-    letter-spacing: 0.05em;
-  }
-
-  /* ============ ANIMATIONS ============ */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(40px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  .reveal {
-    opacity: 0;
-    transform: translateY(40px);
-    transition: opacity 0.9s ease, transform 0.9s ease;
-  }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
-
-  /* ============ RESPONSIVE ============ */
-  @media (max-width: 1024px) {
-    .hero { grid-template-columns: 1fr; padding: 130px 28px 60px; }
-    .hero-visual { height: 400px; margin-top: 30px; }
-    .qa-inner { grid-template-columns: 1fr 1fr; }
-    .qa-item { border-bottom: 1px solid rgba(232, 212, 168, 0.15); }
-    .qa-item:nth-child(2) { border-right: none; }
-    .welcome { grid-template-columns: 1fr; gap: 30px; padding: 90px 28px 70px; }
-    .services-header { grid-template-columns: 1fr; gap: 24px; padding: 0 28px; }
-    .services { grid-template-columns: 1fr 1fr; padding: 0 28px; }
-    .policies-wrap { padding: 90px 28px 70px; }
-    .policies-header { grid-template-columns: 1fr; gap: 24px; }
-    .policies-grid { grid-template-columns: 1fr 1fr; }
-    .footer-inner { grid-template-columns: 1fr 1fr; gap: 40px; }
-    .zelle-page { grid-template-columns: 1fr; padding: 40px 28px 80px; gap: 50px; }
-    .qr-card { max-width: 440px; margin: 0 auto; }
-    nav { padding: 18px 22px; }
-    .nav-links { display: none; }
-  }
-  @media (max-width: 640px) {
-    .hero { padding: 120px 20px 50px; }
-    .qa-inner { grid-template-columns: 1fr; }
-    .qa-item { border-right: none; }
-    .welcome { padding: 70px 20px 60px; }
-    .services-wrap { padding: 70px 0 50px; }
-    .services-header { padding: 0 20px; }
-    .services { grid-template-columns: 1fr; padding: 0 20px; }
-    .policies-wrap { padding: 70px 20px 50px; }
-    .policies-grid { grid-template-columns: 1fr; }
-    .pay-band { padding: 80px 20px; }
-    .pay-details { flex-direction: column; gap: 14px; }
-    .faq-wrap { padding: 80px 20px; }
-    .faq-q { font-size: 18px; }
-    .footer-inner { grid-template-columns: 1fr; gap: 32px; padding: 0 0 40px; }
-    footer { padding: 60px 20px 30px; }
-    .footer-bottom { flex-direction: column; gap: 10px; }
-    .hero-actions { flex-direction: column; align-items: stretch; }
-    .btn-primary, .btn-secondary { width: 100%; justify-content: center; text-align: center; }
-    .page-nav { padding: 18px 22px; }
-    .zelle-page { padding: 30px 20px 60px; }
-    .qr-card { padding: 28px 24px; }
-    .zelle-info h1 { font-size: 38px; }
+  @media (prefers-reduced-motion:reduce){
+    .spin-btn,.fav-btn,.row{transition:none}
   }
 </style>
 </head>
 <body>
+<header>
+  <h1>Lunch Roulette</h1>
+  <p>Lunch spots near 32746 · Lake Mary / Sanford / Longwood / Heathrow (+ two Oviedo picks) · ratings &amp; review counts from Google Maps</p>
+</header>
 
-<!-- ============ MAIN PAGE ============ -->
-<div id="main-page">
-
-<nav>
-  <div class="logo">
-    <span class="logo-mark">
-      <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="20" cy="20" r="18.5" fill="none" stroke="#1a2620" stroke-width="1.5"/>
-        <path d="M 12 26 L 12 18 L 20 12 L 28 18 L 28 26 Z" fill="none" stroke="#1a2620" stroke-width="1.5" stroke-linejoin="round"/>
-        <circle cx="20" cy="22" r="2" fill="#b08545"/>
-      </svg>
-    </span>
-    <span>Arbormoor Heights
-      <small>Property Management · LLC</small>
-    </span>
-  </div>
-  <ul class="nav-links">
-    <li><a href="#services">Resources</a></li>
-    <li><a href="#policies">Policies</a></li>
-    <li><a href="#faq">FAQ</a></li>
-    <li><a href="#" onclick="openZelle(event)">Pay Rent</a></li>
-  </ul>
-  <a href="#" class="nav-cta" onclick="openZelle(event)">Pay Rent</a>
-</nav>
-
-<!-- HERO -->
-<section class="hero">
-  <div>
-    <div class="eyebrow">Welcome Home, Resident</div>
-    <h1 class="hero-title">
-      Everything you need,<br>
-      <span class="accent italic">all in one place.</span>
-    </h1>
-    <p class="hero-lead">
-      Pay your rent, request maintenance, and reach your property manager — quickly, securely, and on your own schedule. We've built every resident touchpoint to respect your time.
-    </p>
-    <div class="hero-actions">
-      <a href="#" class="btn-primary" onclick="openZelle(event)">
-        Pay Rent via Zelle
-        <span class="arrow">→</span>
-      </a>
-      <a href="#services" class="btn-secondary">Other resident resources</a>
+<div class="wrap">
+  <!-- LEFT: list -->
+  <section class="panel">
+    <div class="panel-head">
+      <span>The Lineup</span>
+      <span class="count" id="countLabel"></span>
     </div>
-  </div>
+    <div class="list" id="list"></div>
+  </section>
 
-  <div class="hero-visual">
-    <div class="keycard">
-      <div class="keycard-header">
-        <div class="label">
-          Resident Keycard
-          <span class="v">Arbormoor Heights</span>
-        </div>
-        <div class="keycard-mark">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
-            <path d="M 7 14 L 7 10 L 12 6 L 17 10 L 17 14 Z" stroke="#e8d4a8" stroke-width="1.3" stroke-linejoin="round"/>
-            <circle cx="12" cy="11.5" r="1.2" fill="#e8d4a8"/>
-          </svg>
-        </div>
+  <!-- RIGHT: picker -->
+  <section class="panel">
+    <div class="panel-head"><span>Today's Pick</span></div>
+    <div class="picker-body">
+      <div class="slot" id="slot">
+        <div class="placeholder">Hit spin and let fate decide where you eat.</div>
       </div>
-      <h3>Care, <span class="italic">on call.</span><br>Right at your fingertips.</h3>
-      <div class="features">
-        <div><span class="check">✦</span> Rent via Zelle</div>
-        <div><span class="check">✦</span> 24-hr emergencies</div>
-        <div><span class="check">✦</span> Online requests</div>
-        <div><span class="check">✦</span> Direct manager line</div>
+      <button class="spin-btn" id="spinBtn">Spin</button>
+      <div class="opts">
+        <label><input type="checkbox" id="favOnly"> Favorites only</label>
+        <label><input type="checkbox" id="weighted" checked> Weight by rating</label>
       </div>
+      <p class="note">Tap the ♥ next to a restaurant to mark it as a favorite. Heads up: a few spots are closed Mondays — it's noted on the card.</p>
     </div>
-    <div class="keycard-stub">
-      <div class="stub-label">Quick Pay</div>
-      <div class="stub-title">Zelle · One tap.</div>
-      <div class="stub-meta">
-        <span>Pay to</span>
-        <span>Arbormoor Heights</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- QUICK ACTIONS BAR -->
-<section class="quick-actions">
-  <div class="qa-inner">
-    <a href="#" class="qa-item featured" onclick="openZelle(event)">
-      <span class="qa-num">i.</span>
-      <h3 class="qa-title">Pay Rent <span class="italic">via Zelle</span></h3>
-      <p class="qa-desc">Scan a QR code to send rent securely from your bank's app — no fees, no waiting.</p>
-      <span class="qa-arrow">→</span>
-    </a>
-    <a href="mailto:arbormoorheights@gmail.com?subject=Maintenance%20Request%20%E2%80%94%20%5BYour%20Unit%20%23%5D&body=Hello%2C%0D%0A%0D%0AUnit%20Number%3A%20%0D%0AName%20on%20Lease%3A%20%0D%0APhone%3A%20%0D%0A%0D%0AIssue%20Description%3A%0D%0A%0D%0AUrgency%20%28Emergency%20%2F%20Routine%29%3A%20%0D%0A%0D%0AThank%20you%2C" class="qa-item">
-      <span class="qa-num">ii.</span>
-      <h3 class="qa-title">Request <span class="italic">Maintenance</span></h3>
-      <p class="qa-desc">Submit a repair request — emergencies answered within four hours, day or night.</p>
-      <span class="qa-arrow">→</span>
-    </a>
-    <a href="mailto:arbormoorheights@gmail.com?subject=Lease%20Renewal%20Inquiry%20%E2%80%94%20%5BYour%20Unit%20%23%5D&body=Hello%2C%0D%0A%0D%0AI%27d%20like%20to%20discuss%20renewing%20my%20lease.%0D%0A%0D%0AUnit%20Number%3A%20%0D%0AName%20on%20Lease%3A%20%0D%0ACurrent%20Lease%20End%20Date%3A%20%0D%0A%0D%0AThank%20you%2C" class="qa-item">
-      <span class="qa-num">iii.</span>
-      <h3 class="qa-title">Renew <span class="italic">Your Lease</span></h3>
-      <p class="qa-desc">Coming up on your renewal date? Start the conversation early and lock in your terms.</p>
-      <span class="qa-arrow">→</span>
-    </a>
-    <a href="mailto:arbormoorheights@gmail.com?subject=Resident%20Inquiry%20%E2%80%94%20%5BYour%20Unit%20%23%5D&body=Hello%2C%0D%0A%0D%0AUnit%20Number%3A%20%0D%0AName%20on%20Lease%3A%20%0D%0A%0D%0AMy%20question%3A%0D%0A%0D%0AThank%20you%2C" class="qa-item">
-      <span class="qa-num">iv.</span>
-      <h3 class="qa-title">Contact <span class="italic">Your Manager</span></h3>
-      <p class="qa-desc">Direct line to a real person who knows your unit, your lease, and your history.</p>
-      <span class="qa-arrow">→</span>
-    </a>
-  </div>
-</section>
-
-<!-- WELCOME -->
-<section class="welcome reveal">
-  <div>
-    <div class="section-label">A Word to Our Residents</div>
-    <h2>You're not a unit number. <span class="italic">You're a neighbor.</span></h2>
-  </div>
-  <div class="welcome-body">
-    <p>We know what it's like to rent. The slow responses, the confusing portals, the feeling that no one is actually on the other end of the line. We built Arbormoor Heights to be the opposite of all that.</p>
-    <p>Rent is collected simply. Maintenance is handled quickly. Questions are answered by someone who already knows your name. The goal is straightforward: make your tenancy so smooth you forget property management exists — until the day you want to renew.</p>
-  </div>
-</section>
-
-<!-- POLICIES AT A GLANCE -->
-<section class="policies-wrap reveal" id="policies">
-  <div class="policies-inner">
-    <div class="policies-header">
-      <div>
-        <div class="section-label">Policies at a Glance</div>
-        <h2>The basics, <span class="italic">in one place.</span></h2>
-      </div>
-      <p class="desc">A quick reference to the policies that affect your tenancy day to day. Your specific lease takes precedence — these are the standard terms drawn from the Florida Realtors residential lease form and Florida Statute Chapter 83.</p>
-    </div>
-
-    <div class="policies-grid">
-      <div class="policy">
-        <div class="policy-label">Rent Due</div>
-        <div class="policy-value">1st of <span class="italic">each month</span></div>
-        <p class="policy-note">Five-day grace period. Late fees begin on the 6th per your lease.</p>
-      </div>
-      <div class="policy">
-        <div class="policy-label">Preferred Payment</div>
-        <div class="policy-value">Zelle <span class="italic">— instant</span></div>
-        <p class="policy-note">No fees, same-day confirmation. ACH, money order, and cashier's check also accepted.</p>
-      </div>
-      <div class="policy">
-        <div class="policy-label">Maintenance Response</div>
-        <div class="policy-value">4 hrs / <span class="italic">48 hrs</span></div>
-        <p class="policy-note">Emergencies within four hours. Routine requests within forty-eight.</p>
-      </div>
-      <div class="policy">
-        <div class="policy-label">Pet Policy</div>
-        <div class="policy-value">Per <span class="italic">your lease</span></div>
-        <p class="policy-note">Not permitted unless specifically authorized with a pet deposit on file.</p>
-      </div>
-      <div class="policy">
-        <div class="policy-label">Smoking</div>
-        <div class="policy-value">Not <span class="italic">permitted</span></div>
-        <p class="policy-note">Smoking is prohibited indoors unless explicitly stated otherwise in your lease.</p>
-      </div>
-      <div class="policy">
-        <div class="policy-label">Landlord Entry</div>
-        <div class="policy-value">12 hours' <span class="italic">notice</span></div>
-        <p class="policy-note">For non-emergency repairs or inspections, between 7:30 AM and 8:00 PM (§83.53).</p>
-      </div>
-      <div class="policy">
-        <div class="policy-label">Renter's Insurance</div>
-        <div class="policy-value">Strongly <span class="italic">recommended</span></div>
-        <p class="policy-note">Your belongings are not covered by the landlord's policy. Typically $10–20/month.</p>
-      </div>
-      <div class="policy">
-        <div class="policy-label">Lease Term</div>
-        <div class="policy-value">12 months <span class="italic">maximum</span></div>
-        <p class="policy-note">Florida law caps single-family leases at one year. Renewal requires a new written lease.</p>
-      </div>
-      <div class="policy">
-        <div class="policy-label">Deposit Return</div>
-        <div class="policy-value">15 / <span class="italic">30 days</span></div>
-        <p class="policy-note">15 days with no claim, 30 days with itemized claim notice. Provide forwarding address.</p>
-      </div>
-    </div>
-
-    <div class="policies-footnote">
-      Your tenancy is governed by the Florida Residential Landlord and Tenant Act (Chapter 83, Part II, Florida Statutes), a copy of which is attached to your signed lease. When in doubt, refer to your lease first, then reach out to us — we'd much rather answer a question than resolve a misunderstanding.
-    </div>
-  </div>
-</section>
-
-<!-- SERVICES -->
-<section class="services-wrap" id="services">
-  <div class="services-header reveal">
-    <h2>Resources at <span class="italic">your service.</span></h2>
-    <p class="desc">Every tool, form, and contact point you need as a resident — designed to be quick to find and easy to use, whether you're paying rent or reporting a leak at 2 AM.</p>
-  </div>
-
-  <div class="services">
-    <div class="service">
-      <div class="service-num">i.</div>
-      <h3>Pay rent <span class="italic">via Zelle</span></h3>
-      <p>Send rent directly from your bank's mobile app using our Zelle QR code. Instant, secure, and completely free of processing fees.</p>
-      <a href="#" class="link" onclick="openZelle(event)">Open QR code →</a>
-    </div>
-
-    <div class="service">
-      <div class="service-num">ii.</div>
-      <h3>Submit a <span class="italic">maintenance request</span></h3>
-      <p>Describe the issue, upload a photo, and we'll dispatch a vetted vendor. Routine items handled within 48 hours; emergencies within four.</p>
-      <a href="mailto:arbormoorheights@gmail.com?subject=Maintenance%20Request%20%E2%80%94%20%5BYour%20Unit%20%23%5D&body=Hello%2C%0D%0A%0D%0AUnit%20Number%3A%20%0D%0AName%20on%20Lease%3A%20%0D%0APhone%3A%20%0D%0A%0D%0AIssue%20Description%3A%0D%0A%0D%0AUrgency%20%28Emergency%20%2F%20Routine%29%3A%20%0D%0A%0D%0AThank%20you%2C" class="link">Submit request →</a>
-    </div>
-
-    <div class="service">
-      <div class="service-num">iii.</div>
-      <h3>Emergency <span class="italic">contact line</span></h3>
-      <p>Burst pipe, no heat in winter, electrical hazard, or lockout — our 24-hour emergency line connects you to a manager, not a voicemail.</p>
-      <a href="tel:+13109270857" class="link">Call (310) 927-0857 →</a>
-    </div>
-
-    <div class="service">
-      <div class="service-num">iv.</div>
-      <h3>Lease &amp; <span class="italic">document portal</span></h3>
-      <p>Access your signed lease, addenda, inspection reports, and renewal offers anytime. Everything organized and stored in one secure place.</p>
-      <a href="mailto:arbormoorheights@gmail.com?subject=Lease%20Document%20Request%20%E2%80%94%20%5BYour%20Unit%20%23%5D&body=Hello%2C%0D%0A%0D%0AUnit%20Number%3A%20%0D%0AName%20on%20Lease%3A%20%0D%0A%0D%0AI%27d%20like%20a%20copy%20of%20the%20following%20documents%3A%0D%0A%0D%0AThank%20you%2C" class="link">Request documents →</a>
-    </div>
-
-    <div class="service">
-      <div class="service-num">v.</div>
-      <h3>Renewal &amp; <span class="italic">move-out</span></h3>
-      <p>Planning to stay? Start your renewal early. Moving on? We'll walk you through the move-out checklist and deposit return timeline.</p>
-      <a href="mailto:arbormoorheights@gmail.com?subject=Renewal%20%2F%20Move-Out%20%E2%80%94%20%5BYour%20Unit%20%23%5D&body=Hello%2C%0D%0A%0D%0AUnit%20Number%3A%20%0D%0AName%20on%20Lease%3A%20%0D%0ACurrent%20Lease%20End%20Date%3A%20%0D%0A%0D%0AI%27m%20planning%20to%20%28circle%20one%29%3A%20%20Renew%20%2F%20%20Move%20Out%0D%0A%0D%0ANotes%3A%0D%0A%0D%0AThank%20you%2C" class="link">Begin process →</a>
-    </div>
-
-    <div class="service">
-      <div class="service-num">vi.</div>
-      <h3>Community &amp; <span class="italic">resident perks</span></h3>
-      <p>Local recommendations, seasonal reminders, and small benefits we extend to residents in good standing — because retention is earned, not assumed.</p>
-      <a href="mailto:arbormoorheights@gmail.com?subject=Resident%20Inquiry%20%E2%80%94%20%5BYour%20Unit%20%23%5D&body=Hello%2C%0D%0A%0D%0AUnit%20Number%3A%20%0D%0AName%20on%20Lease%3A%20%0D%0A%0D%0AMy%20question%3A%0D%0A%0D%0AThank%20you%2C" class="link">Get in touch →</a>
-    </div>
-  </div>
-</section>
-
-<!-- PAY BAND -->
-<section class="pay-band">
-  <div class="pay-inner">
-    <div class="section-label">The Fastest Way to Pay</div>
-    <h2>Rent, <span class="italic">paid in seconds.</span></h2>
-    <p>Open your bank's app, scan our Zelle QR code, and send your rent. No portal logins. No processing fees. No checks in the mail. It's the quickest, simplest, and most secure way to pay — and the one we recommend to every resident.</p>
-    <a href="#" class="pay-btn" onclick="openZelle(event)">
-      Open Zelle Payment Page
-      <span class="arrow">→</span>
-    </a>
-    <div class="pay-details">
-      <span><span class="dot"></span> No fees</span>
-      <span><span class="dot"></span> Bank-secured</span>
-      <span><span class="dot"></span> Instant confirmation</span>
-    </div>
-  </div>
-</section>
-
-<!-- FAQ -->
-<section class="faq-wrap" id="faq">
-  <div class="faq-header reveal">
-    <div class="section-label">Frequently Asked</div>
-    <h2>Quick <span class="italic">answers.</span></h2>
-  </div>
-  <div class="faq-list">
-    <div class="faq-item">
-      <div class="faq-q"><span>When is rent due, and is there a grace period?</span><span class="faq-toggle">+</span></div>
-      <div class="faq-a">Rent is due on the 1st of each month per your lease. A standard <strong>five-day grace period</strong> applies — late fees begin on the 6th. The late fee amount is specified in your lease (typically 4% of the monthly rent under the Florida Realtors standard form). Paying via Zelle ensures your payment posts the same day.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q"><span>What if I can't pay rent on time this month?</span><span class="faq-toggle">+</span></div>
-      <div class="faq-a">Contact us <em>before</em> the 1st. We work with residents in good standing on short-term arrangements far more often than people expect. Communication earns flexibility; silence does not. Under Florida Statute §83.56(3), if rent goes unpaid for three business days after written demand, the landlord may begin eviction proceedings — so reaching out early matters.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q"><span>How quickly will maintenance respond to my request?</span><span class="faq-toggle">+</span></div>
-      <div class="faq-a"><strong>Emergencies</strong> — water leaks, gas, no heat in winter, no AC in extreme heat, electrical hazards, or anything affecting safety — are responded to within four hours. <strong>Routine requests</strong> are typically scheduled within 48 hours. Florida law (§83.51) requires landlords to maintain plumbing, structural components, locks, smoke detectors, and meet all applicable housing codes.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q"><span>What maintenance am I responsible for as a tenant?</span><span class="faq-toggle">+</span></div>
-      <div class="faq-a">Under Florida Statute §83.52, tenants must keep the unit clean and sanitary, remove garbage properly, operate plumbing and appliances reasonably, avoid damaging the premises, and refrain from disturbing neighbors. Your lease may also specify lawn care, pest control, or pool maintenance as tenant responsibilities — refer to Section 10 of your lease for the exact breakdown.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q"><span>Can I pay rent through other methods besides Zelle?</span><span class="faq-toggle">+</span></div>
-      <div class="faq-a">Yes — we accept ACH transfer, cashier's check, and money order. However, Zelle is our preferred method because it's instant, fee-free, secure, and creates a clear record on both sides. Personal checks are accepted but slow; under §68.065, returned-check fees apply if a check bounces.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q"><span>When will I get my security deposit back after move-out?</span><span class="faq-toggle">+</span></div>
-      <div class="faq-a">Florida Statute §83.49(3) requires landlords to either return your deposit within <strong>15 days</strong> of move-out, or send written notice of intent to impose a claim within <strong>30 days</strong>. If a claim is made, you have 15 days to object in writing. We aim to be well inside those windows. Make sure to provide your forwarding address at move-out so the notice reaches you.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q"><span>What's the pet and smoking policy?</span><span class="faq-toggle">+</span></div>
-      <div class="faq-a"><strong>Pets</strong> are not permitted unless specifically authorized in your lease and a pet deposit has been paid. If pets are allowed, the number, type, breed, and weight will be listed in Section 7 of your lease. <strong>Smoking</strong> is not permitted on the premises unless explicitly checked in your lease.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q"><span>How much notice do you give before entering the unit?</span><span class="faq-toggle">+</span></div>
-      <div class="faq-a">Per Florida Statute §83.53, we provide at least <strong>12 hours' notice</strong> before entering for non-emergency repairs or inspections, and only between 7:30 AM and 8:00 PM. The exceptions are emergencies (water leaks, fire, etc.) or for the protection of the property — in which case immediate entry is permitted. We do not abuse this right.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q"><span>Do I need renter's insurance?</span><span class="faq-toggle">+</span></div>
-      <div class="faq-a">Your lease (Section 18) recommends you carry both personal property insurance and liability insurance. Our policy covers the building structure; <em>your belongings are not covered by us</em>. Renter's insurance typically costs $10–20 per month and protects against theft, fire, water damage, and liability claims. It's a small expense for significant peace of mind.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q"><span>I'm an active-duty servicemember — what are my rights?</span><span class="faq-toggle">+</span></div>
-      <div class="faq-a">Under Florida Statute §83.682, active-duty servicemembers can terminate a lease with <strong>30 days' written notice</strong> in circumstances including permanent change of station orders (35+ miles), discharge or release from active duty, mandatory move into government quarters, or temporary duty orders exceeding 60 days. Provide a copy of your military orders or written verification from your commanding officer with the notice.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q"><span>How do I start the lease renewal process?</span><span class="faq-toggle">+</span></div>
-      <div class="faq-a">We reach out approximately 60 days before your lease ends, but you're welcome to start the conversation any time. Florida law caps single-family leases at one year, so a renewal is a new written lease — not an automatic extension. Residents in good standing typically receive favorable renewal terms.</div>
-    </div>
-    <div class="faq-item">
-      <div class="faq-q"><span>What's the move-out process?</span><span class="faq-toggle">+</span></div>
-      <div class="faq-a">Give us <strong>at least 7 days' written notice</strong> before vacating, along with your forwarding address (Florida Statute §83.49(5)). Return all keys, garage openers, and HOA access devices to the address on your lease. We'll conduct a move-out inspection, document the unit's condition, and follow the 15/30-day deposit timeline noted above.</div>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer id="contact">
-  <div class="footer-inner">
-    <div class="footer-brand">
-      <div class="logo">
-        <span class="logo-mark">
-          <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="20" cy="20" r="18.5" fill="none" stroke="#ebe3d4" stroke-width="1.5"/>
-            <path d="M 12 26 L 12 18 L 20 12 L 28 18 L 28 26 Z" fill="none" stroke="#ebe3d4" stroke-width="1.5" stroke-linejoin="round"/>
-            <circle cx="20" cy="22" r="2" fill="#b08545"/>
-          </svg>
-        </span>
-        <span>Arbormoor Heights
-          <small>Property Management · LLC</small>
-        </span>
-      </div>
-      <p>A Florida-based property management company headquartered in St. Petersburg, serving residents and owners with care, transparency, and timely service.</p>
-    </div>
-    <div class="footer-col">
-      <h4>Residents</h4>
-      <ul>
-        <li><a href="#" onclick="openZelle(event)">Pay Rent (Zelle)</a></li>
-        <li><a href="mailto:arbormoorheights@gmail.com?subject=Maintenance%20Request%20%E2%80%94%20%5BYour%20Unit%20%23%5D">Maintenance Request</a></li>
-        <li><a href="mailto:arbormoorheights@gmail.com?subject=Lease%20Renewal%20Inquiry%20%E2%80%94%20%5BYour%20Unit%20%23%5D">Lease Renewal</a></li>
-        <li><a href="mailto:arbormoorheights@gmail.com?subject=Lease%20Document%20Request%20%E2%80%94%20%5BYour%20Unit%20%23%5D">Document Request</a></li>
-        <li><a href="mailto:arbormoorheights@gmail.com?subject=Move-Out%20Notice%20%E2%80%94%20%5BYour%20Unit%20%23%5D">Move-Out Notice</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4>Support</h4>
-      <ul>
-        <li><a href="tel:+13109270857">Emergency Line</a></li>
-        <li><a href="mailto:arbormoorheights@gmail.com?subject=General%20Inquiry">General Inquiries</a></li>
-        <li><a href="#faq">FAQ</a></li>
-        <li><a href="https://www.hud.gov/fairhousing" target="_blank" rel="noopener">Fair Housing</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h4>Contact</h4>
-      <ul>
-        <li><a href="mailto:arbormoorheights@gmail.com">arbormoorheights@gmail.com</a></li>
-        <li><a href="tel:+13109270857">(310) 927-0857</a></li>
-        <li style="line-height: 1.55;"><a href="https://maps.google.com/?q=7901+4TH+ST+N+STE+300+St.+Petersburg+FL+33702" target="_blank">7901 4th St N, Ste 300<br>St. Petersburg, FL 33702<br>United States</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="footer-bottom">
-    <span>© MMXXVI Arbormoor Heights, LLC. All rights reserved.</span>
-    <span>Privacy · Terms · Fair Housing</span>
-  </div>
-</footer>
-
-</div>
-
-<!-- ============ ZELLE PAYMENT PAGE ============ -->
-<div id="zelle-page" class="page">
-  <div class="page-nav">
-    <button class="back-link" onclick="closeZelle()">
-      <span class="arr">←</span> Back to Resident Resources
-    </button>
-    <div class="logo" style="font-size: 18px;">
-      <span class="logo-mark" style="width: 26px; height: 26px;">
-        <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="20" cy="20" r="18.5" fill="none" stroke="#1a2620" stroke-width="1.5"/>
-          <path d="M 12 26 L 12 18 L 20 12 L 28 18 L 28 26 Z" fill="none" stroke="#1a2620" stroke-width="1.5" stroke-linejoin="round"/>
-          <circle cx="20" cy="22" r="2" fill="#b08545"/>
-        </svg>
-      </span>
-      Arbormoor Heights
-    </div>
-  </div>
-
-  <div class="zelle-page">
-    <div class="zelle-info">
-      <div class="eyebrow">Secure Rent Payment</div>
-      <h1>Pay rent via <span class="italic">Zelle.</span></h1>
-      <p class="lead">Scan the QR code with your bank's mobile app. The payment goes directly from your bank to ours — no third-party processor, no fees, no waiting. You'll receive instant confirmation from your bank, and we'll see the payment the same day.</p>
-
-      <div class="zelle-details">
-        <div class="zelle-detail-row">
-          <span class="lbl">Pay to</span>
-          <span style="display: flex; align-items: center;">
-            <span class="val">Arbormoor Heights, LLC</span>
-            <button class="copy-btn" onclick="copy(this, 'Arbormoor Heights, LLC')">Copy</button>
-          </span>
-        </div>
-        <div class="zelle-detail-row">
-          <span class="lbl">Zelle Email</span>
-          <span style="display: flex; align-items: center;">
-            <span class="val">arbormoorheights@gmail.com</span>
-            <button class="copy-btn" onclick="copy(this, 'arbormoorheights@gmail.com')">Copy</button>
-          </span>
-        </div>
-        <div class="zelle-detail-row">
-          <span class="lbl">Phone</span>
-          <span style="display: flex; align-items: center;">
-            <span class="val">(310) 927-0857</span>
-            <button class="copy-btn" onclick="copy(this, '3109270857')">Copy</button>
-          </span>
-        </div>
-        <div class="zelle-detail-row">
-          <span class="lbl">Memo</span>
-          <span class="val" style="font-style: italic; color: var(--muted); font-size: 14px;">Your unit # + month</span>
-        </div>
-      </div>
-
-      <ol class="zelle-steps">
-        <li>Open your <strong>bank's mobile app</strong> and find the Zelle option (usually under "Send Money" or "Transfers").</li>
-        <li>Tap <strong>"Send with QR code"</strong> or "Scan QR code."</li>
-        <li>Point your camera at the QR code on this page and confirm the recipient.</li>
-        <li>Enter the rent amount, add your <strong>unit number and month</strong> in the memo, and send.</li>
-      </ol>
-    </div>
-
-    <div class="qr-card">
-      <span class="qr-corner tl"></span>
-      <span class="qr-corner tr"></span>
-      <span class="qr-corner bl"></span>
-      <span class="qr-corner br"></span>
-
-      <div class="qr-card-header">
-        <div class="brand">
-          Arbormoor Heights, LLC
-          <small>Rent Payment</small>
-        </div>
-        <div class="zelle-wordmark">zelle</div>
-      </div>
-
-      <div class="qr-frame">
-        <img src="zelle-qr.png" alt="Zelle QR Code for Arbormoor Heights, LLC" width="240" height="240" style="display: block;">
-      </div>
-
-      <div class="qr-instruct">Scan with your bank's app</div>
-      <div class="qr-sub">Arbormoor Heights, LLC · Rent Payment</div>
-    </div>
-  </div>
+  </section>
 </div>
 
 <script>
-  // Scroll reveal
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.12, rootMargin: '0px 0px -60px 0px' });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+const RESTAURANTS = [
+  {name:"Pisco Peruvian Gastrobar", cuisine:"Peruvian", area:"Lake Mary", rating:4.9, reviews:3108, note:"Opens noon Mon\u2013Fri"},
+  {name:"Queen's Cup Thai Cafe", cuisine:"Thai cafe \u00b7 Boba", area:"Lake Mary", rating:4.9, reviews:136, note:"Closed Sun"},
+  {name:"Cocina Maya Mexican Grill", cuisine:"Mexican \u00b7 Mezcaleria", area:"Lake Mary", rating:4.8, reviews:3322, note:""},
+  {name:"Kona Pok\u00e9", cuisine:"Poke bowls", area:"Sanford", rating:4.8, reviews:1001, note:""},
+  {name:"Indian Express", cuisine:"Indian", area:"Longwood", rating:4.8, reviews:146, note:"Lunch 11:30\u20132:30 \u00b7 Closed Mon"},
+  {name:"Ma-se Sushi Eatery", cuisine:"Sushi \u00b7 Ramen", area:"Longwood", rating:4.8, reviews:385, note:"Lunch Tue\u2013Sat \u00b7 Closed Mon"},
+  {name:"Dali's Lao Thai Caf\u00e9", cuisine:"Lao \u00b7 Thai", area:"Sanford", rating:4.7, reviews:508, note:"Opens noon \u00b7 Closed Sun"},
+  {name:"Yao's", cuisine:"Asian fusion", area:"Oviedo", rating:4.7, reviews:351, note:"Lunch Mon\u2013Fri 11\u20132 only"},
+  {name:"MISSION BBQ", cuisine:"Barbecue", area:"Lake Mary", rating:4.7, reviews:259, note:""},
+  {name:"FILO Mediterranean Kitchen", cuisine:"Mediterranean bowls", area:"Lake Mary", rating:4.7, reviews:201, note:""},
+  {name:"Ford's Garage", cuisine:"Burgers \u00b7 American", area:"Sanford", rating:4.7, reviews:1014, note:""},
+  {name:"Hooked Fish Camp", cuisine:"Seafood", area:"Sanford", rating:4.7, reviews:459, note:""},
+  {name:"Moliendo Caf\u00e9", cuisine:"Colombian \u00b7 Latin", area:"Longwood", rating:4.7, reviews:315, note:""},
+  {name:"Chick-fil-A", cuisine:"Chicken \u00b7 Fast food", area:"Lake Mary Blvd", rating:4.6, reviews:4396, note:"Closed Sun"},
+  {name:"Mellow Mushroom", cuisine:"Pizza", area:"Sanford", rating:4.6, reviews:3095, note:""},
+  {name:"Fresh Kitchen", cuisine:"Healthy bowls", area:"Lake Mary", rating:4.6, reviews:1332, note:""},
+  {name:"F&D Cantina", cuisine:"Mexican", area:"Lake Mary", rating:4.6, reviews:2610, note:"Opens 11:30"},
+  {name:"Made In Puerto Rico", cuisine:"Puerto Rican", area:"Lake Mary", rating:4.6, reviews:474, note:""},
+  {name:"The Yardery", cuisine:"Smash burgers \u00b7 Outdoor bar", area:"Sanford", rating:4.6, reviews:786, note:"Closed Mon"},
+  {name:"Tainos Longwood", cuisine:"Puerto Rican bakery & lunch", area:"Longwood", rating:4.6, reviews:289, note:""},
+  {name:"Boca", cuisine:"American \u00b7 Flatbreads", area:"Lake Mary", rating:4.5, reviews:380, note:""},
+  {name:"The Hangry Bison", cuisine:"Burgers \u00b7 Gastropub", area:"Lake Mary", rating:4.5, reviews:437, note:""},
+  {name:"4 Rivers Smokehouse", cuisine:"Barbecue", area:"Longwood", rating:4.5, reviews:3596, note:""},
+  {name:"Krazy Greek Kitchen", cuisine:"Greek", area:"Lake Mary", rating:4.5, reviews:1834, note:""},
+  {name:"CAVA", cuisine:"Mediterranean bowls", area:"Lake Mary", rating:4.5, reviews:935, note:""},
+  {name:"NewCity Bistro", cuisine:"Bistro \u00b7 Caf\u00e9", area:"Lake Mary", rating:4.5, reviews:110, note:"Open till 4:30"},
+  {name:"The Bayou Kitchen & Lounge", cuisine:"Cajun \u00b7 Soul food", area:"Downtown Sanford", rating:4.5, reviews:238, note:""},
+  {name:"The Breezeway", cuisine:"Bar & grill \u00b7 Pork tenderloin", area:"Downtown Sanford", rating:4.4, reviews:2131, note:"Closed Mon"},
+  {name:"PDQ", cuisine:"Chicken tenders", area:"Sanford", rating:4.4, reviews:2907, note:""},
+  {name:"Shake Shack", cuisine:"Burgers \u00b7 Shakes", area:"Oviedo", rating:4.4, reviews:28, note:""},
+  {name:"The Wildflower", cuisine:"Latin fusion", area:"Downtown Sanford", rating:4.3, reviews:263, note:""},
+  {name:"St Johns River Steak & Seafood", cuisine:"Steak \u00b7 Seafood \u00b7 Waterfront", area:"Sanford", rating:4.3, reviews:3651, note:""},
+  {name:"Peach Valley Caf\u00e9", cuisine:"Breakfast \u00b7 Brunch", area:"Heathrow", rating:4.3, reviews:1313, note:"Open till 2:30"},
+  {name:"Jax 5th Ave", cuisine:"Wings \u00b7 Sports bar", area:"Lake Mary", rating:4.2, reviews:1211, note:"Closed Mon"},
+  {name:"Sweet & Salty Island Grindz", cuisine:"Hawaiian", area:"Downtown Sanford", rating:4.2, reviews:308, note:"In Henry's Depot"},
+  {name:"Subway", cuisine:"Subs \u00b7 Fast food", area:"International Pkwy", rating:4.2, reviews:162, note:""},
+  {name:"Arby's", cuisine:"Roast beef \u00b7 Fast food", area:"Lake Mary", rating:4.1, reviews:1584, note:""},
+  {name:"Dave's Hot Chicken", cuisine:"Hot chicken", area:"Lake Mary", rating:4.0, reviews:555, note:""},
+  {name:"Chipotle", cuisine:"Mexican \u00b7 Fast casual", area:"Sanford (WP Ball Blvd)", rating:4.0, reviews:1078, note:"Next to Kona Pok\u00e9"},
+  {name:"Steak 'n Shake", cuisine:"Burgers \u00b7 Shakes", area:"Sanford", rating:4.0, reviews:1551, note:""},
+  {name:"Bojangles", cuisine:"Chicken \u00b7 Biscuits", area:"Sanford", rating:3.9, reviews:980, note:"Open 24 hrs"}
+];
 
-  // FAQ
-  document.querySelectorAll('.faq-item').forEach(item => {
-    item.addEventListener('click', () => {
-      item.classList.toggle('open');
-      item.querySelector('.faq-toggle').textContent = item.classList.contains('open') ? '×' : '+';
+const favs = new Set();
+const listEl = document.getElementById('list');
+const slotEl = document.getElementById('slot');
+const spinBtn = document.getElementById('spinBtn');
+const favOnly = document.getElementById('favOnly');
+const weighted = document.getElementById('weighted');
+const countLabel = document.getElementById('countLabel');
+
+function stars(r){
+  const full = Math.round(r);
+  return '★'.repeat(full) + '☆'.repeat(5-full);
+}
+
+function render(){
+  listEl.innerHTML = '';
+  RESTAURANTS.forEach((r,i)=>{
+    const row = document.createElement('div');
+    row.className = 'row';
+    row.id = 'row-'+i;
+    row.innerHTML =
+      '<button class="fav-btn'+(favs.has(i)?' on':'')+'" title="Toggle favorite">♥</button>'+
+      '<div class="info"><div class="name">'+r.name+'</div>'+
+      '<div class="meta">'+r.cuisine+' · '+r.area+(r.note?' · '+r.note:'')+'</div></div>'+
+      '<div class="rating">'+stars(r.rating)+' '+r.rating.toFixed(1)+
+      '<span class="n">'+r.reviews.toLocaleString()+' reviews</span></div>';
+    row.querySelector('.fav-btn').addEventListener('click',()=>{
+      favs.has(i) ? favs.delete(i) : favs.add(i);
+      render();
     });
+    listEl.appendChild(row);
   });
+  countLabel.textContent = RESTAURANTS.length + ' spots' + (favs.size ? ' · ' + favs.size + ' ♥' : '');
+}
 
-  // Zelle page
-  function openZelle(e) {
-    if (e) e.preventDefault();
-    document.getElementById('main-page').style.display = 'none';
-    document.getElementById('zelle-page').classList.add('active');
-    window.scrollTo(0, 0);
-  }
-  function closeZelle() {
-    document.getElementById('zelle-page').classList.remove('active');
-    document.getElementById('main-page').style.display = 'block';
-    window.scrollTo(0, 0);
-  }
+function pool(){
+  let idx = RESTAURANTS.map((_,i)=>i);
+  if (favOnly.checked && favs.size) idx = idx.filter(i=>favs.has(i));
+  return idx;
+}
 
-  // Copy
-  function copy(btn, text) {
-    navigator.clipboard.writeText(text).then(() => {
-      const original = btn.textContent;
-      btn.textContent = 'Copied';
-      btn.classList.add('copied');
-      setTimeout(() => {
-        btn.textContent = original;
-        btn.classList.remove('copied');
-      }, 1800);
-    });
+function weightedPick(idx){
+  if (!weighted.checked){
+    return idx[Math.floor(Math.random()*idx.length)];
   }
+  // weight = (rating - 3.5)^2 so a 4.9 is meaningfully likelier than a 3.9
+  const w = idx.map(i=>Math.pow(RESTAURANTS[i].rating-3.5,2));
+  const total = w.reduce((a,b)=>a+b,0);
+  let roll = Math.random()*total;
+  for (let k=0;k<idx.length;k++){
+    roll -= w[k];
+    if (roll<=0) return idx[k];
+  }
+  return idx[idx.length-1];
+}
+
+function showInSlot(i, landed){
+  const r = RESTAURANTS[i];
+  slotEl.classList.toggle('landed', landed);
+  slotEl.innerHTML =
+    '<div class="pick-name">'+r.name+'</div>'+
+    '<div class="pick-meta">'+r.cuisine+' · '+r.area+(r.note?' · '+r.note:'')+'</div>'+
+    '<div class="pick-rating">'+stars(r.rating)+' '+r.rating.toFixed(1)+' ('+r.reviews.toLocaleString()+')</div>'+
+    (favs.has(i)?'<div class="pick-fav">♥ Favorite</div>':'');
+  document.querySelectorAll('.row').forEach(el=>el.classList.remove('highlight'));
+  if (landed){
+    const row = document.getElementById('row-'+i);
+    row.classList.add('highlight');
+    row.scrollIntoView({block:'nearest',behavior:'smooth'});
+  }
+}
+
+function spin(){
+  const idx = pool();
+  if (!idx.length) return;
+  const winner = weightedPick(idx);
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce || idx.length===1){ showInSlot(winner,true); return; }
+
+  spinBtn.disabled = true;
+  let ticks = 0;
+  const totalTicks = 16 + Math.floor(Math.random()*6);
+  let delay = 50;
+  (function tick(){
+    if (ticks < totalTicks){
+      showInSlot(idx[Math.floor(Math.random()*idx.length)], false);
+      ticks++;
+      delay *= 1.13; // slow down like a wheel
+      setTimeout(tick, delay);
+    } else {
+      showInSlot(winner, true);
+      spinBtn.disabled = false;
+    }
+  })();
+}
+
+spinBtn.addEventListener('click', spin);
+render();
 </script>
-
 </body>
 </html>
