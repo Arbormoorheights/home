@@ -69,6 +69,10 @@
   .info{flex:1;min-width:0}
   .name{font-weight:600;font-size:.95rem}
   .meta{color:var(--dim);font-size:.75rem;margin-top:2px}
+  .addr{display:block;font-size:.72rem;margin-top:3px}
+  .addr a,.pick-addr a{color:var(--cyan);text-decoration:none;opacity:.85}
+  .addr a:hover,.pick-addr a:hover{text-decoration:underline;opacity:1}
+  .pick-addr{font-size:.78rem}
   .rating{
     font-family:Consolas,monospace;font-size:.85rem;color:var(--gold);
     flex-shrink:0;text-align:right;
@@ -151,47 +155,44 @@
 
 <script>
 const RESTAURANTS = [
-  {name:"Pisco Peruvian Gastrobar", cuisine:"Peruvian", area:"Lake Mary", rating:4.9, reviews:3108, note:"Opens noon Mon\u2013Fri"},
-  {name:"Queen's Cup Thai Cafe", cuisine:"Thai cafe \u00b7 Boba", area:"Lake Mary", rating:4.9, reviews:136, note:"Closed Sun"},
-  {name:"Cocina Maya Mexican Grill", cuisine:"Mexican \u00b7 Mezcaleria", area:"Lake Mary", rating:4.8, reviews:3322, note:""},
-  {name:"Kona Pok\u00e9", cuisine:"Poke bowls", area:"Sanford", rating:4.8, reviews:1001, note:""},
-  {name:"Indian Express", cuisine:"Indian", area:"Longwood", rating:4.8, reviews:146, note:"Lunch 11:30\u20132:30 \u00b7 Closed Mon"},
-  {name:"Ma-se Sushi Eatery", cuisine:"Sushi \u00b7 Ramen", area:"Longwood", rating:4.8, reviews:385, note:"Lunch Tue\u2013Sat \u00b7 Closed Mon"},
-  {name:"Dali's Lao Thai Caf\u00e9", cuisine:"Lao \u00b7 Thai", area:"Sanford", rating:4.7, reviews:508, note:"Opens noon \u00b7 Closed Sun"},
-  {name:"Yao's", cuisine:"Asian fusion", area:"Oviedo", rating:4.7, reviews:351, note:"Lunch Mon\u2013Fri 11\u20132 only"},
-  {name:"MISSION BBQ", cuisine:"Barbecue", area:"Lake Mary", rating:4.7, reviews:259, note:""},
-  {name:"FILO Mediterranean Kitchen", cuisine:"Mediterranean bowls", area:"Lake Mary", rating:4.7, reviews:201, note:""},
-  {name:"Ford's Garage", cuisine:"Burgers \u00b7 American", area:"Sanford", rating:4.7, reviews:1014, note:""},
-  {name:"Hooked Fish Camp", cuisine:"Seafood", area:"Sanford", rating:4.7, reviews:459, note:""},
-  {name:"Moliendo Caf\u00e9", cuisine:"Colombian \u00b7 Latin", area:"Longwood", rating:4.7, reviews:315, note:""},
-  {name:"Chick-fil-A", cuisine:"Chicken \u00b7 Fast food", area:"Lake Mary Blvd", rating:4.6, reviews:4396, note:"Closed Sun"},
-  {name:"Mellow Mushroom", cuisine:"Pizza", area:"Sanford", rating:4.6, reviews:3095, note:""},
-  {name:"Fresh Kitchen", cuisine:"Healthy bowls", area:"Lake Mary", rating:4.6, reviews:1332, note:""},
-  {name:"F&D Cantina", cuisine:"Mexican", area:"Lake Mary", rating:4.6, reviews:2610, note:"Opens 11:30"},
-  {name:"Made In Puerto Rico", cuisine:"Puerto Rican", area:"Lake Mary", rating:4.6, reviews:474, note:""},
-  {name:"The Yardery", cuisine:"Smash burgers \u00b7 Outdoor bar", area:"Sanford", rating:4.6, reviews:786, note:"Closed Mon"},
-  {name:"Tainos Longwood", cuisine:"Puerto Rican bakery & lunch", area:"Longwood", rating:4.6, reviews:289, note:""},
-  {name:"Boca", cuisine:"American \u00b7 Flatbreads", area:"Lake Mary", rating:4.5, reviews:380, note:""},
-  {name:"The Hangry Bison", cuisine:"Burgers \u00b7 Gastropub", area:"Lake Mary", rating:4.5, reviews:437, note:""},
-  {name:"4 Rivers Smokehouse", cuisine:"Barbecue", area:"Longwood", rating:4.5, reviews:3596, note:""},
-  {name:"Krazy Greek Kitchen", cuisine:"Greek", area:"Lake Mary", rating:4.5, reviews:1834, note:""},
-  {name:"CAVA", cuisine:"Mediterranean bowls", area:"Lake Mary", rating:4.5, reviews:935, note:""},
-  {name:"NewCity Bistro", cuisine:"Bistro \u00b7 Caf\u00e9", area:"Lake Mary", rating:4.5, reviews:110, note:"Open till 4:30"},
-  {name:"The Bayou Kitchen & Lounge", cuisine:"Cajun \u00b7 Soul food", area:"Downtown Sanford", rating:4.5, reviews:238, note:""},
-  {name:"The Breezeway", cuisine:"Bar & grill \u00b7 Pork tenderloin", area:"Downtown Sanford", rating:4.4, reviews:2131, note:"Closed Mon"},
-  {name:"PDQ", cuisine:"Chicken tenders", area:"Sanford", rating:4.4, reviews:2907, note:""},
-  {name:"Shake Shack", cuisine:"Burgers \u00b7 Shakes", area:"Oviedo", rating:4.4, reviews:28, note:""},
-  {name:"The Wildflower", cuisine:"Latin fusion", area:"Downtown Sanford", rating:4.3, reviews:263, note:""},
-  {name:"St Johns River Steak & Seafood", cuisine:"Steak \u00b7 Seafood \u00b7 Waterfront", area:"Sanford", rating:4.3, reviews:3651, note:""},
-  {name:"Peach Valley Caf\u00e9", cuisine:"Breakfast \u00b7 Brunch", area:"Heathrow", rating:4.3, reviews:1313, note:"Open till 2:30"},
-  {name:"Jax 5th Ave", cuisine:"Wings \u00b7 Sports bar", area:"Lake Mary", rating:4.2, reviews:1211, note:"Closed Mon"},
-  {name:"Sweet & Salty Island Grindz", cuisine:"Hawaiian", area:"Downtown Sanford", rating:4.2, reviews:308, note:"In Henry's Depot"},
-  {name:"Subway", cuisine:"Subs \u00b7 Fast food", area:"International Pkwy", rating:4.2, reviews:162, note:""},
-  {name:"Arby's", cuisine:"Roast beef \u00b7 Fast food", area:"Lake Mary", rating:4.1, reviews:1584, note:""},
-  {name:"Dave's Hot Chicken", cuisine:"Hot chicken", area:"Lake Mary", rating:4.0, reviews:555, note:""},
-  {name:"Chipotle", cuisine:"Mexican \u00b7 Fast casual", area:"Sanford (WP Ball Blvd)", rating:4.0, reviews:1078, note:"Next to Kona Pok\u00e9"},
-  {name:"Steak 'n Shake", cuisine:"Burgers \u00b7 Shakes", area:"Sanford", rating:4.0, reviews:1551, note:""},
-  {name:"Bojangles", cuisine:"Chicken \u00b7 Biscuits", area:"Sanford", rating:3.9, reviews:980, note:"Open 24 hrs"}
+  {name:"Pisco Peruvian Gastrobar", cuisine:"Peruvian", area:"Lake Mary", rating:4.9, reviews:3108, note:"Opens noon Mon–Fri", addr:"3801 W Lake Mary Blvd #155, Lake Mary, FL 32746", maps:"https://maps.apple.com/?daddr=3801%20W%20Lake%20Mary%20Blvd%20%23155%2C%20Lake%20Mary%2C%20FL%2032746"},
+  {name:"Cowboy Curry", cuisine:"Japanese curry", area:"Orlando · Mills Market", rating:4.9, reviews:253, note:"Opens noon", addr:"1110 E Colonial Dr, Orlando, FL 32803", maps:"https://maps.apple.com/?daddr=1110%20E%20Colonial%20Dr%2C%20Orlando%2C%20FL%2032803"},
+  {name:"Queen's Cup Thai Cafe", cuisine:"Thai cafe · Boba", area:"Lake Mary", rating:4.9, reviews:136, note:"Closed Sun", addr:"185 N Country Club Rd, Lake Mary, FL 32746", maps:"https://maps.apple.com/?daddr=185%20N%20Country%20Club%20Rd%2C%20Lake%20Mary%2C%20FL%2032746"},
+  {name:"Cocina Maya Mexican Grill", cuisine:"Mexican · Mezcaleria", area:"Lake Mary", rating:4.8, reviews:3322, note:"", addr:"3590 US-17 Ste 1026, Lake Mary, FL 32746", maps:"https://maps.apple.com/?daddr=3590%20US-17%20Ste%201026%2C%20Lake%20Mary%2C%20FL%2032746"},
+  {name:"JINYA Ramen Bar", cuisine:"Ramen", area:"Oviedo", rating:4.8, reviews:2020, note:"", addr:"234 E Mitchell Hammock Rd #1160, Oviedo, FL 32765", maps:"https://maps.apple.com/?daddr=234%20E%20Mitchell%20Hammock%20Rd%20%231160%2C%20Oviedo%2C%20FL%2032765"},
+  {name:"Kona Poké", cuisine:"Poke bowls", area:"Sanford", rating:4.8, reviews:1001, note:"", addr:"1813 WP Ball Blvd, Sanford, FL 32771", maps:"https://maps.apple.com/?daddr=1813%20WP%20Ball%20Blvd%2C%20Sanford%2C%20FL%2032771"},
+  {name:"Indian Express", cuisine:"Indian", area:"Longwood", rating:4.8, reviews:146, note:"Lunch 11:30–2:30 · Closed Mon", addr:"1000 W State Rd 434, Longwood, FL 32750", maps:"https://maps.apple.com/?daddr=1000%20W%20State%20Rd%20434%2C%20Longwood%2C%20FL%2032750"},
+  {name:"Dali's Lao Thai Café", cuisine:"Lao · Thai", area:"Sanford", rating:4.7, reviews:508, note:"Opens noon · Closed Sun", addr:"1181 Rinehart Rd, Sanford, FL 32771", maps:"https://maps.apple.com/?daddr=1181%20Rinehart%20Rd%2C%20Sanford%2C%20FL%2032771"},
+  {name:"Yao's", cuisine:"Asian fusion", area:"Oviedo", rating:4.7, reviews:351, note:"Lunch Mon–Fri 11–2 only", addr:"15 Alafaya Woods Blvd #107, Oviedo, FL 32765", maps:"https://maps.apple.com/?daddr=15%20Alafaya%20Woods%20Blvd%20%23107%2C%20Oviedo%2C%20FL%2032765"},
+  {name:"MISSION BBQ", cuisine:"Barbecue", area:"Lake Mary", rating:4.7, reviews:259, note:"", addr:"4335 W Lake Mary Blvd, Lake Mary, FL 32746", maps:"https://maps.apple.com/?daddr=4335%20W%20Lake%20Mary%20Blvd%2C%20Lake%20Mary%2C%20FL%2032746"},
+  {name:"FILO Mediterranean Kitchen", cuisine:"Mediterranean bowls", area:"Lake Mary", rating:4.7, reviews:201, note:"", addr:"4287 W Lake Mary Blvd, Lake Mary, FL 32746", maps:"https://maps.apple.com/?daddr=4287%20W%20Lake%20Mary%20Blvd%2C%20Lake%20Mary%2C%20FL%2032746"},
+  {name:"Ford's Garage", cuisine:"Burgers · American", area:"Sanford", rating:4.7, reviews:1014, note:"", addr:"1415 Rinehart Rd, Sanford, FL 32771", maps:"https://maps.apple.com/?daddr=1415%20Rinehart%20Rd%2C%20Sanford%2C%20FL%2032771"},
+  {name:"Hooked Fish Camp", cuisine:"Seafood", area:"Sanford", rating:4.7, reviews:459, note:"", addr:"550 Towne Center Cir, Sanford, FL 32771", maps:"https://maps.apple.com/?daddr=550%20Towne%20Center%20Cir%2C%20Sanford%2C%20FL%2032771"},
+  {name:"Moliendo Café", cuisine:"Colombian · Latin", area:"Longwood", rating:4.7, reviews:315, note:"", addr:"409 N US Hwy 17 92, Longwood, FL 32750", maps:"https://maps.apple.com/?daddr=409%20N%20US%20Hwy%2017%2092%2C%20Longwood%2C%20FL%2032750"},
+  {name:"Chick-fil-A", cuisine:"Chicken · Fast food", area:"Lake Mary Blvd", rating:4.6, reviews:4396, note:"Closed Sun", addr:"4420 W Lake Mary Blvd, Lake Mary, FL 32746", maps:"https://maps.apple.com/?daddr=4420%20W%20Lake%20Mary%20Blvd%2C%20Lake%20Mary%2C%20FL%2032746"},
+  {name:"Mellow Mushroom", cuisine:"Pizza", area:"Sanford", rating:4.6, reviews:3095, note:"", addr:"1831 Rinehart Rd, Sanford, FL 32771", maps:"https://maps.apple.com/?daddr=1831%20Rinehart%20Rd%2C%20Sanford%2C%20FL%2032771"},
+  {name:"F&D Cantina", cuisine:"Mexican", area:"Lake Mary", rating:4.6, reviews:2610, note:"Opens 11:30", addr:"1125 Townpark Ave, Lake Mary, FL 32746", maps:"https://maps.apple.com/?daddr=1125%20Townpark%20Ave%2C%20Lake%20Mary%2C%20FL%2032746"},
+  {name:"Fresh Kitchen", cuisine:"Healthy bowls", area:"Lake Mary", rating:4.6, reviews:1332, note:"", addr:"3793 Lake Emma Rd, Lake Mary, FL 32746", maps:"https://maps.apple.com/?daddr=3793%20Lake%20Emma%20Rd%2C%20Lake%20Mary%2C%20FL%2032746"},
+  {name:"The Vineyard Wine Company", cuisine:"Wine bar · American", area:"Lake Mary", rating:4.6, reviews:754, note:"Closed Mon", addr:"1140 Townpark Ave #1260, Lake Mary, FL 32746", maps:"https://maps.apple.com/?daddr=1140%20Townpark%20Ave%20%231260%2C%20Lake%20Mary%2C%20FL%2032746"},
+  {name:"Made In Puerto Rico", cuisine:"Puerto Rican", area:"Lake Mary", rating:4.6, reviews:474, note:"", addr:"3005 W Lake Mary Blvd #120, Lake Mary, FL 32746", maps:"https://maps.apple.com/?daddr=3005%20W%20Lake%20Mary%20Blvd%20%23120%2C%20Lake%20Mary%2C%20FL%2032746"},
+  {name:"Tainos Longwood", cuisine:"Puerto Rican bakery & lunch", area:"Longwood", rating:4.6, reviews:289, note:"", addr:"480 S Ronald Reagan Blvd, Longwood, FL 32750", maps:"https://maps.apple.com/?daddr=480%20S%20Ronald%20Reagan%20Blvd%2C%20Longwood%2C%20FL%2032750"},
+  {name:"Korea House", cuisine:"Korean BBQ", area:"Longwood", rating:4.5, reviews:1118, note:"Opens noon · Closed Tue", addr:"1155 W State Rd 434 #123, Longwood, FL 32750", maps:"https://maps.apple.com/?daddr=1155%20W%20State%20Rd%20434%20%23123%2C%20Longwood%2C%20FL%2032750"},
+  {name:"Krazy Greek Kitchen", cuisine:"Greek", area:"Lake Mary", rating:4.5, reviews:1834, note:"", addr:"142 W Lakeview Ave #1000, Lake Mary, FL 32746", maps:"https://maps.apple.com/?daddr=142%20W%20Lakeview%20Ave%20%231000%2C%20Lake%20Mary%2C%20FL%2032746"},
+  {name:"CAVA", cuisine:"Mediterranean bowls", area:"Lake Mary", rating:4.5, reviews:935, note:"", addr:"901 Currency Cir, Lake Mary, FL 32746", maps:"https://maps.apple.com/?daddr=901%20Currency%20Cir%2C%20Lake%20Mary%2C%20FL%2032746"},
+  {name:"The Hangry Bison", cuisine:"Burgers · Gastropub", area:"Lake Mary", rating:4.5, reviews:437, note:"", addr:"951 Market Promenade Ave #1115, Lake Mary, FL 32746", maps:"https://maps.apple.com/?daddr=951%20Market%20Promenade%20Ave%20%231115%2C%20Lake%20Mary%2C%20FL%2032746"},
+  {name:"Boca", cuisine:"American · Flatbreads", area:"Lake Mary", rating:4.5, reviews:380, note:"", addr:"1145 Townpark Ave #1201, Lake Mary, FL 32746", maps:"https://maps.apple.com/?daddr=1145%20Townpark%20Ave%20%231201%2C%20Lake%20Mary%2C%20FL%2032746"},
+  {name:"4 Rivers Smokehouse", cuisine:"Barbecue", area:"Longwood", rating:4.5, reviews:3596, note:"", addr:"1869 W State Rd 434, Longwood, FL 32750", maps:"https://maps.apple.com/?daddr=1869%20W%20State%20Rd%20434%2C%20Longwood%2C%20FL%2032750"},
+  {name:"NewCity Bistro", cuisine:"Bistro · Café", area:"Lake Mary", rating:4.5, reviews:110, note:"Open till 4:30", addr:"124 N 4th St Ste 1700, Lake Mary, FL 32746", maps:"https://maps.apple.com/?daddr=124%20N%204th%20St%20Ste%201700%2C%20Lake%20Mary%2C%20FL%2032746"},
+  {name:"PDQ", cuisine:"Chicken tenders", area:"Sanford", rating:4.4, reviews:2907, note:"", addr:"1610 Rinehart Rd, Sanford, FL 32771", maps:"https://maps.apple.com/?daddr=1610%20Rinehart%20Rd%2C%20Sanford%2C%20FL%2032771"},
+  {name:"Shake Shack", cuisine:"Burgers · Shakes", area:"Oviedo", rating:4.4, reviews:28, note:"", addr:"65 W Mitchell Hammock Rd Ste 1501, Oviedo, FL 32765", maps:"https://maps.apple.com/?daddr=65%20W%20Mitchell%20Hammock%20Rd%20Ste%201501%2C%20Oviedo%2C%20FL%2032765"},
+  {name:"Peach Valley Café", cuisine:"Breakfast · Brunch", area:"Heathrow", rating:4.3, reviews:1313, note:"Open till 2:30", addr:"1210 International Pkwy, Heathrow, FL 32746", maps:"https://maps.apple.com/?daddr=1210%20International%20Pkwy%2C%20Heathrow%2C%20FL%2032746"},
+  {name:"Jax 5th Ave", cuisine:"Wings · Sports bar", area:"Lake Mary", rating:4.2, reviews:1211, note:"Closed Mon", addr:"951 Greenwood Blvd, Lake Mary, FL 32746", maps:"https://maps.apple.com/?daddr=951%20Greenwood%20Blvd%2C%20Lake%20Mary%2C%20FL%2032746"},
+  {name:"Subway", cuisine:"Subs · Fast food", area:"International Pkwy", rating:4.2, reviews:162, note:"", addr:"120 International Pkwy Ste 114, Lake Mary, FL 32746", maps:"https://maps.apple.com/?daddr=120%20International%20Pkwy%20Ste%20114%2C%20Lake%20Mary%2C%20FL%2032746"},
+  {name:"Arby's", cuisine:"Roast beef · Fast food", area:"Lake Mary", rating:4.1, reviews:1584, note:"", addr:"4620 W Lake Mary Blvd, Lake Mary, FL 32746", maps:"https://maps.apple.com/?daddr=4620%20W%20Lake%20Mary%20Blvd%2C%20Lake%20Mary%2C%20FL%2032746"},
+  {name:"Dave's Hot Chicken", cuisine:"Hot chicken", area:"Lake Mary", rating:4.0, reviews:555, note:"", addr:"4405 W Lake Mary Blvd, Lake Mary, FL 32746", maps:"https://maps.apple.com/?daddr=4405%20W%20Lake%20Mary%20Blvd%2C%20Lake%20Mary%2C%20FL%2032746"},
+  {name:"Chipotle", cuisine:"Mexican · Fast casual", area:"Sanford (WP Ball Blvd)", rating:4.0, reviews:1078, note:"Next to Kona Poké", addr:"1805 WP Ball Blvd, Sanford, FL 32771", maps:"https://maps.apple.com/?daddr=1805%20WP%20Ball%20Blvd%2C%20Sanford%2C%20FL%2032771"},
+  {name:"Steak 'n Shake", cuisine:"Burgers · Shakes", area:"Sanford", rating:4.0, reviews:1551, note:"", addr:"40 Towne Center Cir, Sanford, FL 32771", maps:"https://maps.apple.com/?daddr=40%20Towne%20Center%20Cir%2C%20Sanford%2C%20FL%2032771"},
+  {name:"Bojangles", cuisine:"Chicken · Biscuits", area:"Sanford", rating:3.9, reviews:980, note:"Open 24 hrs", addr:"101 S Oregon Ave, Sanford, FL 32771", maps:"https://maps.apple.com/?daddr=101%20S%20Oregon%20Ave%2C%20Sanford%2C%20FL%2032771"}
 ];
 
 const favs = new Set();
@@ -216,7 +217,8 @@ function render(){
     row.innerHTML =
       '<button class="fav-btn'+(favs.has(i)?' on':'')+'" title="Toggle favorite">♥</button>'+
       '<div class="info"><div class="name">'+r.name+'</div>'+
-      '<div class="meta">'+r.cuisine+' · '+r.area+(r.note?' · '+r.note:'')+'</div></div>'+
+      '<div class="meta">'+r.cuisine+' · '+r.area+(r.note?' · '+r.note:'')+'</div>'+
+      '<div class="addr"><a href="'+r.maps+'" target="_blank" rel="noopener">\ud83d\udccd '+r.addr+'</a></div></div>'+
       '<div class="rating">'+stars(r.rating)+' '+r.rating.toFixed(1)+
       '<span class="n">'+r.reviews.toLocaleString()+' reviews</span></div>';
     row.querySelector('.fav-btn').addEventListener('click',()=>{
@@ -256,6 +258,7 @@ function showInSlot(i, landed){
     '<div class="pick-name">'+r.name+'</div>'+
     '<div class="pick-meta">'+r.cuisine+' · '+r.area+(r.note?' · '+r.note:'')+'</div>'+
     '<div class="pick-rating">'+stars(r.rating)+' '+r.rating.toFixed(1)+' ('+r.reviews.toLocaleString()+')</div>'+
+    '<div class="pick-addr"><a href="'+r.maps+'" target="_blank" rel="noopener">\ud83d\udccd '+r.addr+' \u2192 Directions</a></div>'+
     (favs.has(i)?'<div class="pick-fav">♥ Favorite</div>':'');
   document.querySelectorAll('.row').forEach(el=>el.classList.remove('highlight'));
   if (landed){
