@@ -161,7 +161,6 @@
       <button class="spin-btn" id="spinBtn">Spin</button>
       <div class="opts">
         <label><input type="checkbox" id="favOnly"> Favorites only</label>
-        <label><input type="checkbox" id="weighted" checked> Weight by rating</label>
       </div>
       <p class="note" id="note"></p>
     </div>
@@ -218,7 +217,7 @@ const REGIONS = {
   },
   southbay: {
     label: "South Bay, CA",
-    subtitle: "Brunch & lunch spots in Torrance / Redondo / Hermosa / Manhattan Beach / Gardena \u00b7 no dinner-only spots \u00b7 all highly rated",
+    subtitle: "Brunch & lunch picks across Torrance / Redondo / Hermosa / Manhattan Beach / Gardena (+ a Peninsula spot) \u00b7 ratings from Google Maps",
     note: "Tap the \u2665 to favorite a spot. These are daytime-leaning places \u2014 check the card for closed days and kitchen hours before you head out.",
     restaurants: [
   {name:"Mychal's Café", cuisine:"Café · Breakfast & lunch", area:"Redondo Beach", rating:4.9, reviews:299, note:"Daytime only", addr:"2302 Artesia Blvd, Redondo Beach, CA 90278"},
@@ -240,7 +239,18 @@ const REGIONS = {
   {name:"Gum Tree Café", cuisine:"Café · Breakfast & lunch", area:"Hermosa Beach", rating:4.5, reviews:250, note:"", addr:"238 Pier Ave, Hermosa Beach, CA 90254"},
   {name:"Crème De La Crêpe", cuisine:"French · Crêpes", area:"Hermosa Beach", rating:4.5, reviews:481, note:"", addr:"424 Pier Ave, Hermosa Beach, CA 90254"},
   {name:"Bonaparte Bistro", cuisine:"Californian · Bistro", area:"Hermosa Beach", rating:4.5, reviews:291, note:"Opens 10:30", addr:"36 Pier Ave, Hermosa Beach, CA 90254"},
-  {name:"The Pan", cuisine:"American · Breakfast", area:"Gardena", rating:4.5, reviews:2246, note:"Closed Tue · till 3", addr:"16601 S Western Ave, Gardena, CA 90247"}
+  {name:"The Pan", cuisine:"American · Breakfast", area:"Gardena", rating:4.5, reviews:2246, note:"Closed Tue · till 3", addr:"16601 S Western Ave, Gardena, CA 90247"},
+  {name:"Curryfornia", cuisine:"Japanese curry", area:"Torrance", rating:4.6, reviews:170, note:"Closed Sun–Mon · lunch 11:30–2", addr:"2140 Artesia Blvd #N, Torrance, CA 90504"},
+  {name:"All India Sweets & Snacks", cuisine:"Indian · Vegetarian · Sweets", area:"Torrance", rating:4.2, reviews:445, note:"", addr:"20916 Hawthorne Blvd, Torrance, CA 90503"},
+  {name:"Rascals Teriyaki Grill", cuisine:"Teriyaki · Plate lunch", area:"Torrance", rating:4.5, reviews:957, note:"Closed Sun", addr:"5111 Torrance Blvd, Torrance, CA 90503"},
+  {name:"Mitsuwa Marketplace", cuisine:"Japanese food court · Market", area:"Torrance", rating:4.5, reviews:4750, note:"Food court", addr:"3525 W Carson St Ste 164, Torrance, CA 90503"},
+  {name:"Tokyo Central", cuisine:"Japanese market · Bento & sushi", area:"Torrance", rating:4.6, reviews:152, note:"PCH · deli & food court", addr:"3665 Pacific Coast Hwy, Torrance, CA 90505"},
+  {name:"Ali'i Hawaiian Grill", cuisine:"Hawaiian · Poke", area:"Torrance", rating:4.5, reviews:65, note:"", addr:"4437 Sepulveda Blvd, Torrance, CA 90505"},
+  {name:"Bafang Dumpling", cuisine:"Taiwanese · Dumplings", area:"Torrance", rating:4.0, reviews:101, note:"", addr:"21215 Hawthorne Blvd, Torrance, CA 90503"},
+  {name:"Pho Redbo", cuisine:"Vietnamese · Pho · Wagyu", area:"Rolling Hills Estates", rating:4.6, reviews:81, note:"Halal", addr:"550 Deep Valley Dr Ste 105, Rolling Hills Estates, CA 90274"},
+  {name:"Panda Express", cuisine:"Chinese · Fast food", area:"Redondo Beach", rating:3.9, reviews:253, note:"", addr:"417 N Pacific Coast Hwy, Redondo Beach, CA 90277"},
+  {name:"El Burrito Jr", cuisine:"Mexican", area:"Torrance", rating:4.0, reviews:882, note:"", addr:"21141 Hawthorne Blvd, Torrance, CA 90503"},
+  {name:"Erewhon", cuisine:"Grocery · Prepared foods & smoothies", area:"Manhattan Beach", rating:4.3, reviews:169, note:"Hot bar & smoothies", addr:"1700 Rosecrans Ave C, Manhattan Beach, CA 90266"}
 ]
   }
 };
@@ -253,7 +263,6 @@ const listEl = document.getElementById('list');
 const slotEl = document.getElementById('slot');
 const spinBtn = document.getElementById('spinBtn');
 const favOnly = document.getElementById('favOnly');
-const weighted = document.getElementById('weighted');
 const countLabel = document.getElementById('countLabel');
 const regionSel = document.getElementById('region');
 const subtitleEl = document.getElementById('subtitle');
@@ -301,18 +310,8 @@ function pool(){
   return idx;
 }
 
-function weightedPick(idx){
-  if (!weighted.checked){
-    return idx[Math.floor(Math.random()*idx.length)];
-  }
-  const w = idx.map(i=>Math.pow(RESTAURANTS[i].rating-3.5,2));
-  const total = w.reduce((a,b)=>a+b,0);
-  let roll = Math.random()*total;
-  for (let k=0;k<idx.length;k++){
-    roll -= w[k];
-    if (roll<=0) return idx[k];
-  }
-  return idx[idx.length-1];
+function randomPick(idx){
+  return idx[Math.floor(Math.random()*idx.length)];
 }
 
 function showInSlot(i, landed){
@@ -335,7 +334,7 @@ function showInSlot(i, landed){
 function spin(){
   const idx = pool();
   if (!idx.length) return;
-  const winner = weightedPick(idx);
+  const winner = randomPick(idx);
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduce || idx.length===1){ showInSlot(winner,true); return; }
 
