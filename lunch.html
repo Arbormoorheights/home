@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lunch Roulette — 32746</title>
+<title>Lunch Roulette</title>
 <style>
   :root{
     --bg:#0b0e17;
@@ -27,12 +27,21 @@
     padding:28px 20px 48px;
   }
   header{max-width:1100px;margin:0 auto 22px}
+  .title-row{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
   h1{
     font-size:1.6rem;letter-spacing:.12em;text-transform:uppercase;font-weight:800;
     background:linear-gradient(90deg,var(--cyan),var(--pink));
     -webkit-background-clip:text;background-clip:text;color:transparent;
   }
   header p{color:var(--dim);font-size:.85rem;margin-top:6px;letter-spacing:.02em}
+  .region-picker{display:flex;align-items:center;gap:8px}
+  .region-picker label{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);font-weight:700}
+  #region{
+    font:inherit;font-size:.9rem;font-weight:600;color:var(--text);
+    background:var(--panel);border:1px solid var(--line);border-radius:10px;
+    padding:9px 14px;cursor:pointer;outline:none;
+  }
+  #region:focus{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan)}
   .wrap{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.15fr 1fr;gap:18px}
   @media (max-width:820px){.wrap{grid-template-columns:1fr}}
 
@@ -122,8 +131,14 @@
 </head>
 <body>
 <header>
-  <h1>Lunch Roulette</h1>
-  <p>Lunch spots near 32746 · Lake Mary / Sanford / Longwood / Heathrow (+ two Oviedo picks) · ratings &amp; review counts from Google Maps</p>
+  <div class="title-row">
+    <h1>Lunch Roulette</h1>
+    <div class="region-picker">
+      <label for="region">Area</label>
+      <select id="region"></select>
+    </div>
+  </div>
+  <p id="subtitle"></p>
 </header>
 
 <div class="wrap">
@@ -148,13 +163,18 @@
         <label><input type="checkbox" id="favOnly"> Favorites only</label>
         <label><input type="checkbox" id="weighted" checked> Weight by rating</label>
       </div>
-      <p class="note">Tap the ♥ next to a restaurant to mark it as a favorite. Heads up: a few spots are closed Mondays — it's noted on the card.</p>
+      <p class="note" id="note"></p>
     </div>
   </section>
 </div>
 
 <script>
-const RESTAURANTS = [
+const REGIONS = {
+  lakemary: {
+    label: "Lake Mary, FL",
+    subtitle: "Lunch spots near 32746 \u00b7 Lake Mary / Sanford / Longwood / Heathrow (+ two Oviedo picks) \u00b7 ratings & review counts from Google Maps",
+    note: "Tap the \u2665 next to a restaurant to mark it as a favorite. Heads up: a few spots are closed Mondays \u2014 it's noted on the card.",
+    restaurants: [
   {name:"Pisco Peruvian Gastrobar", cuisine:"Peruvian", area:"Lake Mary", rating:4.9, reviews:3108, note:"Opens noon Mon–Fri", addr:"3801 W Lake Mary Blvd #155, Lake Mary, FL 32746", maps:"https://maps.apple.com/?daddr=3801%20W%20Lake%20Mary%20Blvd%20%23155%2C%20Lake%20Mary%2C%20FL%2032746"},
   {name:"Cowboy Curry", cuisine:"Japanese curry", area:"Orlando · Mills Market", rating:4.9, reviews:253, note:"Opens noon", addr:"1110 E Colonial Dr, Orlando, FL 32803", maps:"https://maps.apple.com/?daddr=1110%20E%20Colonial%20Dr%2C%20Orlando%2C%20FL%2032803"},
   {name:"Queen's Cup Thai Cafe", cuisine:"Thai cafe · Boba", area:"Lake Mary", rating:4.9, reviews:136, note:"Closed Sun", addr:"185 N Country Club Rd, Lake Mary, FL 32746", maps:"https://maps.apple.com/?daddr=185%20N%20Country%20Club%20Rd%2C%20Lake%20Mary%2C%20FL%2032746"},
@@ -194,19 +214,63 @@ const RESTAURANTS = [
   {name:"Chipotle", cuisine:"Mexican · Fast casual", area:"Sanford (WP Ball Blvd)", rating:4.0, reviews:1078, note:"Next to Kona Poké", addr:"1805 WP Ball Blvd, Sanford, FL 32771", maps:"https://maps.apple.com/?daddr=1805%20WP%20Ball%20Blvd%2C%20Sanford%2C%20FL%2032771"},
   {name:"Steak 'n Shake", cuisine:"Burgers · Shakes", area:"Sanford", rating:4.0, reviews:1551, note:"", addr:"40 Towne Center Cir, Sanford, FL 32771", maps:"https://maps.apple.com/?daddr=40%20Towne%20Center%20Cir%2C%20Sanford%2C%20FL%2032771"},
   {name:"Bojangles", cuisine:"Chicken · Biscuits", area:"Sanford", rating:3.9, reviews:980, note:"Open 24 hrs", addr:"101 S Oregon Ave, Sanford, FL 32771", maps:"https://maps.apple.com/?daddr=101%20S%20Oregon%20Ave%2C%20Sanford%2C%20FL%2032771"}
-];
+]
+  },
+  southbay: {
+    label: "South Bay, CA",
+    subtitle: "Brunch & lunch spots in Torrance / Redondo / Hermosa / Manhattan Beach / Gardena \u00b7 no dinner-only spots \u00b7 all highly rated",
+    note: "Tap the \u2665 to favorite a spot. These are daytime-leaning places \u2014 check the card for closed days and kitchen hours before you head out.",
+    restaurants: [
+  {name:"Mychal's Café", cuisine:"Café · Breakfast & lunch", area:"Redondo Beach", rating:4.9, reviews:299, note:"Daytime only", addr:"2302 Artesia Blvd, Redondo Beach, CA 90278"},
+  {name:"Délices Du Chef", cuisine:"French café · Bakery", area:"Torrance", rating:4.8, reviews:135, note:"Open till 4", addr:"24416 Crenshaw Blvd Ste 4, Torrance, CA 90505"},
+  {name:"Caffe Tre Venezie", cuisine:"Italian café · Panini", area:"Torrance", rating:4.8, reviews:373, note:"Closed Wed · till 3", addr:"3525 Pacific Coast Hwy Unit B, Torrance, CA 90505"},
+  {name:"AttaGirl", cuisine:"Mediterranean · Brunch", area:"Hermosa Beach", rating:4.8, reviews:173, note:"Weekend brunch · lunch from noon", addr:"1238 Hermosa Ave, Hermosa Beach, CA 90254"},
+  {name:"Tommy and Atticus", cuisine:"Bakery · Café", area:"Redondo Beach", rating:4.7, reviews:313, note:"Wed–Sun · till 3", addr:"1700 Aviation Blvd, Redondo Beach, CA 90278"},
+  {name:"North End Caffe", cuisine:"Breakfast · Brunch", area:"Manhattan Beach", rating:4.7, reviews:442, note:"Open till 2:30", addr:"3421 Highland Ave, Manhattan Beach, CA 90266"},
+  {name:"Sweet Rice", cuisine:"Thai · Bib Gourmand", area:"Gardena", rating:4.7, reviews:241, note:"Closed Mon", addr:"1630 W Redondo Beach Blvd #4, Gardena, CA 90247"},
+  {name:"Wildflower Café", cuisine:"Breakfast · Brunch", area:"Redondo Beach", rating:4.6, reviews:937, note:"Open till 2:30", addr:"600 S Pacific Coast Hwy, Redondo Beach, CA 90277"},
+  {name:"Local Kitchen", cuisine:"American · Gastropub", area:"Torrance", rating:4.6, reviews:1447, note:"", addr:"1321 Sartori Ave, Torrance, CA 90501"},
+  {name:"Eat At Rudy's", cuisine:"Breakfast · Diner", area:"Torrance", rating:4.6, reviews:1008, note:"Open till 2", addr:"1340 Post Ave, Torrance, CA 90501"},
+  {name:"Martha's 22nd St Grill", cuisine:"Breakfast · Brunch", area:"Hermosa Beach", rating:4.6, reviews:1206, note:"Ocean view · till 3", addr:"25 22nd St, Hermosa Beach, CA 90254"},
+  {name:"El Tarasco", cuisine:"Mexican · Tacos", area:"Manhattan Beach", rating:4.6, reviews:961, note:"Opens 10am", addr:"316 Rosecrans Ave, Manhattan Beach, CA 90266"},
+  {name:"Spoon House", cuisine:"Japanese-Italian pasta", area:"Gardena", rating:4.6, reviews:958, note:"Opens 11", addr:"1601 W Redondo Beach Blvd, Gardena, CA 90247"},
+  {name:"Eatalian", cuisine:"Italian", area:"Gardena", rating:4.6, reviews:2770, note:"Closed Sun · opens 10:30", addr:"15500 S Broadway, Gardena, CA 90248"},
+  {name:"The Pan", cuisine:"American · Breakfast", area:"Torrance", rating:4.5, reviews:210, note:"Closed Tue · till 3", addr:"3160 Pacific Coast Hwy, Torrance, CA 90505"},
+  {name:"Phanny's", cuisine:"Breakfast burritos", area:"Redondo Beach", rating:4.5, reviews:659, note:"Closed Mon · to-go", addr:"1021 S Pacific Coast Hwy, Redondo Beach, CA 90277"},
+  {name:"Gum Tree Café", cuisine:"Café · Breakfast & lunch", area:"Hermosa Beach", rating:4.5, reviews:250, note:"", addr:"238 Pier Ave, Hermosa Beach, CA 90254"},
+  {name:"Crème De La Crêpe", cuisine:"French · Crêpes", area:"Hermosa Beach", rating:4.5, reviews:481, note:"", addr:"424 Pier Ave, Hermosa Beach, CA 90254"},
+  {name:"Bonaparte Bistro", cuisine:"Californian · Bistro", area:"Hermosa Beach", rating:4.5, reviews:291, note:"Opens 10:30", addr:"36 Pier Ave, Hermosa Beach, CA 90254"},
+  {name:"The Pan", cuisine:"American · Breakfast", area:"Gardena", rating:4.5, reviews:2246, note:"Closed Tue · till 3", addr:"16601 S Western Ave, Gardena, CA 90247"}
+]
+  }
+};
 
-const favs = new Set();
+const favsByRegion = {};
+let currentRegion = "lakemary";
+let RESTAURANTS = [];
+
 const listEl = document.getElementById('list');
 const slotEl = document.getElementById('slot');
 const spinBtn = document.getElementById('spinBtn');
 const favOnly = document.getElementById('favOnly');
 const weighted = document.getElementById('weighted');
 const countLabel = document.getElementById('countLabel');
+const regionSel = document.getElementById('region');
+const subtitleEl = document.getElementById('subtitle');
+const noteEl = document.getElementById('note');
+
+function favs(){
+  if(!favsByRegion[currentRegion]) favsByRegion[currentRegion] = new Set();
+  return favsByRegion[currentRegion];
+}
+
+function mapsUrl(r){
+  return r.maps || ('https://maps.apple.com/?daddr=' + encodeURIComponent(r.addr));
+}
 
 function stars(r){
   const full = Math.round(r);
-  return '★'.repeat(full) + '☆'.repeat(5-full);
+  return '\u2605'.repeat(full) + '\u2606'.repeat(5-full);
 }
 
 function render(){
@@ -216,24 +280,24 @@ function render(){
     row.className = 'row';
     row.id = 'row-'+i;
     row.innerHTML =
-      '<button class="fav-btn'+(favs.has(i)?' on':'')+'" title="Toggle favorite">♥</button>'+
+      '<button class="fav-btn'+(favs().has(i)?' on':'')+'" title="Toggle favorite">\u2665</button>'+
       '<div class="info"><div class="name">'+r.name+'</div>'+
-      '<div class="meta">'+r.cuisine+' · '+r.area+(r.note?' · '+r.note:'')+'</div>'+
-      '<div class="addr"><a href="'+r.maps+'" target="_blank" rel="noopener">\ud83d\udccd '+r.addr+'</a></div></div>'+
+      '<div class="meta">'+r.cuisine+' \u00b7 '+r.area+(r.note?' \u00b7 '+r.note:'')+'</div>'+
+      '<div class="addr"><a href="'+mapsUrl(r)+'" target="_blank" rel="noopener">\ud83d\udccd '+r.addr+'</a></div></div>'+
       '<div class="rating">'+stars(r.rating)+' '+r.rating.toFixed(1)+
       '<span class="n">'+r.reviews.toLocaleString()+' reviews</span></div>';
     row.querySelector('.fav-btn').addEventListener('click',()=>{
-      favs.has(i) ? favs.delete(i) : favs.add(i);
+      favs().has(i) ? favs().delete(i) : favs().add(i);
       render();
     });
     listEl.appendChild(row);
   });
-  countLabel.textContent = RESTAURANTS.length + ' spots' + (favs.size ? ' · ' + favs.size + ' ♥' : '');
+  countLabel.textContent = RESTAURANTS.length + ' spots' + (favs().size ? ' \u00b7 ' + favs().size + ' \u2665' : '');
 }
 
 function pool(){
   let idx = RESTAURANTS.map((_,i)=>i);
-  if (favOnly.checked && favs.size) idx = idx.filter(i=>favs.has(i));
+  if (favOnly.checked && favs().size) idx = idx.filter(i=>favs().has(i));
   return idx;
 }
 
@@ -241,7 +305,6 @@ function weightedPick(idx){
   if (!weighted.checked){
     return idx[Math.floor(Math.random()*idx.length)];
   }
-  // weight = (rating - 3.5)^2 so a 4.9 is meaningfully likelier than a 3.9
   const w = idx.map(i=>Math.pow(RESTAURANTS[i].rating-3.5,2));
   const total = w.reduce((a,b)=>a+b,0);
   let roll = Math.random()*total;
@@ -257,10 +320,10 @@ function showInSlot(i, landed){
   slotEl.classList.toggle('landed', landed);
   slotEl.innerHTML =
     '<div class="pick-name">'+r.name+'</div>'+
-    '<div class="pick-meta">'+r.cuisine+' · '+r.area+(r.note?' · '+r.note:'')+'</div>'+
+    '<div class="pick-meta">'+r.cuisine+' \u00b7 '+r.area+(r.note?' \u00b7 '+r.note:'')+'</div>'+
     '<div class="pick-rating">'+stars(r.rating)+' '+r.rating.toFixed(1)+' ('+r.reviews.toLocaleString()+')</div>'+
-    '<div class="pick-addr"><a href="'+r.maps+'" target="_blank" rel="noopener">\ud83d\udccd '+r.addr+' \u2192 Directions</a></div>'+
-    (favs.has(i)?'<div class="pick-fav">♥ Favorite</div>':'');
+    '<div class="pick-addr"><a href="'+mapsUrl(r)+'" target="_blank" rel="noopener">\ud83d\udccd '+r.addr+' \u2192 Directions</a></div>'+
+    (favs().has(i)?'<div class="pick-fav">\u2665 Favorite</div>':'');
   document.querySelectorAll('.row').forEach(el=>el.classList.remove('highlight'));
   if (landed){
     const row = document.getElementById('row-'+i);
@@ -284,7 +347,7 @@ function spin(){
     if (ticks < totalTicks){
       showInSlot(idx[Math.floor(Math.random()*idx.length)], false);
       ticks++;
-      delay *= 1.13; // slow down like a wheel
+      delay *= 1.13;
       setTimeout(tick, delay);
     } else {
       showInSlot(winner, true);
@@ -293,8 +356,28 @@ function spin(){
   })();
 }
 
+function loadRegion(key){
+  currentRegion = key;
+  const region = REGIONS[key];
+  RESTAURANTS = region.restaurants;
+  subtitleEl.textContent = region.subtitle;
+  noteEl.textContent = region.note;
+  slotEl.classList.remove('landed');
+  slotEl.innerHTML = '<div class="placeholder">Hit spin and let fate decide where you eat.</div>';
+  render();
+}
+
+Object.keys(REGIONS).forEach(key=>{
+  const opt = document.createElement('option');
+  opt.value = key;
+  opt.textContent = REGIONS[key].label;
+  regionSel.appendChild(opt);
+});
+
+regionSel.addEventListener('change', e=>loadRegion(e.target.value));
 spinBtn.addEventListener('click', spin);
-render();
+
+loadRegion('lakemary');
 </script>
 </body>
 </html>
