@@ -4,139 +4,339 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lunch Roulette</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,500;1,600&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg:#0b0e17;
-    --panel:#121726;
-    --panel2:#0e1322;
-    --line:#1f2740;
-    --cyan:#36e6ff;
-    --pink:#ff4fd8;
-    --text:#e8ecf6;
-    --dim:#8b94ad;
-    --gold:#ffc94d;
+    --bg:#0b0907;
+    --panel:#17120c;
+    --panel2:#120e09;
+    --line:#2c2318;
+    --gold:#d9b873;
+    --gold-lt:#f0dca6;
+    --gold-dp:#b1873a;
+    --rose:#c08a92;
+    --wine:#7c2f3e;
+    --text:#f2ead9;
+    --dim:#a1937c;
+    --serif:"Playfair Display", Georgia, "Times New Roman", serif;
+    --sans:"Jost","Segoe UI",system-ui,-apple-system,sans-serif;
   }
   *{box-sizing:border-box;margin:0;padding:0}
+  ::selection{background:rgba(217,184,115,.28);color:#fff}
   body{
-    background:var(--bg);
-    background-image:radial-gradient(ellipse 80% 50% at 50% -10%, rgba(54,230,255,.08), transparent),
-                     radial-gradient(ellipse 60% 40% at 90% 110%, rgba(255,79,216,.07), transparent);
+    font-family:var(--sans);
     color:var(--text);
-    font-family:"Segoe UI",system-ui,-apple-system,sans-serif;
     min-height:100vh;
-    padding:28px 20px 48px;
+    padding:40px 20px 64px;
+    position:relative;
+    background:
+      radial-gradient(ellipse 70% 45% at 50% -8%, rgba(217,184,115,.12), transparent 60%),
+      radial-gradient(ellipse 55% 45% at 92% 108%, rgba(124,47,62,.15), transparent 62%),
+      linear-gradient(180deg,#0c0a07,#0a0806);
   }
-  header{max-width:1100px;margin:0 auto 22px}
-  .title-row{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:radial-gradient(ellipse 100% 85% at 50% 28%, transparent 52%, rgba(0,0,0,.6));
+  }
+  body::after{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.04;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  header,.wrap,.shortlist{position:relative;z-index:1}
+
+  header{max-width:1100px;margin:0 auto 28px}
+  .title-row{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap}
   h1{
-    font-size:1.6rem;letter-spacing:.12em;text-transform:uppercase;font-weight:800;
-    background:linear-gradient(90deg,var(--cyan),var(--pink));
+    font-family:var(--serif);font-weight:600;font-size:2.6rem;line-height:1.04;letter-spacing:.005em;
+    background:linear-gradient(92deg,var(--gold-lt),var(--gold) 45%,var(--gold-dp));
     -webkit-background-clip:text;background-clip:text;color:transparent;
   }
-  header p{color:var(--dim);font-size:.85rem;margin-top:6px;letter-spacing:.02em}
-  .region-picker{display:flex;align-items:center;gap:8px}
-  .region-picker label{font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);font-weight:700}
-  #region{
-    font:inherit;font-size:.9rem;font-weight:600;color:var(--text);
-    background:var(--panel);border:1px solid var(--line);border-radius:10px;
-    padding:9px 14px;cursor:pointer;outline:none;
+  header p{
+    color:var(--dim);font-size:.82rem;margin-top:14px;letter-spacing:.04em;max-width:700px;line-height:1.6;
+    border-top:1px solid var(--line);padding-top:14px;
   }
-  #region:focus{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan)}
-  .wrap{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.15fr 1fr;gap:18px}
+  .region-picker{display:flex;align-items:center;gap:11px;padding-bottom:6px}
+  .region-picker label{font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--gold);font-weight:500}
+  #region{
+    font-family:var(--sans);font-size:.86rem;font-weight:500;color:var(--text);letter-spacing:.02em;
+    background:var(--panel);border:1px solid var(--line);border-radius:4px;padding:10px 16px;cursor:pointer;outline:none;
+  }
+  #region:focus{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold-dp)}
+
+  .wrap{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.15fr 1fr;gap:20px}
   @media (max-width:820px){.wrap{grid-template-columns:1fr}}
 
   .panel{
-    background:var(--panel);
-    border:1px solid var(--line);
-    border-radius:14px;
-    overflow:hidden;
-    display:flex;flex-direction:column;
+    background:linear-gradient(180deg, rgba(255,240,210,.022), transparent 28%), var(--panel);
+    border:1px solid var(--line);border-radius:6px;overflow:hidden;display:flex;flex-direction:column;
+    box-shadow:0 28px 64px -30px rgba(0,0,0,.85), inset 0 1px 0 rgba(255,240,210,.045);
   }
   .panel-head{
-    padding:14px 16px;border-bottom:1px solid var(--line);
+    padding:17px 18px;border-bottom:1px solid var(--line);
     display:flex;align-items:center;justify-content:space-between;gap:10px;
-    font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);font-weight:700;
+    font-size:.62rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);font-weight:500;
   }
-  .panel-head .count{color:var(--cyan);font-family:Consolas,monospace;letter-spacing:0}
+  .panel-head>span:first-child{display:flex;align-items:center;gap:10px}
+  .panel-head>span:first-child::before{
+    content:"";width:6px;height:6px;transform:rotate(45deg);flex-shrink:0;
+    background:linear-gradient(135deg,var(--gold-lt),var(--gold-dp));
+  }
+  .panel-head .count{color:var(--gold);letter-spacing:.08em;font-weight:500}
 
-  /* list */
-  .list{overflow-y:auto;max-height:72vh;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+  .list{overflow-y:auto;max-height:72vh;scrollbar-width:thin;scrollbar-color:var(--gold-dp) transparent}
+  .list::-webkit-scrollbar{width:8px}
+  .list::-webkit-scrollbar-thumb{background:var(--line);border-radius:4px}
+  .list::-webkit-scrollbar-track{background:transparent}
   .row{
-    display:flex;align-items:center;gap:12px;
-    padding:12px 14px;border-bottom:1px solid var(--line);
-    transition:background .15s;
+    display:flex;align-items:center;gap:14px;padding:15px 16px;border-bottom:1px solid var(--line);transition:background .2s;
   }
   .row:last-child{border-bottom:none}
-  .row:hover{background:var(--panel2)}
-  .row.highlight{background:rgba(54,230,255,.10);box-shadow:inset 3px 0 0 var(--cyan)}
+  .row:hover{background:rgba(217,184,115,.05)}
+  .row.highlight{background:rgba(217,184,115,.09);box-shadow:inset 3px 0 0 var(--gold)}
   .fav-btn{
-    background:none;border:none;cursor:pointer;font-size:1.15rem;line-height:1;
-    color:#3a4360;transition:color .15s,transform .1s;flex-shrink:0;padding:4px;
+    background:none;border:none;cursor:pointer;font-size:1.1rem;line-height:1;
+    color:#4a3d2c;transition:color .2s,transform .1s;flex-shrink:0;padding:4px;
   }
-  .fav-btn:hover{transform:scale(1.2)}
-  .fav-btn.on{color:var(--pink);text-shadow:0 0 8px rgba(255,79,216,.6)}
+  .fav-btn:hover{transform:scale(1.2);color:var(--rose)}
+  .fav-btn.on{color:var(--rose);text-shadow:0 0 10px rgba(192,138,146,.55)}
   .info{flex:1;min-width:0}
-  .name{font-weight:600;font-size:.95rem}
-  .meta{color:var(--dim);font-size:.75rem;margin-top:2px}
-  .addr{display:block;font-size:.72rem;margin-top:3px}
-  .addr a,.pick-addr a{color:var(--cyan);text-decoration:none;opacity:.85}
+  .name{font-family:var(--serif);font-weight:500;font-size:1.08rem;letter-spacing:.01em;color:var(--text)}
+  .meta{color:var(--dim);font-size:.68rem;margin-top:4px;letter-spacing:.08em;text-transform:uppercase}
+  .addr{display:block;font-size:.74rem;margin-top:6px}
+  .addr a,.pick-addr a{color:var(--gold);text-decoration:none;opacity:.8;letter-spacing:.01em}
   .addr a:hover,.pick-addr a:hover{text-decoration:underline;opacity:1}
-  .pick-addr{font-size:.78rem}
+  .pick-addr{font-size:.8rem}
   .rating{
-    font-family:Consolas,monospace;font-size:.85rem;color:var(--gold);
+    font-family:var(--sans);font-size:.82rem;color:var(--gold);font-weight:500;letter-spacing:.05em;
     flex-shrink:0;text-align:right;
   }
-  .rating .n{display:block;color:var(--dim);font-size:.68rem}
+  .rating .n{display:block;color:var(--dim);font-size:.6rem;margin-top:3px;letter-spacing:.1em;text-transform:uppercase}
 
-  /* picker */
-  .picker-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:34px 22px;gap:20px;min-height:380px}
+  .picker-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;gap:24px;min-height:380px}
   .slot{
-    width:100%;min-height:170px;border-radius:12px;
-    border:1px solid var(--line);
-    background:var(--panel2);
+    width:100%;min-height:184px;border-radius:6px;border:1px solid var(--line);
+    background:radial-gradient(ellipse at top, rgba(217,184,115,.045), transparent 70%), var(--panel2);
     display:flex;flex-direction:column;align-items:center;justify-content:center;
-    padding:22px;text-align:center;gap:8px;position:relative;
+    padding:28px 22px;text-align:center;gap:11px;position:relative;
   }
-  .slot.landed{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan),0 0 28px rgba(54,230,255,.25)}
-  .slot .placeholder{color:var(--dim);font-size:.85rem;letter-spacing:.05em}
-  .slot .pick-name{font-size:1.45rem;font-weight:800;letter-spacing:.01em}
+  .slot.landed{border-color:var(--gold);box-shadow:0 0 0 1px rgba(217,184,115,.5),0 0 44px -10px rgba(217,184,115,.45)}
+  .slot .placeholder{color:var(--dim);font-size:.95rem;letter-spacing:.02em;font-style:italic;font-family:var(--serif)}
+  .slot .pick-name{font-family:var(--serif);font-size:1.75rem;font-weight:600;letter-spacing:.01em;line-height:1.15}
   .slot.landed .pick-name{
-    background:linear-gradient(90deg,var(--cyan),var(--pink));
+    background:linear-gradient(92deg,var(--gold-lt),var(--gold) 50%,var(--gold-dp));
     -webkit-background-clip:text;background-clip:text;color:transparent;
   }
-  .slot .pick-meta{color:var(--dim);font-size:.82rem}
-  .slot .pick-rating{color:var(--gold);font-family:Consolas,monospace;font-size:.95rem}
-  .slot .pick-fav{color:var(--pink);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase}
+  .slot .pick-meta{color:var(--dim);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase}
+  .slot .pick-rating{color:var(--gold);font-family:var(--sans);font-size:.92rem;letter-spacing:.05em}
+  .slot .pick-fav{color:var(--rose);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase}
 
   .spin-btn{
-    font:inherit;font-weight:800;letter-spacing:.18em;text-transform:uppercase;font-size:.9rem;
-    color:#06121a;background:linear-gradient(90deg,var(--cyan),var(--pink));
-    border:none;border-radius:10px;padding:14px 38px;cursor:pointer;
-    transition:transform .1s,box-shadow .15s;
-    box-shadow:0 0 18px rgba(54,230,255,.35);
+    font-family:var(--sans);font-weight:600;letter-spacing:.28em;text-transform:uppercase;font-size:.76rem;
+    color:#1a1206;background:linear-gradient(100deg,var(--gold-lt),var(--gold) 50%,var(--gold-dp));
+    border:none;border-radius:4px;padding:16px 46px;cursor:pointer;
+    transition:transform .12s,box-shadow .2s,filter .2s;box-shadow:0 12px 32px -12px rgba(217,184,115,.55);
   }
-  .spin-btn:hover{transform:translateY(-1px);box-shadow:0 0 26px rgba(255,79,216,.45)}
-  .spin-btn:active{transform:translateY(1px)}
-  .spin-btn:disabled{opacity:.5;cursor:default;transform:none}
+  .spin-btn:hover{transform:translateY(-2px);box-shadow:0 18px 40px -12px rgba(217,184,115,.65);filter:brightness(1.06)}
+  .spin-btn:active{transform:translateY(0)}
+  .spin-btn:disabled{opacity:.45;cursor:default;transform:none;filter:grayscale(.3)}
 
-  .opts{display:flex;gap:18px;flex-wrap:wrap;justify-content:center;color:var(--dim);font-size:.8rem}
-  .opts label{display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none}
-  .opts input{accent-color:var(--pink)}
-  .note{color:var(--dim);font-size:.7rem;text-align:center;max-width:340px;line-height:1.5}
+  .opts{display:flex;gap:24px;flex-wrap:wrap;justify-content:center;color:var(--dim);font-size:.72rem;letter-spacing:.06em}
+  .opts label{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none;text-transform:uppercase}
+  .opts input{accent-color:var(--gold)}
+  .opt-select{text-transform:uppercase}
+  .opts label.opt-disabled{opacity:.32;cursor:not-allowed}
+  .opts input:disabled{cursor:not-allowed}
+  .opts select{
+    font-family:var(--sans);font-size:.72rem;font-weight:500;color:var(--text);letter-spacing:.06em;
+    background:var(--panel2);border:1px solid var(--line);border-radius:5px;padding:3px 7px;margin-left:7px;cursor:pointer;outline:none;
+  }
+  .opts select:focus{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold-dp)}
+  .note{color:var(--dim);font-size:.78rem;text-align:center;max-width:380px;line-height:1.7;font-style:italic;font-family:var(--serif)}
 
+  /* bonus round */
+  .slot.event{
+    border-color:var(--gold);
+    background:radial-gradient(ellipse at center, rgba(217,184,115,.13), var(--panel2));
+    animation:jackpot 1.2s ease-in-out infinite;
+  }
+  @keyframes jackpot{
+    0%,100%{box-shadow:0 0 0 1px var(--gold),0 0 36px -6px rgba(217,184,115,.5)}
+    50%{box-shadow:0 0 0 1px var(--rose),0 0 48px -6px rgba(192,138,146,.5)}
+  }
+  .event-tag{color:var(--gold);font-size:.64rem;letter-spacing:.36em;text-transform:uppercase;font-weight:500}
+  .event-emoji{font-size:2.7rem;line-height:1}
+  .slot.event .pick-name{
+    background:linear-gradient(92deg,var(--gold-lt),var(--rose));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .event-go{
+    margin-top:10px;font-family:var(--sans);font-weight:600;letter-spacing:.16em;text-transform:uppercase;font-size:.7rem;
+    color:#1a1206;background:linear-gradient(100deg,var(--gold-lt),var(--gold-dp));
+    border:none;border-radius:4px;padding:13px 26px;cursor:pointer;
+    box-shadow:0 12px 28px -10px rgba(217,184,115,.55);transition:transform .12s;
+  }
+  .event-go:hover{transform:translateY(-2px)}
+  .event-go:active{transform:translateY(0)}
+
+  /* shortlist */
+  .shortlist{max-width:1100px;margin:20px auto 0}
+  .sl-actions{display:flex;gap:10px}
+  .sl-btn{
+    font-family:var(--sans);font-size:.62rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;
+    color:#1a1206;background:linear-gradient(100deg,var(--gold-lt),var(--gold-dp));
+    border:none;border-radius:4px;padding:10px 16px;cursor:pointer;transition:transform .12s,filter .2s;
+  }
+  .sl-btn:hover:not(:disabled){transform:translateY(-1px);filter:brightness(1.06)}
+  .sl-btn.ghost{background:transparent;color:var(--dim);border:1px solid var(--line)}
+  .sl-btn.ghost:hover:not(:disabled){border-color:var(--gold);color:var(--gold)}
+  .sl-btn:disabled{opacity:.4;cursor:default}
+  .sl-body{padding:18px}
+  .sl-chips{display:flex;flex-wrap:wrap;gap:10px}
+  .sl-empty{color:var(--dim);font-size:.86rem;padding:4px 2px;line-height:1.6;font-style:italic;font-family:var(--serif)}
+  .sl-chip{
+    display:flex;align-items:center;gap:10px;background:var(--panel2);border:1px solid var(--line);
+    border-radius:999px;padding:8px 17px;font-size:.92rem;font-family:var(--serif);letter-spacing:.01em;
+    transition:border-color .14s,background .14s,box-shadow .14s;
+  }
+  .sl-chip .sl-num{
+    display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;
+    background:var(--line);color:var(--dim);font-size:.58rem;font-family:var(--sans);
+  }
+  .sl-chip.flash{border-color:var(--gold);background:rgba(217,184,115,.1)}
+  .sl-chip.win{border-color:var(--gold);background:rgba(217,184,115,.16);box-shadow:0 0 22px -4px rgba(217,184,115,.5)}
+  .sl-chip.win .sl-num{background:linear-gradient(135deg,var(--gold-lt),var(--gold-dp));color:#1a1206}
+  .sl-winner{margin-top:16px;font-size:1.05rem;min-height:1.4em;display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-family:var(--serif)}
+  .sl-winner strong{font-weight:600}
+  .sl-winner .sw-meta{color:var(--dim);font-size:.7rem;font-family:var(--sans);letter-spacing:.08em;text-transform:uppercase}
+
+  /* actions */
+  .pick-actions{display:flex;gap:10px;justify-content:center;margin-top:6px}
+  .act{
+    font-family:var(--sans);font-size:.64rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--gold);background:transparent;border:1px solid var(--line);border-radius:4px;padding:8px 14px;
+    cursor:pointer;text-decoration:none;display:inline-block;transition:border-color .2s,background .2s;
+  }
+  .act:hover{border-color:var(--gold);background:rgba(217,184,115,.06)}
+
+  .toast{
+    position:fixed;left:50%;bottom:28px;transform:translateX(-50%) translateY(20px);
+    background:var(--panel);border:1px solid var(--gold-dp);color:var(--text);
+    padding:13px 24px;border-radius:4px;font-size:.84rem;letter-spacing:.03em;
+    opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;z-index:50;
+    box-shadow:0 18px 44px -14px rgba(0,0,0,.75);
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+  @media (max-width:820px){
+    h1{font-size:2.05rem}
+    body{padding:30px 16px 52px}
+  }
   @media (prefers-reduced-motion:reduce){
     .spin-btn,.fav-btn,.row{transition:none}
+    .slot.event{animation:none}
   }
+  /* ---- luxe extras ---- */
+  .title-row{align-items:center}
+  .title-left{display:flex;align-items:center;gap:20px}
+  .crest{width:62px;height:62px;flex-shrink:0;filter:drop-shadow(0 4px 14px rgba(217,184,115,.28))}
+  .crest svg{width:100%;height:100%;display:block}
+  .brand{display:flex;flex-direction:column;gap:6px}
+  .kicker{font-size:.58rem;letter-spacing:.42em;text-transform:uppercase;color:var(--gold);font-weight:500;padding-left:3px}
+  .flourish{display:flex;justify-content:center;margin:22px auto 4px;max-width:360px}
+  .flourish svg{width:100%;height:18px;display:block}
+
+  /* charger-plate motif behind the pick */
+  .slot{
+    background:
+      url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20200%20200'%3E%3Cg%20fill='none'%20stroke='%23d9b873'%3E%3Ccircle%20cx='100'%20cy='100'%20r='80'%20stroke-width='1'%20stroke-opacity='0.11'/%3E%3Ccircle%20cx='100'%20cy='100'%20r='64'%20stroke-width='0.7'%20stroke-opacity='0.08'/%3E%3Ccircle%20cx='100'%20cy='100'%20r='49'%20stroke-width='0.5'%20stroke-opacity='0.05'/%3E%3C/g%3E%3C/svg%3E") center / 250px no-repeat,
+      radial-gradient(ellipse at top, rgba(217,184,115,.045), transparent 70%),
+      var(--panel2);
+  }
+
+  /* larger, richer shortlist */
+  .shortlist{margin-top:28px}
+  .shortlist .panel{position:relative}
+  .shortlist .panel::before{
+    content:"";position:absolute;top:0;left:0;right:0;height:2px;
+    background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.85;z-index:2;
+  }
+  .shortlist .panel-head{padding:20px 22px;font-size:.66rem;letter-spacing:.3em}
+  .sl-body{padding:24px;min-height:118px}
+  .sl-chips{gap:12px}
+  .sl-chip{padding:12px 20px;font-size:1.04rem;gap:12px}
+  .sl-chip .sl-num{width:22px;height:22px;font-size:.62rem}
+  .sl-empty{font-size:.96rem;max-width:580px}
+  .sl-winner{font-size:1.2rem;margin-top:20px}
+  .sl-btn{padding:11px 18px;font-size:.64rem}
+
+  @keyframes chipPop{
+    0%{transform:scale(.7);opacity:0}
+    60%{transform:scale(1.09)}
+    100%{transform:scale(1);opacity:1}
+  }
+  .sl-chip.added{animation:chipPop .5s cubic-bezier(.2,.8,.2,1);border-color:var(--gold);box-shadow:0 0 22px -4px rgba(217,184,115,.6)}
+  @media (prefers-reduced-motion:reduce){ .sl-chip.added{animation:none} }
+  #confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:60}
+  .dist{color:var(--gold);font-weight:500;letter-spacing:.04em}
+  .row.closed-now{opacity:.4}
+  .closed-tag{color:var(--rose);letter-spacing:.06em}
 </style>
 </head>
 <body>
 <header>
   <div class="title-row">
-    <h1>Lunch Roulette</h1>
+    <div class="title-left">
+      <div class="crest">
+        <svg viewBox="0 0 80 80" aria-hidden="true">
+          <defs>
+            <linearGradient id="cg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#f0dca6"/>
+              <stop offset=".55" stop-color="#d9b873"/>
+              <stop offset="1" stop-color="#b1873a"/>
+            </linearGradient>
+          </defs>
+          <circle cx="40" cy="40" r="33" fill="none" stroke="url(#cg)" stroke-width="1.4"/>
+          <circle cx="40" cy="40" r="28.5" fill="none" stroke="url(#cg)" stroke-width="0.6" opacity=".5"/>
+          <g fill="none" stroke="url(#cg)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <g transform="translate(40 41) rotate(15)">
+              <line x1="0" y1="23" x2="0" y2="-5"/>
+              <ellipse cx="0" cy="-13" rx="6.2" ry="9"/>
+            </g>
+            <g transform="translate(40 41) rotate(-15)">
+              <line x1="0" y1="23" x2="0" y2="-6"/>
+              <path d="M-5,-21 L-5,-10 Q-5,-6 0,-6 Q5,-6 5,-10 L5,-21"/>
+              <line x1="-2.3" y1="-21" x2="-2.3" y2="-11"/>
+              <line x1="2.3" y1="-21" x2="2.3" y2="-11"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <div class="brand">
+        <div class="kicker">Le Hasard du Déjeuner</div>
+        <h1>Lunch Roulette</h1>
+      </div>
+    </div>
     <div class="region-picker">
       <label for="region">Area</label>
       <select id="region"></select>
     </div>
+  </div>
+  <div class="flourish">
+    <svg viewBox="0 0 300 18" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+      <defs>
+        <linearGradient id="fg" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#b1873a" stop-opacity="0"/>
+          <stop offset=".5" stop-color="#d9b873" stop-opacity="1"/>
+          <stop offset="1" stop-color="#b1873a" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <line x1="20" y1="9" x2="280" y2="9" stroke="url(#fg)" stroke-width="1"/>
+      <circle cx="118" cy="9" r="1.7" fill="#d9b873"/>
+      <circle cx="182" cy="9" r="1.7" fill="#d9b873"/>
+      <path d="M150,2 L156,9 L150,16 L144,9 Z" fill="#d9b873"/>
+    </svg>
   </div>
   <p id="subtitle"></p>
 </header>
@@ -155,17 +355,40 @@
   <section class="panel">
     <div class="panel-head"><span>Today's Pick</span></div>
     <div class="picker-body">
+      <p class="note" id="note"></p>
       <div class="slot" id="slot">
         <div class="placeholder">Hit spin and let fate decide where you eat.</div>
       </div>
       <button class="spin-btn" id="spinBtn">Spin</button>
       <div class="opts">
         <label><input type="checkbox" id="favOnly"> Favorites only</label>
+        <label id="buffetLabel"><input type="checkbox" id="buffetOnly"> Buffets only</label>
+        <label><input type="checkbox" id="openNow"> Open now</label>
+        <label class="opt-select">Within <select id="radius"><option value="0">any</option><option value="5">5 mi</option><option value="10">10 mi</option><option value="35">15+ mi</option></select></label>
+        <label><input type="checkbox" id="sound" checked> Sound</label>
       </div>
-      <p class="note" id="note"></p>
     </div>
   </section>
 </div>
+
+<div class="shortlist">
+  <section class="panel">
+    <div class="panel-head">
+      <span>Shortlist <span class="count" id="slCount">(0/5)</span></span>
+      <div class="sl-actions">
+        <button class="sl-btn" id="slSpin" disabled>Spin shortlist →</button>
+        <button class="sl-btn ghost" id="slClear" disabled>Clear</button>
+      </div>
+    </div>
+    <div class="sl-body">
+      <div class="sl-chips" id="slChips"></div>
+      <div class="sl-winner" id="slWinner"></div>
+    </div>
+  </section>
+</div>
+
+<canvas id="confetti"></canvas>
+<div class="toast" id="toast"></div>
 
 <script>
 const REGIONS = {
@@ -213,12 +436,24 @@ const REGIONS = {
   {name:"Chipotle", cuisine:"Mexican · Fast casual", area:"Sanford (WP Ball Blvd)", rating:4.0, reviews:1078, note:"Next to Kona Poké", addr:"1805 WP Ball Blvd, Sanford, FL 32771", maps:"https://maps.apple.com/?daddr=1805%20WP%20Ball%20Blvd%2C%20Sanford%2C%20FL%2032771"},
   {name:"Steak 'n Shake", cuisine:"Burgers · Shakes", area:"Sanford", rating:4.0, reviews:1551, note:"", addr:"40 Towne Center Cir, Sanford, FL 32771", maps:"https://maps.apple.com/?daddr=40%20Towne%20Center%20Cir%2C%20Sanford%2C%20FL%2032771"},
   {name:"Bojangles", cuisine:"Chicken · Biscuits", area:"Sanford", rating:3.9, reviews:980, note:"Open 24 hrs", addr:"101 S Oregon Ave, Sanford, FL 32771", maps:"https://maps.apple.com/?daddr=101%20S%20Oregon%20Ave%2C%20Sanford%2C%20FL%2032771"}
-]
+],
+    buffets: [
+  {name:"Aashirwad", cuisine:"Indian · Lunch buffet", area:"Orlando", rating:4.7, reviews:9500, note:"Buffet Fri–Sun", addr:"7000 S Kirkman Rd, Orlando, FL 32819"},
+  {name:"Mynt Fine Indian", cuisine:"Indian · Lunch buffet", area:"Winter Park", rating:4.7, reviews:2184, note:"Buffet till 3", addr:"535 W New England Ave #200, Winter Park, FL 32789"},
+  {name:"Texas de Brazil", cuisine:"Brazilian churrascaria", area:"Orlando", rating:4.6, reviews:9002, note:"Rodízio · I-Drive", addr:"5259 International Dr f1, Orlando, FL 32819"},
+  {name:"Tabla", cuisine:"Indian · Indo-Chinese buffet", area:"Orlando", rating:4.5, reviews:11610, note:"Lunch buffet till 3", addr:"5847 Grand National Dr, Orlando, FL 32819"},
+  {name:"BoiBrazil Churrascaria", cuisine:"Brazilian churrascaria", area:"Orlando", rating:4.3, reviews:2222, note:"Rodízio · I-Drive", addr:"5668 International Dr, Orlando, FL 32819"},
+  {name:"Ichigo Ichie Buffet", cuisine:"Asian buffet · Hibachi", area:"Sanford", rating:4.0, reviews:3215, note:"Sushi & Chinese", addr:"3611 S Orlando Dr, Sanford, FL 32773"},
+  {name:"Golden Corral", cuisine:"American buffet", area:"Altamonte Springs", rating:4.0, reviews:4310, note:"", addr:"897 W Town Pkwy, Altamonte Springs, FL 32714"}
+],
+    events: [
+      {label:"Park Ave Detour", emoji:"\ud83c\udf33", target:"winterpark", blurb:"Skip the suburbs \u2014 cruise down to Park Avenue for Winter Park & Baldwin Park's finest."}
+    ]
   },
   southbay: {
     label: "South Bay, CA",
     subtitle: "Brunch & lunch picks across Torrance / Redondo / Hermosa / Manhattan Beach / Gardena (+ a Peninsula spot) \u00b7 ratings from Google Maps",
-    note: "Tap the \u2665 to favorite a spot. These are daytime-leaning places \u2014 check the card for closed days and kitchen hours before you head out.",
+    note: "Tap the \u2665 to favorite a spot. These are daytime-leaning places \u2014 check the card for closed days and kitchen hours before you head out. Keep spinning, too \u2014 a rare bonus round can whisk you up to K-Town.",
     restaurants: [
   {name:"Mychal's Café", cuisine:"Café · Breakfast & lunch", area:"Redondo Beach", rating:4.9, reviews:299, note:"Daytime only", addr:"2302 Artesia Blvd, Redondo Beach, CA 90278"},
   {name:"Délices Du Chef", cuisine:"French café · Bakery", area:"Torrance", rating:4.8, reviews:135, note:"Open till 4", addr:"24416 Crenshaw Blvd Ste 4, Torrance, CA 90505"},
@@ -250,7 +485,134 @@ const REGIONS = {
   {name:"Pho Redbo", cuisine:"Vietnamese · Pho · Wagyu", area:"Rolling Hills Estates", rating:4.6, reviews:81, note:"Halal", addr:"550 Deep Valley Dr Ste 105, Rolling Hills Estates, CA 90274"},
   {name:"Panda Express", cuisine:"Chinese · Fast food", area:"Redondo Beach", rating:3.9, reviews:253, note:"", addr:"417 N Pacific Coast Hwy, Redondo Beach, CA 90277"},
   {name:"El Burrito Jr", cuisine:"Mexican", area:"Torrance", rating:4.0, reviews:882, note:"", addr:"21141 Hawthorne Blvd, Torrance, CA 90503"},
-  {name:"Erewhon", cuisine:"Grocery · Prepared foods & smoothies", area:"Manhattan Beach", rating:4.3, reviews:169, note:"Hot bar & smoothies", addr:"1700 Rosecrans Ave C, Manhattan Beach, CA 90266"}
+  {name:"Erewhon", cuisine:"Grocery · Prepared foods & smoothies", area:"Manhattan Beach", rating:4.3, reviews:169, note:"Hot bar & smoothies", addr:"1700 Rosecrans Ave C, Manhattan Beach, CA 90266"},
+  {name:"Szechwan Chinese Food", cuisine:"Chinese · Dim sum", area:"Lomita", rating:4.4, reviews:754, note:"Dim sum till 3", addr:"2107 Pacific Coast Hwy, Lomita, CA 90717"},
+  {name:"Sue's Kitchen", cuisine:"Taiwanese · Beef noodle", area:"Torrance", rating:4.0, reviews:209, note:"Closed Tue", addr:"23918 Crenshaw Blvd, Torrance, CA 90505"},
+  {name:"Bowl Thai Grill", cuisine:"Thai", area:"Gardena", rating:4.6, reviews:119, note:"Closed Mon", addr:"1630 W Redondo Beach Blvd #9, Gardena, CA 90247"},
+  {name:"Hansol Noodle", cuisine:"Korean · Noodles & soup", area:"Torrance", rating:4.3, reviews:106, note:"In H Mart · till 7:45", addr:"4340 Pacific Coast Hwy, Torrance, CA 90505"},
+  {name:"bb.q Chicken", cuisine:"Korean fried chicken", area:"Redondo Beach", rating:4.6, reviews:180, note:"Beryl St · mostly to-go", addr:"1252 Beryl St, Redondo Beach, CA 90277"}
+],
+    buffets: [
+  {name:"Mumu Hot Pot", cuisine:"AYCE hot pot", area:"Torrance", rating:4.7, reviews:153, note:"All-you-can-eat sets", addr:"3525 W Carson St Ste 170, Torrance, CA 90503"},
+  {name:"Pampas Grill", cuisine:"Brazilian · By the pound", area:"Culver City", rating:4.6, reviews:1954, note:"Churrasco buffet", addr:"3857 Overland Ave, Culver City, CA 90232"},
+  {name:"Gyu-Kaku", cuisine:"Yakiniku · AYCE option", area:"Torrance", rating:4.5, reviews:683, note:"Grill-your-own", addr:"24631 Crenshaw Blvd, Torrance, CA 90505"},
+  {name:"Ichiban Buffet", cuisine:"Asian buffet · Mongolian grill", area:"Gardena", rating:4.4, reviews:583, note:"Weekend crab", addr:"1230 W Redondo Beach Blvd, Gardena, CA 90247"},
+  {name:"Kanpai", cuisine:"AYCE sushi", area:"Westchester", rating:4.4, reviews:1315, note:"Late night", addr:"8736 S Sepulveda Blvd, Los Angeles, CA 90045"},
+  {name:"India's Tandoori", cuisine:"Indian · Lunch buffet", area:"Hawthorne", rating:4.3, reviews:738, note:"Halal", addr:"12866 Hawthorne Blvd, Hawthorne, CA 90250"},
+  {name:"Gen Korean BBQ", cuisine:"AYCE Korean BBQ", area:"Torrance", rating:4.1, reviews:2506, note:"Grill-your-own", addr:"24301 Crenshaw Blvd, Torrance, CA 90505"},
+  {name:"Sizzler", cuisine:"Salad bar · Grill", area:"Torrance", rating:4.1, reviews:1546, note:"Salad bar buffet", addr:"17544 Hawthorne Blvd, Torrance, CA 90504"}
+],
+    events: [
+      {label:"Koreatown Run", emoji:"\ud83c\udf03", target:"koreatown", blurb:"Forget the South Bay \u2014 pile in the car, you're road-tripping up to K-Town."},
+      {label:"SGV Detour", emoji:"\ud83e\udd5f", target:"sangabriel", blurb:"The dice say dumplings. Point the car east \u2014 you're headed to the San Gabriel Valley."},
+      {label:"West Side Run", emoji:"\ud83c\udf34", target:"culvercity", blurb:"Make for the coast \u2014 Culver City out to Marina del Rey, Playa del Rey & Santa Monica."}
+    ]
+  },
+  koreatown: {
+    label: "\u21b3 Koreatown, LA (bonus)",
+    bonus: true,
+    subtitle: "K-Town landmarks \u00b7 KBBQ, tofu stew, knife noodles, bossam & more \u00b7 ratings from Google Maps",
+    note: "Bonus round! These are destination spots \u2014 several close Tue or Sun, and parking is its own adventure. Worth it.",
+    restaurants: [
+  {name:"Hae Jang Chon", cuisine:"Korean BBQ · AYCE", area:"Koreatown", rating:4.5, reviews:3463, note:"Closed Tue", addr:"3821 W 6th St, Los Angeles, CA 90020"},
+  {name:"Kang Ho Dong Baekjeong", cuisine:"Korean BBQ", area:"Koreatown", rating:4.4, reviews:2502, note:"", addr:"3465 W 6th St #20, Los Angeles, CA 90020"},
+  {name:"Park's BBQ", cuisine:"Korean BBQ · Michelin", area:"Koreatown", rating:4.4, reviews:2254, note:"", addr:"955 S Vermont Ave G, Los Angeles, CA 90006"},
+  {name:"Quarters Korean BBQ", cuisine:"Korean BBQ", area:"Koreatown", rating:4.4, reviews:2756, note:"", addr:"3465 W 6th St #C-130, Los Angeles, CA 90020"},
+  {name:"Soowon Galbi", cuisine:"Korean BBQ · Suwon style", area:"Koreatown", rating:4.5, reviews:1309, note:"", addr:"856 Vermont Ave B, Los Angeles, CA 90005"},
+  {name:"Chosun Galbee", cuisine:"Korean BBQ · OG", area:"Koreatown", rating:4.1, reviews:1602, note:"Closed Tue", addr:"3330 W Olympic Blvd, Los Angeles, CA 90019"},
+  {name:"Sun Nong Dan", cuisine:"Galbi jjim · Soups", area:"Koreatown", rating:4.4, reviews:2515, note:"Open 24 hrs", addr:"710 S Western Ave, Los Angeles, CA 90005"},
+  {name:"Hanbat Sul Lung Tang", cuisine:"Beef bone soup", area:"Koreatown", rating:4.5, reviews:1913, note:"Closed Sun", addr:"4163 5th St, Los Angeles, CA 90020"},
+  {name:"BCD Tofu House", cuisine:"Soft tofu stew", area:"Koreatown", rating:4.3, reviews:6381, note:"Late night", addr:"3575 Wilshire Blvd, Los Angeles, CA 90010"},
+  {name:"Ondal 2", cuisine:"Spicy crab & beef stew", area:"Koreatown", rating:4.2, reviews:177, note:"", addr:"4566 W Washington Blvd, Los Angeles, CA 90016"},
+  {name:"Hangari Kalguksu", cuisine:"Knife-cut noodles", area:"Koreatown", rating:4.4, reviews:1495, note:"Closed Tue", addr:"3470 W 6th St, Los Angeles, CA 90020"},
+  {name:"Yuchun", cuisine:"Cold noodles · Naengmyun", area:"Koreatown", rating:4.0, reviews:897, note:"Closed Sun", addr:"3185 W Olympic Blvd, Los Angeles, CA 90006"},
+  {name:"MDK Noodles", cuisine:"Kalguksu · Dumplings", area:"Koreatown", rating:4.1, reviews:1454, note:"", addr:"3630 Wilshire Blvd, Los Angeles, CA 90010"},
+  {name:"Kobawoo House", cuisine:"Bossam · Pancakes", area:"Koreatown", rating:4.5, reviews:854, note:"Closed Mon", addr:"698 S Vermont Ave #109, Los Angeles, CA 90005"},
+  {name:"Myung In Dumplings", cuisine:"Dumplings · Mandu", area:"Koreatown", rating:4.4, reviews:761, note:"Closed Tue", addr:"3109 W Olympic Blvd B, Los Angeles, CA 90006"},
+  {name:"Soban", cuisine:"Banchan · Marinated crab", area:"Koreatown", rating:4.1, reviews:607, note:"Closed Tue", addr:"4001 W Olympic Blvd, Los Angeles, CA 90019"},
+  {name:"Jeonju Hyundaiok", cuisine:"Bibimbap · Soups", area:"Koreatown", rating:4.3, reviews:253, note:"", addr:"201 N Western Ave, Los Angeles, CA 90004"}
+]
+  },
+  sangabriel: {
+    label: "\u21b3 San Gabriel Valley (bonus)",
+    bonus: true,
+    subtitle: "SGV landmarks \u00b7 dumplings, dim sum, Sichuan, Taiwanese & beef noodles \u00b7 ratings from Google Maps",
+    note: "Bonus round! The best Chinese food in the country. Many spots are lunch-only or close Tue/Wed \u2014 check the card, and bring cash for the old-school ones.",
+    restaurants: [
+  {name:"Din Tai Fung", cuisine:"Dumplings · Michelin", area:"Arcadia", rating:4.5, reviews:2817, note:"In Westfield mall · expect a wait", addr:"400 S Baldwin Ave #M5, Arcadia, CA 91007"},
+  {name:"Golden Deli", cuisine:"Vietnamese · Pho", area:"San Gabriel", rating:4.6, reviews:1167, note:"Closed Wed", addr:"815 W Las Tunas Dr, San Gabriel, CA 91776"},
+  {name:"Yang's Kitchen", cuisine:"Modern Asian · Brunch", area:"Alhambra", rating:4.5, reviews:472, note:"Closed Tue–Wed · lunch till 2", addr:"112 W Main St, Alhambra, CA 91801"},
+  {name:"Newport Seafood", cuisine:"Chinese · Seafood", area:"San Gabriel", rating:4.4, reviews:2296, note:"Closed Tue · house lobster", addr:"518 W Las Tunas Dr, San Gabriel, CA 91776"},
+  {name:"Hui Tou Xiang", cuisine:"Dumplings · Noodles", area:"San Gabriel", rating:4.4, reviews:248, note:"Mostly to-go · till 8:30", addr:"704 W Las Tunas Dr, San Gabriel, CA 91776"},
+  {name:"SinBala", cuisine:"Taiwanese · Sausage", area:"Arcadia", rating:4.4, reviews:570, note:"Closed Tue", addr:"651 W Duarte Rd f, Arcadia, CA 91007"},
+  {name:"Chengdu Taste", cuisine:"Sichuan · Bib Gourmand", area:"Alhambra", rating:4.3, reviews:843, note:"Lunch till 2:30", addr:"828 W Valley Blvd, Alhambra, CA 91803"},
+  {name:"Mama Lu's Dumpling House", cuisine:"Dumplings · Shanghai", area:"Monterey Park", rating:4.3, reviews:2874, note:"Soup dumplings", addr:"153 E Garvey Ave, Monterey Park, CA 91755"},
+  {name:"JTYH", cuisine:"Knife-cut noodles", area:"Rosemead", rating:4.3, reviews:171, note:"Closed Tue", addr:"9425 Valley Blvd, Rosemead, CA 91770"},
+  {name:"Sichuan Impression", cuisine:"Sichuan · Bib Gourmand", area:"Alhambra", rating:4.3, reviews:922, note:"Lunch till 2:30", addr:"235 W Main St Suite B, Alhambra, CA 91801"},
+  {name:"Lunasia", cuisine:"Dim sum · Michelin", area:"Alhambra", rating:4.2, reviews:1668, note:"Jumbo dim sum", addr:"500 W Main St, Alhambra, CA 91801"},
+  {name:"Beijing Pie House", cuisine:"Meat pies · Dumplings", area:"Monterey Park", rating:4.2, reviews:408, note:"Lamb pies", addr:"846 E Garvey Ave Ste A, Monterey Park, CA 91755"},
+  {name:"Dai Ho", cuisine:"Taiwanese beef noodle", area:"Temple City", rating:4.2, reviews:289, note:"Closed Mon · lunch till 2:30", addr:"9148 E Las Tunas Dr, Temple City, CA 91780"},
+  {name:"Luscious Dumplings", cuisine:"Dumplings · Bib Gourmand", area:"Monrovia", rating:4.2, reviews:313, note:"Closed Tue · lunch till 2:30", addr:"919 W Duarte Rd, Monrovia, CA 91016"},
+  {name:"Sea Harbour", cuisine:"Dim sum · Cantonese", area:"Rosemead", rating:4.1, reviews:1257, note:"Dim sum till 3", addr:"3939 Rosemead Blvd, Rosemead, CA 91770"},
+  {name:"101 Noodle Express", cuisine:"Beef rolls · Noodles", area:"Alhambra", rating:4.0, reviews:906, note:"Famous beef roll", addr:"1408 E Valley Blvd, Alhambra, CA 91801"}
+]
+  },
+  winterpark: {
+    label: "\u21b3 Winter Park / Baldwin Park (bonus)",
+    bonus: true,
+    subtitle: "Park Avenue & Baldwin Park \u00b7 brunch, bakeries, tapas, Italian & Taste of Chengdu \u00b7 ratings from Google Maps",
+    note: "Bonus round! The leafy, upscale side of Orlando dining. A couple of bakeries close Mon–Tue and Seito does lunch on weekends only \u2014 check the card.",
+    restaurants: [
+  {name:"Bulla Gastrobar", cuisine:"Spanish tapas · Brunch", area:"Winter Park", rating:4.9, reviews:14873, note:"Till 10", addr:"110 S Orlando Ave #7, Winter Park, FL 32789"},
+  {name:"The Glass Knife", cuisine:"Bakery · Brunch", area:"Winter Park", rating:4.9, reviews:585, note:"Pastries · all day", addr:"212 N Park Ave, Winter Park, FL 32789"},
+  {name:"Buttermilk Bakery", cuisine:"Bakery · Brunch", area:"Winter Park", rating:4.7, reviews:830, note:"Closed Mon–Tue · till 2", addr:"1198 N Orange Ave, Winter Park, FL 32789"},
+  {name:"Bosphorous", cuisine:"Turkish · Mediterranean", area:"Winter Park", rating:4.6, reviews:4624, note:"", addr:"108 S Park Ave, Winter Park, FL 32789"},
+  {name:"Briarpatch", cuisine:"American · Brunch", area:"Winter Park", rating:4.5, reviews:4051, note:"Till 4", addr:"252 N Park Ave, Winter Park, FL 32789"},
+  {name:"Prato", cuisine:"Italian", area:"Winter Park", rating:4.5, reviews:3270, note:"", addr:"124 N Park Ave, Winter Park, FL 32789"},
+  {name:"Seito Sushi", cuisine:"Japanese · Sushi", area:"Baldwin Park", rating:4.5, reviews:1498, note:"Lunch Fri–Sun · Closed Mon", addr:"4898 New Broad St, Orlando, FL 32814"},
+  {name:"Winter Park Fish Co", cuisine:"Seafood", area:"Winter Park", rating:4.5, reviews:986, note:"", addr:"761 N Orange Ave, Winter Park, FL 32789"},
+  {name:"Hamilton's Kitchen", cuisine:"American · Brunch", area:"Winter Park", rating:4.4, reviews:773, note:"At the Alfond Inn", addr:"300 E New England Ave, Winter Park, FL 32789"},
+  {name:"Pannullo's", cuisine:"Italian", area:"Winter Park", rating:4.4, reviews:2032, note:"", addr:"216 S Park Ave, Winter Park, FL 32789"},
+  {name:"Taste of Chengdu", cuisine:"Sichuan", area:"Orlando", rating:4.3, reviews:876, note:"Closed Mon", addr:"2030 W Colonial Dr, Orlando, FL 32804"},
+  {name:"Cocina 214", cuisine:"Mexican · Tex-Mex", area:"Winter Park", rating:4.2, reviews:1210, note:"", addr:"151 E Welbourne Ave, Winter Park, FL 32789"},
+  {name:"Croissant Gourmet", cuisine:"French bakery · Café", area:"Winter Park", rating:4.2, reviews:842, note:"Till 6", addr:"120 E Morse Blvd, Winter Park, FL 32789"},
+  {name:"Armando's", cuisine:"Italian · Pizza", area:"Winter Park", rating:4.2, reviews:1260, note:"", addr:"463 W New England Ave, Winter Park, FL 32789"},
+  {name:"310 Park South", cuisine:"American · Brunch", area:"Winter Park", rating:4.1, reviews:1110, note:"Lunch specials", addr:"310 S Park Ave, Winter Park, FL 32789"}
+]
+  },
+  culvercity: {
+    label: "\u21b3 Culver City & the West Side (bonus)",
+    bonus: true,
+    subtitle: "Culver City, Marina del Rey, Playa del Rey & Santa Monica \u00b7 delis, tacos, sushi, seafood & beachside brunch \u00b7 ratings from Google Maps",
+    note: "Bonus round! Spans the whole West Side \u2014 from the Helms District out to the coast. A few spots close Mon or by mid-afternoon, and Bay Cities is closed Mon–Tue \u2014 check the card.",
+    restaurants: [
+  {name:"Mayura", cuisine:"South Indian · Kerala", area:"Culver City", rating:4.8, reviews:13390, note:"Closed Mon", addr:"10406 Venice Blvd, Culver City, CA 90232"},
+  {name:"Lodge Bread Company", cuisine:"Bakery · Brunch", area:"Culver City", rating:4.6, reviews:1401, note:"Till 4", addr:"11918 Washington Blvd, Los Angeles, CA 90066"},
+  {name:"Industry Cafe & Jazz", cuisine:"Ethiopian", area:"Culver City", rating:4.6, reviews:393, note:"Closed Mon–Tue", addr:"6039 Washington Blvd, Culver City, CA 90232"},
+  {name:"Citizen Public Market", cuisine:"Food hall", area:"Culver City", rating:4.6, reviews:390, note:"Stalls · rooftop", addr:"9355 Culver Blvd, Culver City, CA 90232"},
+  {name:"Pasta Sisters", cuisine:"Italian", area:"Culver City", rating:4.5, reviews:2238, note:"Opens 10:30", addr:"3280 Helms Ave, Culver City, CA 90232"},
+  {name:"Versailles", cuisine:"Cuban", area:"Culver City", rating:4.5, reviews:3423, note:"Garlic chicken", addr:"10319 Venice Blvd, Los Angeles, CA 90034"},
+  {name:"Johnnie's Pastrami", cuisine:"Deli · Pastrami", area:"Culver City", rating:4.4, reviews:3272, note:"Get it dipped", addr:"4017 Sepulveda Blvd, Culver City, CA 90230"},
+  {name:"Destroyer", cuisine:"Modern café · Brunch", area:"Culver City", rating:4.4, reviews:1425, note:"Till 3", addr:"3578 Hayden Ave, Culver City, CA 90232"},
+  {name:"City Tavern", cuisine:"Gastropub", area:"Culver City", rating:4.3, reviews:604, note:"", addr:"9739 Culver Blvd, Culver City, CA 90232"},
+  {name:"Honey's Kettle", cuisine:"Fried chicken", area:"Culver City", rating:4.2, reviews:3486, note:"", addr:"9537 Culver Blvd, Culver City, CA 90232"},
+  {name:"Ms. Chi Cafe", cuisine:"Chinese-American · Dumplings", area:"Culver City", rating:4.2, reviews:246, note:"Cheeseburger dumplings", addr:"3829 Main St, Culver City, CA 90232"},
+  {name:"Samosa House", cuisine:"Indian · Vegetarian", area:"Culver City", rating:4.2, reviews:624, note:"Veg · counter", addr:"10700 Washington Blvd, Culver City, CA 90232"},
+  {name:"Margot", cuisine:"Mediterranean · Rooftop", area:"Culver City", rating:4.1, reviews:697, note:"Lunch 11–3", addr:"8820 Washington Blvd Ste 301, Culver City, CA 90232"},
+  {name:"Tito's Tacos", cuisine:"Tacos · Institution", area:"Culver City", rating:4.1, reviews:10014, note:"Cash-friendly line", addr:"11222 Washington Pl, Culver City, CA 90230"},
+  {name:"Santa Monica Seafood", cuisine:"Seafood · Oyster bar", area:"Santa Monica", rating:4.6, reviews:1978, note:"Market & café", addr:"1000 Wilshire Blvd, Santa Monica, CA 90401"},
+  {name:"Sugarfish", cuisine:"Sushi", area:"Santa Monica", rating:4.6, reviews:1596, note:"Trust Me set", addr:"1345 2nd St, Santa Monica, CA 90401"},
+  {name:"Bay Cities Italian Deli", cuisine:"Deli · Sandwiches", area:"Santa Monica", rating:4.5, reviews:2894, note:"Closed Mon–Tue · till 6 · the Godmother", addr:"1517 Lincoln Blvd, Santa Monica, CA 90401"},
+  {name:"Forma", cuisine:"Italian · Cheese bar", area:"Santa Monica", rating:4.5, reviews:1104, note:"Cheese-wheel pasta", addr:"1610 Montana Ave, Santa Monica, CA 90403"},
+  {name:"Milo & Olive", cuisine:"Bakery · Italian", area:"Santa Monica", rating:4.4, reviews:1649, note:"Garlic knots", addr:"2723 Wilshire Blvd, Santa Monica, CA 90403"},
+  {name:"Joe's Pizza", cuisine:"Pizza", area:"Santa Monica", rating:4.4, reviews:1719, note:"Opens noon", addr:"111 Broadway, Santa Monica, CA 90401"},
+  {name:"Tacos Por Favor", cuisine:"Mexican", area:"Santa Monica", rating:4.4, reviews:1654, note:"Cash-friendly", addr:"1408 Olympic Blvd, Santa Monica, CA 90404"},
+  {name:"Huckleberry", cuisine:"Bakery · Brunch", area:"Santa Monica", rating:4.2, reviews:1288, note:"Till 3", addr:"1014 Wilshire Blvd, Santa Monica, CA 90401"},
+  {name:"Mendocino Farms", cuisine:"Sandwiches · Salads", area:"Marina del Rey", rating:4.5, reviews:757, note:"Free lot", addr:"4724 Admiralty Way, Marina Del Rey, CA 90292"},
+  {name:"La Marina Trattoria", cuisine:"Italian · Waterfront", area:"Marina del Rey", rating:4.3, reviews:532, note:"Fisherman's Village views", addr:"13723 Fiji Way, Marina Del Rey, CA 90292"},
+  {name:"Killer Shrimp", cuisine:"Seafood · Waterfront", area:"Marina del Rey", rating:4.1, reviews:6041, note:"Signature shrimp in broth", addr:"4211 Admiralty Way, Marina Del Rey, CA 90292"},
+  {name:"Playa Provisions", cuisine:"Coastal · Seafood", area:"Playa del Rey", rating:4.6, reviews:2468, note:"All day · beachside", addr:"119 Culver Blvd, Playa Del Rey, CA 90293"},
+  {name:"The Tripel", cuisine:"Gastropub · Burgers", area:"Playa del Rey", rating:4.6, reviews:343, note:"Tiny · communal", addr:"333 Culver Blvd #1047, Playa Del Rey, CA 90293"}
 ]
   }
 };
@@ -258,19 +620,47 @@ const REGIONS = {
 const favsByRegion = {};
 let currentRegion = "lakemary";
 let RESTAURANTS = [];
+const EVENT_CHANCE = 0.09;
+let lastPickName = null;
 
 const listEl = document.getElementById('list');
 const slotEl = document.getElementById('slot');
 const spinBtn = document.getElementById('spinBtn');
 const favOnly = document.getElementById('favOnly');
+const buffetOnly = document.getElementById('buffetOnly');
+const buffetLabel = document.getElementById('buffetLabel');
+const openNow = document.getElementById('openNow');
+const radiusSel = document.getElementById('radius');
+const soundChk = document.getElementById('sound');
+const confCanvas = document.getElementById('confetti');
 const countLabel = document.getElementById('countLabel');
 const regionSel = document.getElementById('region');
 const subtitleEl = document.getElementById('subtitle');
 const noteEl = document.getElementById('note');
+const slCount = document.getElementById('slCount');
+const slChips = document.getElementById('slChips');
+const slWinner = document.getElementById('slWinner');
+const slSpinBtn = document.getElementById('slSpin');
+const slClearBtn = document.getElementById('slClear');
+const toastEl = document.getElementById('toast');
 
+const SL_MAX = 5;
+let shortlist = [];
+let userLoc = null;
+let slSpinning = false;
+let toastTimer;
+
+function favKey(){
+  return currentRegion + (buffetOnly.checked && REGIONS[currentRegion].buffets ? ':buffet' : '');
+}
 function favs(){
-  if(!favsByRegion[currentRegion]) favsByRegion[currentRegion] = new Set();
-  return favsByRegion[currentRegion];
+  const k = favKey();
+  if(!favsByRegion[k]) favsByRegion[k] = new Set();
+  return favsByRegion[k];
+}
+function activeList(){
+  const reg = REGIONS[currentRegion];
+  return (buffetOnly.checked && reg.buffets) ? reg.buffets : reg.restaurants;
 }
 
 function mapsUrl(r){
@@ -282,16 +672,152 @@ function stars(r){
   return '\u2605'.repeat(full) + '\u2606'.repeat(5-full);
 }
 
+/* ---- sound ---- */
+let audioCtx;
+function ensureAudio(){
+  if (!audioCtx){ try{ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }catch(e){} }
+  if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+function blip(freq, dur, type, vol){
+  if (!soundChk.checked) return;
+  const ac = ensureAudio(); if (!ac) return;
+  const o = ac.createOscillator(), g = ac.createGain();
+  o.type = type || 'sine'; o.frequency.value = freq;
+  const t = ac.currentTime;
+  g.gain.setValueAtTime(0, t);
+  g.gain.linearRampToValueAtTime(vol || 0.14, t + 0.008);
+  g.gain.exponentialRampToValueAtTime(0.0001, t + (dur || 0.15));
+  o.connect(g); g.connect(ac.destination);
+  o.start(t); o.stop(t + (dur || 0.15));
+}
+function playTick(){ blip(820 + Math.random()*140, 0.045, 'square', 0.035); }
+function playChime(){ [523.25, 659.25, 783.99, 1046.5].forEach((f,k)=>setTimeout(()=>blip(f, 0.65, 'sine', 0.16), k*70)); }
+
+/* ---- confetti ---- */
+let confCtx, confParticles = [], confRAF = null;
+function initConfetti(){
+  if (!confCanvas) return;
+  confCtx = confCanvas.getContext('2d');
+  const resize = ()=>{ confCanvas.width = innerWidth; confCanvas.height = innerHeight; };
+  resize(); window.addEventListener('resize', resize);
+}
+function burstConfetti(big){
+  if (!confCtx || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const colors = ['#f0dca6','#d9b873','#b1873a','#fff7e6','#c08a92'];
+  const n = big ? 150 : 80;
+  for (let i=0;i<n;i++){
+    confParticles.push({
+      x: innerWidth/2 + (Math.random()-0.5)*220,
+      y: innerHeight*0.34 + (Math.random()-0.5)*60,
+      vx: (Math.random()-0.5)*9, vy: Math.random()*-8-3,
+      g: 0.22 + Math.random()*0.12, s: 4 + Math.random()*6,
+      rot: Math.random()*6.28, vr: (Math.random()-0.5)*0.45,
+      color: colors[Math.floor(Math.random()*colors.length)],
+      life: 0, max: 64 + Math.random()*46
+    });
+  }
+  if (!confRAF) confRAF = requestAnimationFrame(stepConfetti);
+}
+function stepConfetti(){
+  confCtx.clearRect(0,0,confCanvas.width,confCanvas.height);
+  confParticles = confParticles.filter(p=>p.life < p.max);
+  confParticles.forEach(p=>{
+    p.life++; p.vy += p.g; p.x += p.vx; p.y += p.vy; p.rot += p.vr;
+    confCtx.save(); confCtx.translate(p.x,p.y); confCtx.rotate(p.rot);
+    confCtx.globalAlpha = Math.max(0, 1 - p.life/p.max);
+    confCtx.fillStyle = p.color; confCtx.fillRect(-p.s/2,-p.s/2,p.s,p.s*0.55);
+    confCtx.restore();
+  });
+  if (confParticles.length) confRAF = requestAnimationFrame(stepConfetti);
+  else { confRAF = null; confCtx.clearRect(0,0,confCanvas.width,confCanvas.height); }
+}
+function celebrate(big){ burstConfetti(big); playChime(); }
+
+/* ---- near me (ZIP-centroid distance) ---- */
+const ZIPS = {
+  // South Bay
+  "90505":[33.808,-118.349],"90503":[33.838,-118.353],"90501":[33.835,-118.305],
+  "90277":[33.835,-118.385],"90278":[33.873,-118.371],"90254":[33.862,-118.399],
+  "90266":[33.886,-118.404],"90247":[33.892,-118.307],"90248":[33.873,-118.281],
+  "90717":[33.792,-118.318],"90274":[33.776,-118.371],
+  // Koreatown / central LA
+  "90020":[34.066,-118.309],"90005":[34.059,-118.306],"90006":[34.049,-118.294],
+  "90010":[34.062,-118.302],"90004":[34.076,-118.310],"90019":[34.049,-118.338],"90016":[34.030,-118.353],
+  // San Gabriel Valley
+  "91007":[34.132,-118.035],"91776":[34.097,-118.106],"91801":[34.092,-118.127],
+  "91803":[34.069,-118.143],"91770":[34.064,-118.084],"91755":[34.062,-118.123],
+  "91754":[34.063,-118.135],"91780":[34.103,-118.057],"91016":[34.137,-118.000],
+  // Lake Mary / Orlando
+  "32746":[28.770,-81.345],"32771":[28.800,-81.290],"32773":[28.760,-81.270],
+  "32750":[28.700,-81.360],"32779":[28.700,-81.420],"32714":[28.660,-81.410],
+  "32765":[28.660,-81.210],"32766":[28.630,-81.110],"32803":[28.552,-81.360],
+  "32789":[28.598,-81.351],"32814":[28.567,-81.326],"32804":[28.570,-81.394],
+  "90232":[34.026,-118.389],"90230":[34.000,-118.398],"90066":[33.998,-118.430],"90034":[34.030,-118.402],
+  "90401":[34.015,-118.492],"90403":[34.034,-118.487],"90404":[34.026,-118.477],"90292":[33.976,-118.451],"90293":[33.960,-118.448],
+  "90045":[33.960,-118.400],"90250":[33.916,-118.350],"90504":[33.871,-118.350],"32819":[28.450,-81.470]
+};
+function zipOf(r){ const m = (r.addr||'').match(/\b(\d{5})\b/); return m ? m[1] : null; }
+function distMi(r){
+  if (!userLoc) return Infinity;
+  const z = zipOf(r); const c = z && ZIPS[z];
+  if (!c) return Infinity;
+  const toRad = d=>d*Math.PI/180, R = 3958.8;
+  const dLat = toRad(c[0]-userLoc.lat), dLng = toRad(c[1]-userLoc.lng);
+  const a = Math.sin(dLat/2)**2 + Math.cos(toRad(userLoc.lat))*Math.cos(toRad(c[0]))*Math.sin(dLng/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+function distLabel(r){ const d = distMi(r); return isFinite(d) ? d.toFixed(1)+' mi' : null; }
+
+/* ---- open now (best-effort, from card notes) ---- */
+const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+function parseHours(note){
+  const out = { closed:new Set(), open:null, close:null, always:false };
+  if (!note) return out;
+  if (/24\s*h/i.test(note)){ out.always = true; return out; }
+  let m; const re = /Closed\s+(Sun|Mon|Tue|Wed|Thu|Fri|Sat)(?:\s*[\u2013\u2014-]\s*(Sun|Mon|Tue|Wed|Thu|Fri|Sat))?/gi;
+  while ((m = re.exec(note))){
+    const a = DAYS.indexOf(m[1][0].toUpperCase()+m[1].slice(1).toLowerCase());
+    if (m[2]){ const b = DAYS.indexOf(m[2][0].toUpperCase()+m[2].slice(1).toLowerCase());
+      for (let k=0;k<7;k++){ const d=(a+k)%7; out.closed.add(DAYS[d]); if (d===b) break; }
+    } else out.closed.add(DAYS[a]);
+  }
+  const toMin = (h,min,pm)=>{ h=+h; if (pm && h<12) h+=12; return h*60 + (min?+min:0); };
+  let lm = note.match(/Lunch\s+(\d{1,2})(?::(\d{2}))?\s*[\u2013\u2014-]\s*(\d{1,2})(?::(\d{2}))?/i);
+  if (lm){ out.open = toMin(lm[1],lm[2],false); out.close = toMin(lm[3],lm[4], (+lm[3])<11); }
+  let cm = note.match(/til{1,2}\s+(\d{1,2})(?::(\d{2}))?/i);
+  if (cm){ out.close = toMin(cm[1],cm[2], (+cm[1])<11 ? true : false); }
+  let om = note.match(/Opens?\s+(noon|\d{1,2})(?::(\d{2}))?/i);
+  if (om){ out.open = /noon/i.test(om[1]) ? 720 : toMin(om[1],om[2], (+om[1])<11 ? false : false); }
+  let fm = note.match(/from\s+(\d{1,2})(?::(\d{2}))?\s*(am|pm)?/i);
+  if (fm){ out.open = toMin(fm[1],fm[2], /pm/i.test(fm[3]||'')); }
+  return out;
+}
+function isOpenNow(r){
+  const h = parseHours(r.note);
+  if (h.always) return true;
+  const now = new Date();
+  if (h.closed.has(DAYS[now.getDay()])) return false;
+  const mins = now.getHours()*60 + now.getMinutes();
+  if (h.open != null && mins < h.open) return false;
+  if (h.close != null && mins >= h.close) return false;
+  return true;
+}
+
 function render(){
   listEl.innerHTML = '';
   RESTAURANTS.forEach((r,i)=>{
     const row = document.createElement('div');
-    row.className = 'row';
+    const dl = distLabel(r);
+    const closed = openNow.checked && !isOpenNow(r);
+    row.className = 'row' + (closed ? ' closed-now' : '');
     row.id = 'row-'+i;
     row.innerHTML =
       '<button class="fav-btn'+(favs().has(i)?' on':'')+'" title="Toggle favorite">\u2665</button>'+
       '<div class="info"><div class="name">'+r.name+'</div>'+
-      '<div class="meta">'+r.cuisine+' \u00b7 '+r.area+(r.note?' \u00b7 '+r.note:'')+'</div>'+
+      '<div class="meta">'+r.cuisine+' \u00b7 '+r.area+(r.note?' \u00b7 '+r.note:'')+
+        (dl?' \u00b7 <span class="dist">'+dl+'</span>':'')+
+        (closed?' \u00b7 <span class="closed-tag">Closed now</span>':'')+'</div>'+
       '<div class="addr"><a href="'+mapsUrl(r)+'" target="_blank" rel="noopener">\ud83d\udccd '+r.addr+'</a></div></div>'+
       '<div class="rating">'+stars(r.rating)+' '+r.rating.toFixed(1)+
       '<span class="n">'+r.reviews.toLocaleString()+' reviews</span></div>';
@@ -307,6 +833,11 @@ function render(){
 function pool(){
   let idx = RESTAURANTS.map((_,i)=>i);
   if (favOnly.checked && favs().size) idx = idx.filter(i=>favs().has(i));
+  if (openNow.checked) idx = idx.filter(i=>isOpenNow(RESTAURANTS[i]));
+  const maxR = +radiusSel.value;
+  if (maxR > 0 && userLoc){
+    idx = idx.filter(i=>distMi(RESTAURANTS[i]) <= maxR);
+  }
   return idx;
 }
 
@@ -314,29 +845,181 @@ function randomPick(idx){
   return idx[Math.floor(Math.random()*idx.length)];
 }
 
+function pickWinner(idx){
+  let w = randomPick(idx);
+  if (idx.length > 1){
+    let guard = 0;
+    while (RESTAURANTS[w].name === lastPickName && guard < 6){ w = randomPick(idx); guard++; }
+  }
+  return w;
+}
+
+function rollEvent(){
+  const evs = REGIONS[currentRegion].events;
+  if (favOnly.checked || !evs || !evs.length) return null;
+  return Math.random() < EVENT_CHANCE ? evs[Math.floor(Math.random()*evs.length)] : null;
+}
+
+function buzz(p){ if (navigator.vibrate){ try{ navigator.vibrate(p); }catch(e){} } }
+
+function toast(msg){
+  toastEl.textContent = msg;
+  toastEl.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>toastEl.classList.remove('show'), 1900);
+}
+
+function gmaps(r){
+  return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(r.name + ' ' + r.addr);
+}
+
+function shareResult(r){
+  const text = '\ud83c\udf74 Lunch Roulette picked: ' + r.name + ' \u2014 ' + r.cuisine + ' \u00b7 ' + r.area;
+  const url = gmaps(r);
+  if (navigator.share){
+    navigator.share({title:'Lunch Roulette', text:text, url:url}).catch(()=>{});
+    return;
+  }
+  const payload = text + '\n' + url;
+  if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(payload).then(()=>toast('Copied \u2014 paste it to a friend')).catch(()=>toast('Could not copy'));
+  } else {
+    toast('Sharing not supported here');
+  }
+}
+
+/* ---- shortlist + sub-roll ---- */
+function chipEls(){ return slChips.querySelectorAll('.sl-chip'); }
+function clearChipStates(){ chipEls().forEach(el=>el.classList.remove('flash','win')); }
+
+function renderShortlist(){
+  slCount.textContent = '(' + shortlist.length + '/' + SL_MAX + ')';
+  if (!shortlist.length){
+    slChips.innerHTML = '<div class="sl-empty">Spin to drop spots here (up to 5). Roll a 6th and the box resets. Then spin the shortlist to choose between them \u2014 a spot that lands twice gets double the odds.</div>';
+  } else {
+    slChips.innerHTML = shortlist.map((r,k)=>'<div class="sl-chip" data-k="'+k+'"><span class="sl-num">'+(k+1)+'</span>'+r.name+'</div>').join('');
+  }
+  slSpinBtn.disabled = shortlist.length < 2;
+  slClearBtn.disabled = shortlist.length < 1;
+  slWinner.innerHTML = '';
+}
+
+function addToShortlist(r){
+  if (shortlist.length >= SL_MAX) shortlist = [];
+  shortlist.push(r);
+  renderShortlist();
+  const chips = chipEls();
+  const newest = chips[chips.length - 1];
+  if (newest){
+    newest.classList.add('added');
+    setTimeout(()=>newest.classList.remove('added'), 800);
+  }
+}
+
+function settleSub(idx){
+  clearChipStates();
+  const el = chipEls()[idx];
+  if (el){ el.classList.add('win'); el.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'}); }
+  const r = shortlist[idx];
+  buzz([30,50,90]);
+  celebrate(false);
+  slWinner.innerHTML =
+    '\ud83d\udc51 <strong>'+r.name+'</strong>'+
+    '<span class="sw-meta">'+r.cuisine+' \u00b7 '+r.area+'</span>'+
+    '<a class="act" href="'+gmaps(r)+'" target="_blank" rel="noopener">Maps</a>'+
+    '<button class="act" id="swShare">Share</button>';
+  const sb = document.getElementById('swShare');
+  if (sb) sb.addEventListener('click', ()=>shareResult(r));
+}
+
+function subRoll(){
+  if (slSpinning || shortlist.length < 2) return;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const winnerIdx = Math.floor(Math.random()*shortlist.length);
+  clearChipStates();
+  slWinner.innerHTML = '';
+  if (reduce){ settleSub(winnerIdx); return; }
+  slSpinning = true;
+  slSpinBtn.disabled = true;
+  let ticks = 0;
+  const total = 14 + Math.floor(Math.random()*6);
+  let delay = 55;
+  (function t(){
+    if (ticks < total){
+      clearChipStates();
+      const els = chipEls();
+      const flashIdx = Math.floor(Math.random()*els.length);
+      if (els[flashIdx]) els[flashIdx].classList.add('flash');
+      ticks++;
+      delay *= 1.14;
+      setTimeout(t, delay);
+    } else {
+      settleSub(winnerIdx);
+      slSpinning = false;
+      slSpinBtn.disabled = shortlist.length < 2;
+    }
+  })();
+}
+
+function cleanLabel(key){
+  return REGIONS[key].label.replace(/^\u21b3\s*/,'').replace(/\s*\(bonus\)$/,'');
+}
+
+function showEvent(ev){
+  slotEl.className = 'slot event landed';
+  slotEl.innerHTML =
+    '<div class="event-tag">\u2728 Bonus Round \u2728</div>'+
+    '<div class="event-emoji">'+ev.emoji+'</div>'+
+    '<div class="pick-name">'+ev.label+'</div>'+
+    '<div class="pick-meta">'+ev.blurb+'</div>'+
+    '<button class="event-go" id="eventGo">Take me to '+cleanLabel(ev.target)+' \u2192</button>';
+  document.querySelectorAll('.row').forEach(el=>el.classList.remove('highlight'));
+  buzz([40,60,40,60,140]);
+  celebrate(true);
+  slotEl.scrollIntoView({block:'center', behavior:'smooth'});
+  document.getElementById('eventGo').addEventListener('click', ()=>{
+    loadRegion(ev.target);
+    setTimeout(spin, 250);
+  });
+}
+
 function showInSlot(i, landed){
   const r = RESTAURANTS[i];
-  slotEl.classList.toggle('landed', landed);
+  const dl = distLabel(r);
+  slotEl.className = 'slot' + (landed ? ' landed' : '');
   slotEl.innerHTML =
     '<div class="pick-name">'+r.name+'</div>'+
-    '<div class="pick-meta">'+r.cuisine+' \u00b7 '+r.area+(r.note?' \u00b7 '+r.note:'')+'</div>'+
+    '<div class="pick-meta">'+r.cuisine+' \u00b7 '+r.area+(r.note?' \u00b7 '+r.note:'')+(landed&&dl?' \u00b7 <span class="dist">'+dl+'</span>':'')+'</div>'+
     '<div class="pick-rating">'+stars(r.rating)+' '+r.rating.toFixed(1)+' ('+r.reviews.toLocaleString()+')</div>'+
     '<div class="pick-addr"><a href="'+mapsUrl(r)+'" target="_blank" rel="noopener">\ud83d\udccd '+r.addr+' \u2192 Directions</a></div>'+
+    (landed ? '<div class="pick-actions"><a class="act" href="'+gmaps(r)+'" target="_blank" rel="noopener">Open in Maps</a><button class="act" id="pickShare">Share</button></div>' : '')+
     (favs().has(i)?'<div class="pick-fav">\u2665 Favorite</div>':'');
   document.querySelectorAll('.row').forEach(el=>el.classList.remove('highlight'));
   if (landed){
+    lastPickName = r.name;
+    buzz(30);
+    celebrate(false);
+    const sb = document.getElementById('pickShare');
+    if (sb) sb.addEventListener('click', ()=>shareResult(r));
+    addToShortlist(r);
     const row = document.getElementById('row-'+i);
-    row.classList.add('highlight');
-    row.scrollIntoView({block:'nearest',behavior:'smooth'});
+    if (row) row.classList.add('highlight');
+    slotEl.scrollIntoView({block:'center', behavior:'smooth'});
   }
 }
 
 function spin(){
+  ensureAudio();
   const idx = pool();
-  if (!idx.length) return;
-  const winner = randomPick(idx);
+  if (!idx.length){ toast('No spots match those filters'); return; }
+  slotEl.scrollIntoView({block:'center', behavior:'smooth'});
+  const ev = rollEvent();
+  const winner = ev ? null : pickWinner(idx);
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (reduce || idx.length===1){ showInSlot(winner,true); return; }
+  if (reduce || idx.length===1){
+    ev ? showEvent(ev) : showInSlot(winner,true);
+    return;
+  }
 
   spinBtn.disabled = true;
   let ticks = 0;
@@ -345,11 +1028,12 @@ function spin(){
   (function tick(){
     if (ticks < totalTicks){
       showInSlot(idx[Math.floor(Math.random()*idx.length)], false);
+      playTick();
       ticks++;
       delay *= 1.13;
       setTimeout(tick, delay);
     } else {
-      showInSlot(winner, true);
+      ev ? showEvent(ev) : showInSlot(winner, true);
       spinBtn.disabled = false;
     }
   })();
@@ -357,12 +1041,20 @@ function spin(){
 
 function loadRegion(key){
   currentRegion = key;
+  lastPickName = null;
   const region = REGIONS[key];
-  RESTAURANTS = region.restaurants;
+  const hasBuffets = !!region.buffets;
+  buffetOnly.disabled = !hasBuffets;
+  buffetLabel.classList.toggle('opt-disabled', !hasBuffets);
+  if (!hasBuffets) buffetOnly.checked = false;
+  RESTAURANTS = activeList();
   subtitleEl.textContent = region.subtitle;
   noteEl.textContent = region.note;
-  slotEl.classList.remove('landed');
+  regionSel.value = key;
+  slotEl.className = 'slot';
   slotEl.innerHTML = '<div class="placeholder">Hit spin and let fate decide where you eat.</div>';
+  shortlist = [];
+  renderShortlist();
   render();
 }
 
@@ -375,6 +1067,29 @@ Object.keys(REGIONS).forEach(key=>{
 
 regionSel.addEventListener('change', e=>loadRegion(e.target.value));
 spinBtn.addEventListener('click', spin);
+buffetOnly.addEventListener('change', ()=>{
+  RESTAURANTS = activeList();
+  lastPickName = null;
+  shortlist = [];
+  renderShortlist();
+  slotEl.className = 'slot';
+  slotEl.innerHTML = '<div class="placeholder">Hit spin and let fate decide where you eat.</div>';
+  render();
+});
+openNow.addEventListener('change', render);
+radiusSel.addEventListener('change', ()=>{
+  if (+radiusSel.value > 0 && !userLoc){
+    if (!navigator.geolocation){ toast('Location not available'); radiusSel.value = '0'; return; }
+    toast('Getting your location\u2026');
+    navigator.geolocation.getCurrentPosition(
+      pos=>{ userLoc = {lat:pos.coords.latitude, lng:pos.coords.longitude}; render(); toast('Location set \u2014 filtering by distance'); },
+      ()=>{ radiusSel.value = '0'; toast('Couldn\u0027t get your location'); }
+    );
+  } else { render(); }
+});
+initConfetti();
+slSpinBtn.addEventListener('click', subRoll);
+slClearBtn.addEventListener('click', ()=>{ shortlist = []; renderShortlist(); });
 
 loadRegion('lakemary');
 </script>
