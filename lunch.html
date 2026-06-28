@@ -162,6 +162,10 @@
   .opts #zipInput::placeholder{color:var(--dim);letter-spacing:.1em}
   .opts #zipBtn{background:rgba(177,135,58,.16);border:1px solid var(--gold-dp);color:var(--gold-lt);border-radius:6px;padding:3px 11px;font-family:var(--sans);font-size:.66rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:background .15s ease}
   .opts #zipBtn:hover{background:rgba(177,135,58,.32)}
+  .opts #locBtn{background:rgba(177,135,58,.16);border:1px solid var(--gold-dp);color:var(--gold-lt);border-radius:999px;padding:5px 14px;font-family:var(--sans);font-size:.66rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:background .15s ease}
+  .opts #locBtn::before{content:"\25c9";margin-right:6px;color:var(--gold)}
+  .opts #locBtn:hover{background:rgba(177,135,58,.32)}
+  .opts #locBtn.busy{opacity:.6;cursor:default}
   .opts .opt-note{font-size:.68rem;font-style:italic;color:var(--dim);letter-spacing:.02em;margin-left:1px}
   .badge-dinner{display:inline-block;vertical-align:middle;font-size:.56rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-lt);background:rgba(177,135,58,.18);border:1px solid var(--gold-dp);border-radius:999px;padding:1px 7px;margin-left:7px;font-family:var(--sans);position:relative;top:-1px}
   .slot .badge-dinner{font-size:.6rem;margin-left:9px}
@@ -405,6 +409,7 @@
         <label><input type="checkbox" id="openNow"> Open now</label>
         <label class="opt-select">Within <select id="radius"><option value="0">any</option><option value="5">5 mi</option><option value="10">10 mi</option><option value="35">15+ mi</option></select></label>
         <span class="opt-select zip-field">Near <input type="text" id="zipInput" inputmode="numeric" maxlength="5" placeholder="ZIP" aria-label="ZIP code"><button type="button" id="zipBtn">Set</button></span>
+        <button type="button" id="locBtn" class="opt-select">Use my location</button>
         <label><input type="checkbox" id="sound" checked> Sound</label>
       </div>
     </div>
@@ -1306,15 +1311,27 @@ function nearestRegion(loc){
 
 loadRegion('lakemary');
 
-// auto-default the area to wherever the user is, if they allow location
-if (navigator.geolocation){
+// find the user's nearest region from their device location
+const locBtn = document.getElementById('locBtn');
+function locate(manual){
+  if (!navigator.geolocation || (window.isSecureContext === false)){
+    if (manual) toast('Location needs an https page \u2014 type a ZIP instead');
+    return;
+  }
+  if (manual){ toast('Getting your location\u2026'); locBtn.classList.add('busy'); }
   navigator.geolocation.getCurrentPosition(pos=>{
+    locBtn.classList.remove('busy');
     userLoc = {lat:pos.coords.latitude, lng:pos.coords.longitude};
     const k = nearestRegion(userLoc);
     if (k && k !== currentRegion) loadRegion(k); else render();
     toast('Showing spots near you \u2014 ' + cleanLabel(currentRegion));
-  }, ()=>{}, {timeout:8000, maximumAge:600000});
+  }, err=>{
+    locBtn.classList.remove('busy');
+    if (manual) toast(err.code === 1 ? 'Location blocked \u2014 allow it in your browser, or type a ZIP' : 'Couldn\u0027t get your location \u2014 type a ZIP instead');
+  }, {enableHighAccuracy:false, timeout:9000, maximumAge:600000});
 }
+locBtn.addEventListener('click', ()=>locate(true));
+locate(false);   // try once on load (works on https once permission is granted)
 
 // manual ZIP entry as an alternative to geolocation
 const zipInput = document.getElementById('zipInput');
