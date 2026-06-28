@@ -156,6 +156,15 @@
   .opts input{accent-color:var(--gold)}
   .opt-select{text-transform:uppercase}
   .opts label.opt-disabled{opacity:.32;cursor:not-allowed}
+  .opts .zip-field{display:flex;align-items:center;gap:7px}
+  .opts #zipInput{width:62px;background:var(--panel);border:1px solid var(--line);color:var(--text);border-radius:6px;padding:3px 8px;font-family:var(--sans);font-size:.74rem;letter-spacing:.12em;text-align:center}
+  .opts #zipInput:focus{outline:none;border-color:var(--gold-dp)}
+  .opts #zipInput::placeholder{color:var(--dim);letter-spacing:.1em}
+  .opts #zipBtn{background:rgba(177,135,58,.16);border:1px solid var(--gold-dp);color:var(--gold-lt);border-radius:6px;padding:3px 11px;font-family:var(--sans);font-size:.66rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:background .15s ease}
+  .opts #zipBtn:hover{background:rgba(177,135,58,.32)}
+  .opts .opt-note{font-size:.68rem;font-style:italic;color:var(--dim);letter-spacing:.02em;margin-left:1px}
+  .badge-dinner{display:inline-block;vertical-align:middle;font-size:.56rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-lt);background:rgba(177,135,58,.18);border:1px solid var(--gold-dp);border-radius:999px;padding:1px 7px;margin-left:7px;font-family:var(--sans);position:relative;top:-1px}
+  .slot .badge-dinner{font-size:.6rem;margin-left:9px}
   .opts input:disabled{cursor:not-allowed}
   .opts select{
     font-family:var(--sans);font-size:.72rem;font-weight:500;color:var(--text);letter-spacing:.06em;
@@ -292,8 +301,29 @@
   .row.closed-now{opacity:.4}
   .closed-tag{color:var(--rose);letter-spacing:.06em}
 </style>
+<style>
+  .mode-bar{position:sticky;top:0;z-index:200;display:flex;justify-content:center;
+    padding:10px 12px;background:linear-gradient(180deg,rgba(11,9,7,.97),rgba(11,9,7,.82));
+    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .mode-switch{display:inline-flex;border:1px solid var(--gold-dp);border-radius:999px;overflow:hidden;background:rgba(0,0,0,.35)}
+  .mode-btn{background:transparent;border:0;color:var(--dim);cursor:pointer;font-family:var(--serif);
+    font-size:1.02rem;font-style:italic;letter-spacing:.05em;padding:7px 28px;transition:.18s}
+  .mode-btn:hover{color:var(--text)}
+  .mode-btn.on{background:linear-gradient(180deg,var(--gold-lt),var(--gold));color:#1a130a;font-weight:600;font-style:normal}
+  #michelinFrame{width:100%;height:calc(100vh - 58px);border:0;display:none;background:#0b0a0d}
+  body.mich #michelinFrame{display:block}
+  body.mich #lunchView{display:none}
+  @media (max-width:560px){ .mode-btn{padding:7px 20px;font-size:.95rem} }
+</style>
 </head>
 <body>
+<div class="mode-bar">
+  <div class="mode-switch" role="group" aria-label="Choose a roulette">
+    <button id="modeLunch" class="mode-btn on" aria-pressed="true">Lunch</button>
+    <button id="modeMich" class="mode-btn" aria-pressed="false">Michelin</button>
+  </div>
+</div>
+<div id="lunchView">
 <header>
   <div class="title-row">
     <div class="title-left">
@@ -371,9 +401,10 @@
       <button class="spin-btn" id="spinBtn">Spin</button>
       <div class="opts">
         <label><input type="checkbox" id="favOnly"> Favorites only</label>
-        <label id="buffetLabel"><input type="checkbox" id="buffetOnly"> Buffets only</label>
+        <label id="buffetLabel"><input type="checkbox" id="buffetOnly"> Buffets only <span class="opt-note">incl. some dinner-only</span></label>
         <label><input type="checkbox" id="openNow"> Open now</label>
         <label class="opt-select">Within <select id="radius"><option value="0">any</option><option value="5">5 mi</option><option value="10">10 mi</option><option value="35">15+ mi</option></select></label>
+        <span class="opt-select zip-field">Near <input type="text" id="zipInput" inputmode="numeric" maxlength="5" placeholder="ZIP" aria-label="ZIP code"><button type="button" id="zipBtn">Set</button></span>
         <label><input type="checkbox" id="sound" checked> Sound</label>
       </div>
     </div>
@@ -399,6 +430,8 @@
 <canvas id="confetti"></canvas>
 <div class="toast" id="toast"></div>
 
+</div><!-- /lunchView -->
+<iframe id="michelinFrame" title="Michelin Roulette" hidden></iframe>
 <script>
 const REGIONS = {
   lakemary: {
@@ -514,8 +547,106 @@ const REGIONS = {
     events: [
       {label:"Koreatown Run", emoji:"\ud83c\udf03", target:"koreatown", blurb:"Forget the South Bay \u2014 pile in the car, you're road-tripping up to K-Town."},
       {label:"SGV Detour", emoji:"\ud83e\udd5f", target:"sangabriel", blurb:"The dice say dumplings. Point the car east \u2014 you're headed to the San Gabriel Valley."},
-      {label:"West Side Run", emoji:"\ud83c\udf34", target:"culvercity", blurb:"Make for the coast \u2014 Culver City out to Marina del Rey, Playa del Rey & Santa Monica."}
+      {label:"West Side Run", emoji:"\ud83c\udf34", target:"culvercity", blurb:"Make for the coast \u2014 Culver City out to Marina del Rey, Playa del Rey & Santa Monica."},
+      {label:"Downtown LA Run", emoji:"\ud83c\udfd9\ufe0f", target:"dtla", blurb:"Into the heart of the city \u2014 Little Tokyo, Grand Central Market & the Historic Core."}
     ]
+  },
+  oc: {
+    label: "Orange County",
+    subtitle: "Irvine, Newport Beach, Costa Mesa & Lake Forest \u00b7 seafood, tacos, French bistro, pastrami & boba \u00b7 ratings from Google Maps",
+    note: "Central OC from the coast to the Spectrum. A few spots are brunch-only or close by mid-afternoon (Moulin, Cappy's, Burnt Crumbs) \u2014 check the card.",
+    restaurants: [
+  {name:"Moulin", cuisine:"French bistro · Café", area:"Newport Beach", rating:4.6, reviews:2463, note:"Till 3 · pastries", addr:"1000 Bristol St N St. 10, Newport Beach, CA 92660"},
+  {name:"The Hat", cuisine:"Pastrami · Sandwiches", area:"Lake Forest", rating:4.6, reviews:2622, note:"World-famous pastrami dip", addr:"23641 Rockfield Blvd, Lake Forest, CA 92630"},
+  {name:"Habana", cuisine:"Cuban", area:"Costa Mesa", rating:4.5, reviews:1974, note:"The LAB · weekend brunch", addr:"2930 Bristol St, Costa Mesa, CA 92626"},
+  {name:"Taco María", cuisine:"Mexican · Michelin", area:"Costa Mesa", rating:4.5, reviews:496, note:"Michelin · reserve", addr:"3313 Hyland Ave, Costa Mesa, CA 92626"},
+  {name:"Bear Flag Fish Co", cuisine:"Seafood · Poke", area:"Newport Beach", rating:4.5, reviews:1474, note:"Lido · poke & burritos", addr:"3421 Via Lido, Newport Beach, CA 92663"},
+  {name:"Cappy's Cafe", cuisine:"Breakfast · Diner", area:"Newport Beach", rating:4.5, reviews:1806, note:"Till 2 · beachy brunch", addr:"5930 West Coast Hwy, Newport Beach, CA 92663"},
+  {name:"Houston's", cuisine:"American · Steakhouse", area:"Irvine", rating:4.5, reviews:2326, note:"Prime rib French dip", addr:"2991 Michelson Dr, Irvine, CA 92612"},
+  {name:"Burnt Crumbs", cuisine:"Sandwiches · Brunch", area:"Irvine", rating:4.5, reviews:910, note:"Till 3 · spaghetti grilled cheese", addr:"8549 Irvine Center Dr, Irvine, CA 92618"},
+  {name:"Break of Dawn", cuisine:"Asian-French · Brunch", area:"Laguna Hills", rating:4.5, reviews:216, note:"Cult brunch", addr:"24291 Avenida De La Carlota, Laguna Hills, CA 92653"},
+  {name:"Wahoo's Fish Taco", cuisine:"Baja tacos", area:"Lake Forest", rating:4.5, reviews:565, note:"OC original", addr:"27412 Portola Pkwy A, Lake Forest, CA 92610"},
+  {name:"Shuck Oyster Bar", cuisine:"Seafood · Oysters", area:"Costa Mesa", rating:4.4, reviews:321, note:"OC Mix · oysters", addr:"3313 Hyland Ave a1, Costa Mesa, CA 92626"},
+  {name:"Old Vine Kitchen & Bar", cuisine:"New American · Brunch", area:"Costa Mesa", rating:4.4, reviews:328, note:"The CAMP · rooftop", addr:"2937 Bristol St a103, Costa Mesa, CA 92626"},
+  {name:"Bluewater Grill", cuisine:"Seafood · Waterfront", area:"Newport Beach", rating:4.4, reviews:2306, note:"Dockside", addr:"630 Lido Park Dr, Newport Beach, CA 92663"},
+  {name:"Bandera", cuisine:"American · Wood-grill", area:"Corona del Mar", rating:4.4, reviews:997, note:"Famous ribs", addr:"3201 CA-1, Corona Del Mar, CA 92625"},
+  {name:"85°C Bakery Cafe", cuisine:"Bakery · Café", area:"Irvine", rating:4.4, reviews:1961, note:"Sea-salt coffee · pastries", addr:"2700 Alton Pkwy #123, Irvine, CA 92606"},
+  {name:"Avila's El Ranchito", cuisine:"Mexican", area:"Lake Forest", rating:4.4, reviews:1638, note:"Generous · great salsa", addr:"24406 Muirlands Blvd, Lake Forest, CA 92630"},
+  {name:"Descanso", cuisine:"Mexican · Plancha", area:"Costa Mesa", rating:4.3, reviews:1170, note:"Tableside plancha", addr:"1555 Adams Ave #103, Costa Mesa, CA 92626"},
+  {name:"Cha Cha's Latin Kitchen", cuisine:"Latin · Mexican", area:"Irvine", rating:4.3, reviews:1032, note:"Lunch specials", addr:"13126 Jamboree Rd, Irvine, CA 92602"},
+  {name:"Class 302", cuisine:"Taiwanese · Boba", area:"Irvine", rating:4.1, reviews:615, note:"Shaved ice · boba", addr:"13252 Jamboree Rd, Irvine, CA 92602"}
+],
+    buffets: [
+  {name:"Galpão Gaucho", cuisine:"Brazilian churrascaria · AYCE", area:"Irvine", rating:4.8, reviews:496, note:"Rodízio · 18 cuts · lunch til 2:30", addr:"1830 Main St, Irvine, CA 92614"},
+  {name:"All That Shabu", cuisine:"AYCE shabu · Hot pot", area:"Irvine", rating:4.7, reviews:682, note:"Unlimited meat & broth", addr:"15315 Culver Dr #145, Irvine, CA 92604"},
+  {name:"Nice to Meet You Skewer Hot Pot", cuisine:"AYCE Sichuan hot pot", area:"Irvine", rating:4.6, reviews:408, note:"Self-serve skewers", addr:"15361 Culver Dr, Irvine, CA 92604"},
+  {name:"I Can Barbecue", cuisine:"AYCE Korean BBQ", area:"Tustin", rating:4.3, reviews:470, note:"Halal · robot servers", addr:"2881 El Camino Real, Tustin, CA 92782"},
+  {name:"Royal Khyber", cuisine:"Indian · Lunch buffet", area:"Santa Ana", rating:4.2, reviews:277, note:"Weekday lunch buffet", addr:"1621 W Sunflower Ave D53, Santa Ana, CA 92704"},
+  {name:"Gen Korean BBQ", cuisine:"AYCE Korean BBQ", area:"Tustin", rating:4.1, reviews:2064, note:"Grill-your-own", addr:"13741 Newport Ave, Tustin, CA 92780"}
+]
+  },
+  sandiego: {
+    label: "San Diego",
+    subtitle: "Gaslamp, Little Italy, East Village & the Embarcadero \u00b7 seafood, tacos, Italian, burgers & brunch \u00b7 ratings from Google Maps",
+    note: "Downtown San Diego from Little Italy to the Gaslamp. A few spots are brunch-only or close mid-afternoon, and Las Cuatro Milpas is cash-only & closed Fri/Sun \u2014 check the card.",
+    restaurants: [
+  {name:"Hodad's Downtown", cuisine:"Burgers", area:"Downtown", rating:4.6, reviews:4445, note:"Huge burgers · onion rings", addr:"945 Broadway, San Diego, CA 92101"},
+  {name:"Las Cuatro Milpas", cuisine:"Mexican · Cash only", area:"Barrio Logan", rating:4.6, reviews:4463, note:"Closed Fri/Sun · cash · til 3", addr:"1985 National Ave Ste 1131, San Diego, CA 92113"},
+  {name:"Buona Forchetta", cuisine:"Italian · Pizza", area:"South Park", rating:4.6, reviews:3287, note:"Wood-fired · lunch til 3", addr:"3001 Beech St, San Diego, CA 92102"},
+  {name:"Ironside Fish & Oyster", cuisine:"Seafood · Oysters", area:"Little Italy", rating:4.5, reviews:5026, note:"Lobster roll · oysters", addr:"1654 India St, San Diego, CA 92101"},
+  {name:"The Crack Shack", cuisine:"Fried chicken", area:"Little Italy", rating:4.5, reviews:6367, note:"Chicken sandwiches · patio", addr:"2266 Kettner Blvd, San Diego, CA 92101"},
+  {name:"Puesto", cuisine:"Mexican · Tacos", area:"Seaport", rating:4.5, reviews:4445, note:"Taco Tuesday · waterfront", addr:"789 W Harbor Dr Unit 155, San Diego, CA 92101"},
+  {name:"Lou & Mickey's", cuisine:"Steakhouse · Seafood", area:"Gaslamp", rating:4.5, reviews:2746, note:"Gaslamp classic", addr:"224 Fifth Ave, San Diego, CA 92101"},
+  {name:"Lola 55", cuisine:"Tacos · Cocktails", area:"East Village", rating:4.5, reviews:1434, note:"Modern tacos · birria", addr:"1290 F St, San Diego, CA 92101"},
+  {name:"Filippi's Pizza Grotto", cuisine:"Italian · Pizza", area:"Little Italy", rating:4.5, reviews:8792, note:"Walk through the deli", addr:"1747 India St, San Diego, CA 92101"},
+  {name:"Richard Walker's", cuisine:"Breakfast · Pancakes", area:"Downtown", rating:4.5, reviews:4389, note:"Til 2:30 · German pancake", addr:"520 Front St, San Diego, CA 92101"},
+  {name:"Carnitas' Snack Shack", cuisine:"Pork · Sandwiches", area:"Embarcadero", rating:4.4, reviews:3572, note:"Waterfront · DJ weekends", addr:"1004 N Harbor Dr, San Diego, CA 92101"},
+  {name:"Civico 1845", cuisine:"Italian", area:"Little Italy", rating:4.4, reviews:3099, note:"Weekend lunch · vegan menu", addr:"1845 India St, San Diego, CA 92101"},
+  {name:"Underbelly", cuisine:"Ramen · Bao", area:"Little Italy", rating:4.4, reviews:2243, note:"Ramen · beer garden", addr:"750 W Fir St #101, San Diego, CA 92101"},
+  {name:"Cafe 21", cuisine:"Brunch · Small plates", area:"Gaslamp", rating:4.4, reviews:2668, note:"Farm-to-table brunch", addr:"802 Fifth Ave, San Diego, CA 92101"},
+  {name:"Meze Greek Fusion", cuisine:"Greek · Mediterranean", area:"Gaslamp", rating:4.4, reviews:2474, note:"Lamb chops · baklava cheesecake", addr:"345 Sixth Ave, San Diego, CA 92101"},
+  {name:"Morning Glory", cuisine:"Brunch", area:"Little Italy", rating:4.3, reviews:3685, note:"Til 3 · soufflé pancakes", addr:"550 W Date St Ste C, San Diego, CA 92101"}
+]
+  },
+  walnutcreek: {
+    label: "Walnut Creek & Diablo Valley",
+    subtitle: "Walnut Creek, Lafayette, Orinda, Concord & Pleasant Hill \u00b7 small plates, BBQ, deep-dish & Mediterranean \u00b7 ratings from Google Maps",
+    note: "East Bay \u2014 the I-680 corridor north. A couple of spots are dinner-only (look for the dinner tag). Flip on distances to see what's closest.",
+    restaurants: [
+  {name:"Va de Vi Bistro", cuisine:"Small plates · Wine bar", area:"Walnut Creek", rating:4.5, reviews:1032, note:"Global small plates", addr:"1511 Mt Diablo Blvd, Walnut Creek, CA 94596"},
+  {name:"Walnut Creek Yacht Club", cuisine:"Seafood", area:"Walnut Creek", rating:4.5, reviews:799, note:"Fish & chips · lobster", addr:"1555 Bonanza St, Walnut Creek, CA 94596"},
+  {name:"Lokanta Grill & Bar", cuisine:"Mediterranean", area:"Walnut Creek", rating:4.5, reviews:399, note:"Mezze · kunefe", addr:"1520 Locust St, Walnut Creek, CA 94596"},
+  {name:"Zachary's Chicago Pizza", cuisine:"Deep-dish pizza", area:"Pleasant Hill", rating:4.5, reviews:1469, note:"Stuffed deep-dish", addr:"140 Crescent Dr, Pleasant Hill, CA 94523"},
+  {name:"Telefèric Barcelona", cuisine:"Spanish · Tapas", area:"Walnut Creek", rating:4.4, reviews:2194, note:"Paella · balcony", addr:"1500 Mt Diablo Blvd 2nd Floor, Walnut Creek, CA 94596"},
+  {name:"Rocco's Ristorante Pizzeria", cuisine:"Italian · Pizza", area:"Walnut Creek", rating:4.4, reviews:1307, note:"Lunch specials", addr:"2909 Ygnacio Valley Rd, Walnut Creek, CA 94598"},
+  {name:"Batch & Brine", cuisine:"American · Brunch", area:"Lafayette", rating:4.4, reviews:750, note:"Brunch · burgers", addr:"3602 Mount Diablo Blvd, Lafayette, CA 94549"},
+  {name:"Slow Hand BBQ", cuisine:"BBQ", area:"Pleasant Hill", rating:4.4, reviews:817, note:"Brisket · ribs", addr:"1941 Oak Park Blvd #5, Pleasant Hill, CA 94523"},
+  {name:"Casa Orinda", cuisine:"American chophouse", area:"Orinda", rating:4.4, reviews:592, dinnerOnly:true, note:"Fried chicken · closed Mon–Tue", addr:"20 Bryant Way, Orinda, CA 94563"},
+  {name:"Lima", cuisine:"Peruvian", area:"Concord", rating:4.4, reviews:771, note:"Empanadas · Todos Santos", addr:"2151 Salvio St Ste i, Concord, CA 94520"},
+  {name:"Sasa", cuisine:"Japanese · Izakaya", area:"Walnut Creek", rating:4.3, reviews:616, note:"Sushi · lunch till 3", addr:"1432 N Main St, Walnut Creek, CA 94596"},
+  {name:"Vanessa's Bistro 2", cuisine:"Vietnamese · Fusion", area:"Walnut Creek", rating:4.3, reviews:279, dinnerOnly:true, note:"Tapas · happy hour", addr:"1512 Locust St, Walnut Creek, CA 94596"},
+  {name:"Híjole María", cuisine:"Mexican", area:"Concord", rating:4.7, reviews:210, note:"Quesabirria · closed Mon", addr:"1819 Colfax St, Concord, CA 94520"}
+]
+  },
+  trivalley: {
+    label: "Tri-Valley",
+    subtitle: "Danville, San Ramon, Dublin, Pleasanton & Livermore \u00b7 Italian, Indian, dim sum, Caribbean & New American \u00b7 ratings from Google Maps",
+    note: "East Bay \u2014 the I-680/I-580 Tri-Valley, Danville east to Livermore. A few spots are dinner-only (look for the dinner tag).",
+    restaurants: [
+  {name:"Esin Restaurant & Bar", cuisine:"American · Mediterranean", area:"Danville", rating:4.7, reviews:798, note:"Farm-to-table · desserts", addr:"750 Camino Ramon, Danville, CA 94526"},
+  {name:"One House Bistro", cuisine:"Thai · Brunch", area:"San Ramon", rating:4.7, reviews:106, note:"Khao soi · brunch", addr:"2468 San Ramon Valley Blvd, San Ramon, CA 94583"},
+  {name:"Range Life", cuisine:"New American", area:"Livermore", rating:4.7, reviews:439, dinnerOnly:true, note:"Seasonal · closed Tue", addr:"2160 Railroad Ave, Livermore, CA 94550"},
+  {name:"Posada Alta Cocina", cuisine:"Mexican · Fusion", area:"Livermore", rating:4.6, reviews:692, note:"Upscale Mexican · closed Tue", addr:"988 Murrieta Blvd, Livermore, CA 94550"},
+  {name:"Piatti", cuisine:"Italian", area:"Danville", rating:4.5, reviews:915, note:"Fresh pasta · patio", addr:"100 Sycamore Valley Rd, Danville, CA 94526"},
+  {name:"Oyo", cuisine:"Caribbean · Guyanese", area:"Pleasanton", rating:4.5, reviews:807, note:"Paella · oxtail", addr:"680 Main St, Pleasanton, CA 94566"},
+  {name:"First Street Alehouse", cuisine:"Gastropub", area:"Livermore", rating:4.5, reviews:3536, note:"Reubens · huge beer list", addr:"2106 First St, Livermore, CA 94550"},
+  {name:"Khaki", cuisine:"Indian · Fine dining", area:"San Ramon", rating:4.4, reviews:301, note:"Modern Indian · City Center", addr:"6000 Bollinger Canyon Rd 2nd Floor Unit 2601, San Ramon, CA 94583"},
+  {name:"Vic's All Star Kitchen", cuisine:"Breakfast · American", area:"Pleasanton", rating:4.4, reviews:527, note:"Big breakfasts · till 3", addr:"201 Main St A, Pleasanton, CA 94566"},
+  {name:"Bridges Restaurant", cuisine:"Asian fusion", area:"Danville", rating:4.3, reviews:651, note:"'Mrs. Doubtfire' setting", addr:"44 Church St, Danville, CA 94526"},
+  {name:"Amakara", cuisine:"Japanese · Sushi", area:"Dublin", rating:4.3, reviews:1807, note:"Sushi · grilled edamame", addr:"7568 Dublin Blvd, Dublin, CA 94568"},
+  {name:"Sabio on Main", cuisine:"Californian · Tapas", area:"Pleasanton", rating:4.3, reviews:486, dinnerOnly:true, note:"Michelin-listed · wknd brunch", addr:"501 Main St, Pleasanton, CA 94566"},
+  {name:"Koi Palace", cuisine:"Dim sum · Cantonese", area:"Dublin", rating:4.0, reviews:1161, note:"Famous dim sum · weekend wait", addr:"4288 Dublin Blvd #213, Dublin, CA 94568"}
+]
   },
   koreatown: {
     label: "\u21b3 Koreatown, LA (bonus)",
@@ -622,6 +753,35 @@ const REGIONS = {
   {name:"Killer Shrimp", cuisine:"Seafood · Waterfront", area:"Marina del Rey", rating:4.1, reviews:6041, note:"Signature shrimp in broth", addr:"4211 Admiralty Way, Marina Del Rey, CA 90292"},
   {name:"Playa Provisions", cuisine:"Coastal · Seafood", area:"Playa del Rey", rating:4.6, reviews:2468, note:"All day · beachside", addr:"119 Culver Blvd, Playa Del Rey, CA 90293"},
   {name:"The Tripel", cuisine:"Gastropub · Burgers", area:"Playa del Rey", rating:4.6, reviews:343, note:"Tiny · communal", addr:"333 Culver Blvd #1047, Playa Del Rey, CA 90293"}
+]
+  },
+  dtla: {
+    label: "\u21b3 Downtown LA & Little Tokyo (bonus)",
+    bonus: true,
+    subtitle: "Little Tokyo, the Historic Core, Chinatown & the Arts District \u00b7 ramen, tacos, French dips, hand rolls & A5 wagyu \u00b7 ratings from Google Maps",
+    note: "Bonus round! The heart of the city. A few spots are weekends-only (Howlin' Ray's) or close Mondays, and NikuX is mostly dinner with weekend lunch \u2014 check the card. Toggle Buffets only for the AYCE wagyu & hot pot.",
+    restaurants: [
+  {name:"Howlin' Ray's", cuisine:"Nashville hot chicken", area:"Chinatown", rating:4.7, reviews:4440, note:"Fri–Sun only · long line", addr:"727 N Broadway #128, Los Angeles, CA 90012"},
+  {name:"Sushi Gen", cuisine:"Sushi · Sashimi", area:"Little Tokyo", rating:4.6, reviews:1796, note:"Closed Mon · lunch till 2", addr:"422 E 2nd St, Los Angeles, CA 90012"},
+  {name:"Guisados", cuisine:"Tacos · Braised", area:"Downtown LA", rating:4.6, reviews:2400, note:"Sampler plate", addr:"541 S Spring St Unit 101, Los Angeles, CA 90013"},
+  {name:"Philippe The Original", cuisine:"French dip · Since 1908", area:"Chinatown", rating:4.6, reviews:12178, note:"Cash · pre-Dodgers", addr:"1001 N Alameda St, Los Angeles, CA 90012"},
+  {name:"KazuNori", cuisine:"Hand rolls · Sushi", area:"Downtown LA", rating:4.6, reviews:1693, note:"Hand-roll sets", addr:"421 Main St, Los Angeles, CA 90013"},
+  {name:"Shojin", cuisine:"Vegan Japanese · Sushi", area:"Little Tokyo", rating:4.6, reviews:378, note:"Vegan tasting", addr:"333 S Alameda St Suite 310, Los Angeles, CA 90013"},
+  {name:"Shabu-Shabu House", cuisine:"Japanese · Shabu", area:"Little Tokyo", rating:4.6, reviews:862, note:"Wagyu platters", addr:"127 Japanese Village Plaza Mall, Los Angeles, CA 90012"},
+  {name:"Marugame Monzo", cuisine:"Udon · Michelin", area:"Little Tokyo", rating:4.5, reviews:1624, note:"Michelin udon", addr:"329 1st St, Los Angeles, CA 90012"},
+  {name:"Sonoratown", cuisine:"Tacos · Sonora-style", area:"Downtown LA", rating:4.5, reviews:3345, note:"Mesquite flour tortillas", addr:"208 E 8th St, Los Angeles, CA 90014"},
+  {name:"Grand Central Market", cuisine:"Food hall", area:"Downtown LA", rating:4.5, reviews:36731, note:"Historic · many stalls", addr:"317 S Broadway, Los Angeles, CA 90013"},
+  {name:"Daikokuya", cuisine:"Ramen", area:"Little Tokyo", rating:4.4, reviews:4445, note:"Rich tonkotsu · expect a wait", addr:"327 1st St, Los Angeles, CA 90012"},
+  {name:"Spitz", cuisine:"Mediterranean · Döner", area:"Little Tokyo", rating:4.4, reviews:1091, note:"Street-cart döner", addr:"371 E 2nd St, Los Angeles, CA 90012"},
+  {name:"Cole's French Dip", cuisine:"French dip · Historic", area:"Downtown LA", rating:4.4, reviews:1763, note:"Since 1908", addr:"118 E 6th St, Los Angeles, CA 90014"},
+  {name:"Tacos 1986", cuisine:"Tacos · Tijuana-style", area:"Downtown LA", rating:4.2, reviews:820, note:"Adobada", addr:"609 S Spring St, Los Angeles, CA 90014"},
+  {name:"Badmaash", cuisine:"Indian · Gastro", area:"Downtown LA", rating:4.1, reviews:1791, note:"Butter-chicken poutine", addr:"108 W 2nd St APT 104, Los Angeles, CA 90012"}
+],
+    buffets: [
+  {name:"NIKU X", cuisine:"AYCE A5 wagyu · Seafood", area:"Downtown LA", rating:4.6, reviews:1639, dinnerOnly:true, note:"Dinner · weekend lunch · AYCE wagyu", addr:"900 Wilshire Blvd Ste 212, Los Angeles, CA 90017"},
+  {name:"Gangnam Station", cuisine:"AYCE Korean BBQ", area:"Koreatown", rating:4.3, reviews:1098, note:"Self-serve meat bar", addr:"3785 Wilshire Blvd Unit 217, Los Angeles, CA 90010"},
+  {name:"Gyu-Kaku", cuisine:"Yakiniku · AYCE option", area:"Downtown LA", rating:4.3, reviews:186, note:"AYCE lunch · grill-your-own", addr:"514 W 7th St, Los Angeles, CA 90014"},
+  {name:"LA Downtown Buffet", cuisine:"Asian buffet · Mongolian grill", area:"Westlake", rating:4.2, reviews:118, note:"Crab · sushi · dim sum", addr:"1901 W 7th St, Los Angeles, CA 90057"}
 ]
   }
 };
@@ -764,9 +924,15 @@ const ZIPS = {
   "32789":[28.598,-81.351],"32814":[28.567,-81.326],"32804":[28.570,-81.394],
   "90232":[34.026,-118.389],"90230":[34.000,-118.398],"90066":[33.998,-118.430],"90034":[34.030,-118.402],
   "90401":[34.015,-118.492],"90403":[34.034,-118.487],"90404":[34.026,-118.477],"90292":[33.976,-118.451],"90293":[33.960,-118.448],
-  "90045":[33.960,-118.400],"90250":[33.916,-118.350],"90504":[33.871,-118.350],"32819":[28.450,-81.470]
+  "90045":[33.960,-118.400],"90250":[33.916,-118.350],"90504":[33.871,-118.350],"32819":[28.450,-81.470],
+  "90012":[34.058,-118.240],"90013":[34.044,-118.244],"90014":[34.042,-118.252],"90017":[34.053,-118.265],"90057":[34.058,-118.276],
+  "92626":[33.685,-117.910],"92660":[33.640,-117.870],"92663":[33.620,-117.930],"92625":[33.600,-117.873],"92606":[33.690,-117.835],"92612":[33.660,-117.840],"92618":[33.660,-117.745],"92602":[33.730,-117.785],"92630":[33.640,-117.690],"92610":[33.685,-117.660],"92653":[33.610,-117.710],
+  "92614":[33.685,-117.850],"92604":[33.690,-117.800],"92782":[33.730,-117.795],"92704":[33.700,-117.905],"92780":[33.740,-117.820],
+  "92101":[32.715,-117.165],"92113":[32.695,-117.140],"92102":[32.715,-117.130],
+  "94596":[37.898,-122.060],"94597":[37.920,-122.075],"94598":[37.925,-122.018],"94549":[37.892,-122.118],"94523":[37.948,-122.065],"94563":[37.877,-122.182],"94520":[37.978,-122.033],
+  "94526":[37.815,-121.995],"94583":[37.765,-121.965],"94568":[37.715,-121.910],"94566":[37.660,-121.876],"94550":[37.680,-121.775]
 };
-function zipOf(r){ const m = (r.addr||'').match(/\b(\d{5})\b/); return m ? m[1] : null; }
+function zipOf(r){ const m = (r.addr||'').match(/(\d{5})(?!.*\d{5})/); return m ? m[1] : null; }
 function distMi(r){
   if (!userLoc) return Infinity;
   const z = zipOf(r); const c = z && ZIPS[z];
@@ -823,7 +989,7 @@ function render(){
     row.id = 'row-'+i;
     row.innerHTML =
       '<button class="fav-btn'+(favs().has(i)?' on':'')+'" title="Toggle favorite">\u2665</button>'+
-      '<div class="info"><div class="name">'+r.name+'</div>'+
+      '<div class="info"><div class="name">'+r.name+(r.dinnerOnly?' <span class="badge-dinner">dinner</span>':'')+'</div>'+
       '<div class="meta">'+r.cuisine+' \u00b7 '+r.area+(r.note?' \u00b7 '+r.note:'')+
         (dl?' \u00b7 <span class="dist">'+dl+'</span>':'')+
         (closed?' \u00b7 <span class="closed-tag">Closed now</span>':'')+'</div>'+
@@ -997,7 +1163,7 @@ function showInSlot(i, landed){
   const dl = distLabel(r);
   slotEl.className = 'slot' + (landed ? ' landed' : '');
   slotEl.innerHTML =
-    '<div class="pick-name">'+r.name+'</div>'+
+    '<div class="pick-name">'+r.name+(r.dinnerOnly?' <span class="badge-dinner">dinner</span>':'')+'</div>'+
     '<div class="pick-meta">'+r.cuisine+' \u00b7 '+r.area+(r.note?' \u00b7 '+r.note:'')+(landed&&dl?' \u00b7 <span class="dist">'+dl+'</span>':'')+'</div>'+
     '<div class="pick-rating">'+stars(r.rating)+' '+r.rating.toFixed(1)+' ('+r.reviews.toLocaleString()+')</div>'+
     '<div class="pick-addr"><a href="'+mapsUrl(r)+'" target="_blank" rel="noopener">\ud83d\udccd '+r.addr+' \u2192 Directions</a></div>'+
@@ -1112,7 +1278,603 @@ initConfetti();
 slSpinBtn.addEventListener('click', subRoll);
 slClearBtn.addEventListener('click', ()=>{ shortlist = []; renderShortlist(); });
 
+// figure out which home region the user is closest to
+function regionCenter(key){
+  const list = REGIONS[key].restaurants;
+  let la=0, lo=0, n=0;
+  for (const r of list){ const z=zipOf(r), c=z&&ZIPS[z]; if(c){ la+=c[0]; lo+=c[1]; n++; } }
+  return n ? {lat:la/n, lng:lo/n} : null;
+}
+function haversineMi(a, b){
+  const toRad=d=>d*Math.PI/180, R=3958.8;
+  const dLat=toRad(b.lat-a.lat), dLng=toRad(b.lng-a.lng);
+  const x=Math.sin(dLat/2)**2 + Math.cos(toRad(a.lat))*Math.cos(toRad(b.lat))*Math.sin(dLng/2)**2;
+  return R*2*Math.atan2(Math.sqrt(x), Math.sqrt(1-x));
+}
+function nearestRegion(loc){
+  let best=null, bestD=Infinity;
+  for (const key of Object.keys(REGIONS)){
+    for (const r of REGIONS[key].restaurants){
+      const z=zipOf(r), c=z&&ZIPS[z];
+      if(!c) continue;
+      const d=haversineMi(loc, {lat:c[0], lng:c[1]});
+      if(d<bestD){ bestD=d; best=key; }
+    }
+  }
+  return best;
+}
+
 loadRegion('lakemary');
+
+// auto-default the area to wherever the user is, if they allow location
+if (navigator.geolocation){
+  navigator.geolocation.getCurrentPosition(pos=>{
+    userLoc = {lat:pos.coords.latitude, lng:pos.coords.longitude};
+    const k = nearestRegion(userLoc);
+    if (k && k !== currentRegion) loadRegion(k); else render();
+    toast('Showing spots near you \u2014 ' + cleanLabel(currentRegion));
+  }, ()=>{}, {timeout:8000, maximumAge:600000});
+}
+
+// manual ZIP entry as an alternative to geolocation
+const zipInput = document.getElementById('zipInput');
+const zipBtn = document.getElementById('zipBtn');
+async function zipCentroid(zip){
+  if (ZIPS[zip]) return {lat:ZIPS[zip][0], lng:ZIPS[zip][1]};
+  try{
+    const res = await fetch('https://api.zippopotam.us/us/'+zip);
+    if(!res.ok) return null;
+    const data = await res.json();
+    const p = data.places && data.places[0];
+    return p ? {lat:parseFloat(p.latitude), lng:parseFloat(p.longitude)} : null;
+  }catch(e){ return null; }
+}
+async function setZipLocation(){
+  const zip = (zipInput.value||'').trim();
+  if(!/^\d{5}$/.test(zip)){ toast('Enter a 5-digit ZIP'); return; }
+  toast('Looking up '+zip+'\u2026');
+  const c = await zipCentroid(zip);
+  if(!c){ toast('Couldn\u0027t find ZIP '+zip); return; }
+  userLoc = c;
+  const k = nearestRegion(userLoc);
+  if (k && k !== currentRegion) loadRegion(k); else render();
+  toast('Location set to '+zip+' \u2014 ' + cleanLabel(currentRegion));
+}
+zipBtn.addEventListener('click', setZipLocation);
+zipInput.addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); setZipLocation(); } });
+</script>
+<script>
+(function(){
+  const frame=document.getElementById("michelinFrame");
+  const bL=document.getElementById("modeLunch"), bM=document.getElementById("modeMich");
+  let loaded=false;
+  const MICHELIN_HTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Michelin Roulette · USA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --noir:#0b0a0d;
+    --panel:#151219;
+    --panel2:#100e15;
+    --line:#2b2533;
+    --gold:#e3c264;
+    --gold-lt:#f6e6ad;
+    --gold-dp:#b08a36;
+    --red:#c8102e;
+    --red-dp:#8c1622;
+    --cream:#f3eee4;
+    --dim:#9c9384;
+    --serif:"Cormorant Garamond", Georgia, serif;
+    --sans:"Jost","Segoe UI",system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:
+      radial-gradient(1200px 700px at 50% -10%, #1c1622 0%, rgba(28,22,34,0) 60%),
+      radial-gradient(900px 500px at 90% 110%, #1a1119 0%, rgba(26,17,25,0) 55%),
+      var(--noir);
+    color:var(--cream);
+    font-family:var(--sans);
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+    position:relative;
+    overflow-x:hidden;
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+    background-image:radial-gradient(rgba(227,194,100,.04) 1px, transparent 1px);
+    background-size:3px 3px;mix-blend-mode:screen;opacity:.5;
+  }
+  .wrap{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:34px 20px 80px}
+
+  /* ---- header ---- */
+  header{text-align:center;padding:8px 0 4px}
+  .eyebrow{font-size:.66rem;letter-spacing:.42em;text-transform:uppercase;color:var(--gold);font-weight:500}
+  .eyebrow::before,.eyebrow::after{content:"";display:inline-block;width:26px;height:1px;background:linear-gradient(90deg,transparent,var(--gold-dp));vertical-align:middle;margin:0 12px}
+  .eyebrow::after{background:linear-gradient(90deg,var(--gold-dp),transparent)}
+  h1{
+    font-family:var(--serif);font-weight:600;letter-spacing:.01em;
+    font-size:clamp(2.9rem,9vw,4.8rem);line-height:.95;margin:.18em 0 .12em;
+    color:var(--cream);
+  }
+  h1 .of{font-style:italic;color:var(--gold-lt);font-weight:500}
+  .sub{color:var(--dim);font-family:var(--serif);font-size:1.12rem;font-style:italic;max-width:520px;margin:0 auto;line-height:1.5}
+  .tally{margin:16px auto 0;display:flex;gap:18px;justify-content:center;flex-wrap:wrap;font-size:.72rem;letter-spacing:.12em;color:var(--dim);text-transform:uppercase}
+  .tally b{color:var(--gold-lt);font-weight:600}
+
+  /* ---- florette (the star motif) ---- */
+  .flor{width:1em;height:1em;display:inline-block;vertical-align:-.14em;color:var(--gold)}
+  .flor + .flor{margin-left:.08em}
+
+  /* ---- controls ---- */
+  .controls{margin:26px 0 6px;display:flex;gap:14px 20px;align-items:center;justify-content:center;flex-wrap:wrap}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--panel2)}
+  .seg button{
+    background:transparent;border:0;color:var(--dim);cursor:pointer;
+    font-family:var(--sans);font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;
+    padding:9px 15px;display:flex;align-items:center;gap:5px;transition:.18s;
+  }
+  .seg button .flor{color:var(--gold-dp);transition:.18s}
+  .seg button:hover{color:var(--cream)}
+  .seg button[aria-pressed="true"]{background:linear-gradient(180deg,rgba(227,194,100,.16),rgba(227,194,100,.06));color:var(--gold-lt)}
+  .seg button[aria-pressed="true"] .flor{color:var(--gold)}
+  .field{display:flex;align-items:center;gap:9px;font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+  select{
+    background:var(--panel);border:1px solid var(--line);color:var(--cream);
+    border-radius:8px;padding:8px 12px;font-family:var(--sans);font-size:.78rem;letter-spacing:.04em;cursor:pointer;
+  }
+  select:focus{outline:none;border-color:var(--gold-dp)}
+
+  /* ---- stage ---- */
+  .stage{margin:22px 0 0;position:relative}
+  .plate{
+    position:relative;border:1px solid var(--line);border-radius:16px;
+    background:
+      radial-gradient(120% 130% at 50% 0%, rgba(227,194,100,.05), rgba(0,0,0,0) 55%),
+      linear-gradient(180deg,var(--panel),var(--panel2));
+    padding:42px 26px 30px;min-height:240px;text-align:center;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    box-shadow:inset 0 1px 0 rgba(246,230,173,.06), 0 30px 60px -30px rgba(0,0,0,.7);
+    overflow:hidden;
+  }
+  .plate::before{
+    content:"";position:absolute;inset:14px;border:1px solid rgba(176,138,54,.22);border-radius:10px;pointer-events:none;
+  }
+  .placeholder{color:var(--dim);font-family:var(--serif);font-style:italic;font-size:1.35rem;line-height:1.5;max-width:360px}
+  .stars-row{height:34px;display:flex;gap:4px;align-items:center;justify-content:center;font-size:1.7rem;margin-bottom:10px}
+  .stars-row .flor{filter:drop-shadow(0 2px 6px rgba(227,194,100,.35))}
+  .pick-name{font-family:var(--serif);font-weight:600;font-size:clamp(2rem,6.5vw,3.2rem);line-height:1.04;color:var(--cream);letter-spacing:.01em}
+  .pick-where{margin-top:12px;font-size:.74rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold)}
+  .pick-cuisine{margin-top:7px;color:var(--dim);font-family:var(--serif);font-style:italic;font-size:1.12rem}
+  .pick-actions{margin-top:18px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;min-height:1px}
+  .act{
+    font-family:var(--sans);font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;
+    border:1px solid var(--gold-dp);color:var(--gold-lt);background:rgba(227,194,100,.08);
+    border-radius:999px;padding:9px 17px;cursor:pointer;text-decoration:none;transition:.18s;
+  }
+  .act:hover{background:rgba(227,194,100,.2)}
+  .plate.spin .pick-name{opacity:.55}
+  .plate.land{animation:landpulse .6s ease}
+  @keyframes landpulse{0%{box-shadow:inset 0 0 0 1px var(--gold)}40%{box-shadow:inset 0 0 0 2px var(--gold),0 0 50px -6px rgba(227,194,100,.5)}100%{box-shadow:inset 0 1px 0 rgba(246,230,173,.06),0 30px 60px -30px rgba(0,0,0,.7)}}
+
+  .spinbar{display:flex;justify-content:center;margin:22px 0 4px}
+  .spin-btn{
+    font-family:var(--serif);font-size:1.4rem;font-weight:600;font-style:italic;letter-spacing:.02em;
+    color:#1a130a;cursor:pointer;border:0;border-radius:999px;padding:15px 52px;
+    background:linear-gradient(180deg,var(--gold-lt),var(--gold) 55%,var(--gold-dp));
+    box-shadow:0 10px 28px -10px rgba(227,194,100,.6), inset 0 1px 0 rgba(255,255,255,.5);
+    transition:transform .12s, box-shadow .2s;
+  }
+  .spin-btn:hover{transform:translateY(-1px);box-shadow:0 14px 32px -10px rgba(227,194,100,.75), inset 0 1px 0 rgba(255,255,255,.6)}
+  .spin-btn:active{transform:translateY(1px) scale(.99)}
+  .spin-btn:disabled{opacity:.55;cursor:default;transform:none}
+
+  /* ---- directory ---- */
+  .dir-head{display:flex;align-items:baseline;justify-content:space-between;margin:46px 0 10px;border-bottom:1px solid var(--line);padding-bottom:10px}
+  .dir-head h2{font-family:var(--serif);font-weight:500;font-size:1.5rem;margin:0;color:var(--gold-lt);letter-spacing:.02em}
+  .dir-head .count{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:12px}
+  .card{
+    border:1px solid var(--line);border-radius:12px;background:linear-gradient(180deg,var(--panel),var(--panel2));
+    padding:15px 16px 14px;cursor:pointer;transition:.16s;text-align:left;position:relative;
+  }
+  .card:hover{border-color:var(--gold-dp);transform:translateY(-2px);box-shadow:0 16px 30px -22px rgba(227,194,100,.5)}
+  .card .cstars{font-size:.95rem;margin-bottom:7px;display:flex;gap:3px}
+  .card .cname{font-family:var(--serif);font-weight:600;font-size:1.28rem;line-height:1.1;color:var(--cream)}
+  .card .cwhere{margin-top:6px;font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)}
+  .card .ccuisine{margin-top:5px;color:var(--dim);font-family:var(--serif);font-style:italic;font-size:1rem}
+
+  .note{margin:42px auto 0;max-width:680px;text-align:center;color:var(--dim);font-size:.82rem;line-height:1.7}
+  .note b{color:var(--gold-lt);font-weight:600}
+  footer{margin-top:30px;text-align:center;color:var(--dim);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase}
+  footer .flor{color:var(--gold-dp);width:.85em;height:.85em}
+
+  #toast{
+    position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(20px);
+    background:var(--panel);border:1px solid var(--gold-dp);color:var(--gold-lt);
+    padding:11px 20px;border-radius:999px;font-size:.78rem;letter-spacing:.05em;
+    opacity:0;pointer-events:none;transition:.3s;z-index:50;box-shadow:0 14px 30px -12px rgba(0,0,0,.8)
+  }
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  canvas#spark{position:fixed;inset:0;pointer-events:none;z-index:40}
+
+  @media (max-width:560px){
+    .controls{gap:12px}
+    .seg button{padding:8px 11px}
+    .dir-head{flex-direction:column;gap:4px;align-items:flex-start}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .plate.land{animation:none}
+    .spin-btn{transition:none}
+  }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="florette" viewBox="0 0 24 24">
+    <g fill="currentColor">
+      <ellipse cx="12" cy="6.4" rx="2.5" ry="4.1" transform="rotate(0 12 12)"/>
+      <ellipse cx="12" cy="6.4" rx="2.5" ry="4.1" transform="rotate(60 12 12)"/>
+      <ellipse cx="12" cy="6.4" rx="2.5" ry="4.1" transform="rotate(120 12 12)"/>
+      <ellipse cx="12" cy="6.4" rx="2.5" ry="4.1" transform="rotate(180 12 12)"/>
+      <ellipse cx="12" cy="6.4" rx="2.5" ry="4.1" transform="rotate(240 12 12)"/>
+      <ellipse cx="12" cy="6.4" rx="2.5" ry="4.1" transform="rotate(300 12 12)"/>
+      <circle cx="12" cy="12" r="2.7" fill="#1a130a"/>
+      <circle cx="12" cy="12" r="1.5"/>
+    </g>
+  </symbol>
+</svg>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">United States &middot; The Michelin Guide</div>
+    <h1>Michelin <span class="of">Roulette</span></h1>
+    <p class="sub">Let fate choose your splurge. Spin for a star-rated table somewhere in America.</p>
+    <div class="tally" id="tally"></div>
+  </header>
+
+  <div class="controls">
+    <div class="seg" id="tierSeg" role="group" aria-label="Filter by stars">
+      <button data-tier="0" aria-pressed="true">All</button>
+      <button data-tier="1" aria-pressed="false"><svg class="flor"><use href="#florette"/></svg></button>
+      <button data-tier="2" aria-pressed="false"><svg class="flor"><use href="#florette"/></svg><svg class="flor"><use href="#florette"/></svg></button>
+      <button data-tier="3" aria-pressed="false"><svg class="flor"><use href="#florette"/></svg><svg class="flor"><use href="#florette"/></svg><svg class="flor"><use href="#florette"/></svg></button>
+    </div>
+    <label class="field">Region
+      <select id="region"><option value="">All of the USA</option></select>
+    </label>
+  </div>
+
+  <div class="stage">
+    <div class="plate" id="plate">
+      <div class="placeholder">Press spin and let the guide decide.</div>
+    </div>
+  </div>
+  <div class="spinbar"><button class="spin-btn" id="spinBtn">Spin the guide</button></div>
+
+  <div class="dir-head">
+    <h2>The selection</h2>
+    <div class="count" id="count"></div>
+  </div>
+  <div class="grid" id="grid"></div>
+
+  <p class="note">
+    Compiled from the <b>2025 MICHELIN Guide</b> selections. The <b>three-star tier is complete</b> (all 14 in the country);
+    the two- and one-star tiers are a broad selection across every U.S. region, not yet every one of the ~220.
+    Stars are re-judged yearly and restaurants close &mdash; confirm before you book. Tap any name to load it, then spin again.
+  </p>
+  <footer><svg class="flor"><use href="#florette"/></svg> &nbsp; worth a special journey &nbsp; <svg class="flor"><use href="#florette"/></svg></footer>
+</div>
+
+<div id="toast"></div>
+<canvas id="spark"></canvas>
+
+<script>
+/* ===== Data: US Michelin-starred restaurants (2025 Guide) =====
+   stars: 1 | 2 | 3   region used for the filter; city shown on the card. */
+const R = [
+  // ---------- THREE STARS (complete: all 14) ----------
+  {n:"Addison", s:3, city:"San Diego", region:"Southern California", c:"Contemporary Californian"},
+  {n:"Atelier Crenn", s:3, city:"San Francisco", region:"Northern California", c:"Contemporary French"},
+  {n:"Benu", s:3, city:"San Francisco", region:"Northern California", c:"New American · Asian"},
+  {n:"Quince", s:3, city:"San Francisco", region:"Northern California", c:"Californian · Italian"},
+  {n:"SingleThread", s:3, city:"Healdsburg", region:"Northern California", c:"New American · Japanese"},
+  {n:"The French Laundry", s:3, city:"Yountville", region:"Northern California", c:"French · Californian"},
+  {n:"Providence", s:3, city:"Los Angeles", region:"Southern California", c:"Seafood"},
+  {n:"Somni", s:3, city:"West Hollywood", region:"Southern California", c:"Contemporary tasting"},
+  {n:"Eleven Madison Park", s:3, city:"New York", region:"New York", c:"Plant-based contemporary"},
+  {n:"Le Bernardin", s:3, city:"New York", region:"New York", c:"French · Seafood"},
+  {n:"Per Se", s:3, city:"New York", region:"New York", c:"New American · French"},
+  {n:"Jungsik", s:3, city:"New York", region:"New York", c:"Korean"},
+  {n:"Sushi Sho", s:3, city:"New York", region:"New York", c:"Sushi · Edomae"},
+  {n:"Smyth", s:3, city:"Chicago", region:"Chicago", c:"Contemporary"},
+
+  // ---------- TWO STARS ----------
+  {n:"Acquerello", s:2, city:"San Francisco", region:"Northern California", c:"Italian"},
+  {n:"Birdsong", s:2, city:"San Francisco", region:"Northern California", c:"Contemporary"},
+  {n:"Californios", s:2, city:"San Francisco", region:"Northern California", c:"Mexican tasting"},
+  {n:"Lazy Bear", s:2, city:"San Francisco", region:"Northern California", c:"Contemporary American"},
+  {n:"Saison", s:2, city:"San Francisco", region:"Northern California", c:"Californian · live-fire"},
+  {n:"Commis", s:2, city:"Oakland", region:"Northern California", c:"Contemporary"},
+  {n:"Harbor House", s:2, city:"Elk", region:"Northern California", c:"Coastal Californian"},
+  {n:"Aubergine", s:2, city:"Carmel-by-the-Sea", region:"Northern California", c:"Contemporary"},
+  {n:"n/naka", s:2, city:"Los Angeles", region:"Southern California", c:"Japanese kaiseki"},
+  {n:"Hayato", s:2, city:"Los Angeles", region:"Southern California", c:"Japanese kappo"},
+  {n:"Mélisse", s:2, city:"Santa Monica", region:"Southern California", c:"Contemporary French"},
+  {n:"Alinea", s:2, city:"Chicago", region:"Chicago", c:"Avant-garde"},
+  {n:"Oriole", s:2, city:"Chicago", region:"Chicago", c:"Contemporary"},
+  {n:"Ever", s:2, city:"Chicago", region:"Chicago", c:"Contemporary"},
+  {n:"Moody Tongue", s:2, city:"Chicago", region:"Chicago", c:"Contemporary · beer pairing"},
+  {n:"Kasama", s:2, city:"Chicago", region:"Chicago", c:"Filipino"},
+  {n:"Masa", s:2, city:"New York", region:"New York", c:"Sushi · Edomae"},
+  {n:"Chef's Table at Brooklyn Fare", s:2, city:"New York", region:"New York", c:"Seafood · omakase"},
+  {n:"Jean-Georges", s:2, city:"New York", region:"New York", c:"French"},
+  {n:"Gabriel Kreuther", s:2, city:"New York", region:"New York", c:"Alsatian · French"},
+  {n:"Atomix", s:2, city:"New York", region:"New York", c:"Korean tasting"},
+  {n:"Aquavit", s:2, city:"New York", region:"New York", c:"Scandinavian"},
+  {n:"The Modern", s:2, city:"New York", region:"New York", c:"Contemporary American"},
+  {n:"Blue Hill at Stone Barns", s:2, city:"Pocantico Hills", region:"New York", c:"Farm-to-table"},
+  {n:"Jônt", s:2, city:"Washington", region:"Washington DC", c:"Contemporary tasting"},
+  {n:"Pineapple and Pearls", s:2, city:"Washington", region:"Washington DC", c:"Contemporary tasting"},
+  {n:"minibar by José Andrés", s:2, city:"Washington", region:"Washington DC", c:"Avant-garde tasting"},
+  {n:"The Inn at Little Washington", s:2, city:"Washington, VA", region:"Washington DC", c:"Nouveau American"},
+  {n:"L'Atelier de Joël Robuchon", s:2, city:"Miami", region:"Florida", c:"French"},
+  {n:"Emeril's", s:2, city:"Orlando", region:"Florida", c:"Contemporary"},
+
+  // ---------- ONE STARS ----------
+  // California — Bay Area
+  {n:"Mister Jiu's", s:1, city:"San Francisco", region:"Northern California", c:"Chinese"},
+  {n:"Octavia", s:1, city:"San Francisco", region:"Northern California", c:"Californian"},
+  {n:"Nari", s:1, city:"San Francisco", region:"Northern California", c:"Thai"},
+  {n:"Kin Khao", s:1, city:"San Francisco", region:"Northern California", c:"Thai"},
+  {n:"Sorrel", s:1, city:"San Francisco", region:"Northern California", c:"Contemporary Californian"},
+  {n:"Rich Table", s:1, city:"San Francisco", region:"Northern California", c:"Californian"},
+  {n:"State Bird Provisions", s:1, city:"San Francisco", region:"Northern California", c:"Californian small plates"},
+  {n:"Gary Danko", s:1, city:"San Francisco", region:"Northern California", c:"Contemporary"},
+  {n:"Mourad", s:1, city:"San Francisco", region:"Northern California", c:"Moroccan"},
+  {n:"San Ho Won", s:1, city:"San Francisco", region:"Northern California", c:"Korean BBQ"},
+  {n:"Niku Steakhouse", s:1, city:"San Francisco", region:"Northern California", c:"Steakhouse"},
+  {n:"Jū-Ni", s:1, city:"San Francisco", region:"Northern California", c:"Sushi omakase"},
+  {n:"Son's & Daughters", s:1, city:"San Francisco", region:"Northern California", c:"Contemporary"},
+  {n:"Angler", s:1, city:"San Francisco", region:"Northern California", c:"Seafood"},
+  {n:"Protégé", s:1, city:"Palo Alto", region:"Northern California", c:"Contemporary"},
+  {n:"Plumed Horse", s:1, city:"Saratoga", region:"Northern California", c:"Contemporary"},
+  {n:"Chez TJ", s:1, city:"Mountain View", region:"Northern California", c:"Contemporary"},
+  {n:"Madera", s:1, city:"Menlo Park", region:"Northern California", c:"Contemporary"},
+  // California — Wine Country
+  {n:"Auberge du Soleil", s:1, city:"Rutherford", region:"Northern California", c:"Californian"},
+  {n:"Bouchon", s:1, city:"Yountville", region:"Northern California", c:"French bistro"},
+  {n:"Cyrus", s:1, city:"Geyserville", region:"Northern California", c:"Californian tasting"},
+  {n:"La Toque", s:1, city:"Napa", region:"Northern California", c:"Contemporary"},
+  {n:"Kenzo", s:1, city:"Napa", region:"Northern California", c:"Japanese · Californian"},
+  {n:"Madrona Manor", s:1, city:"Healdsburg", region:"Northern California", c:"Californian"},
+  // California — LA & SoCal
+  {n:"Osteria Mozza", s:1, city:"Los Angeles", region:"Southern California", c:"Italian"},
+  {n:"Gwen", s:1, city:"Los Angeles", region:"Southern California", c:"American · steakhouse"},
+  {n:"Kato", s:1, city:"Los Angeles", region:"Southern California", c:"Taiwanese-American tasting"},
+  {n:"Kali", s:1, city:"Los Angeles", region:"Southern California", c:"Californian"},
+  {n:"Q Sushi", s:1, city:"Los Angeles", region:"Southern California", c:"Sushi"},
+  {n:"Sushi Kaneyoshi", s:1, city:"Los Angeles", region:"Southern California", c:"Sushi"},
+  {n:"Morihiro", s:1, city:"Los Angeles", region:"Southern California", c:"Japanese"},
+  {n:"Orsa & Winston", s:1, city:"Los Angeles", region:"Southern California", c:"Japanese · Italian"},
+  {n:"Hatchet Hall", s:1, city:"Culver City", region:"Southern California", c:"New American"},
+  {n:"Camphor", s:1, city:"Los Angeles", region:"Southern California", c:"French"},
+  {n:"Holbox", s:1, city:"Los Angeles", region:"Southern California", c:"Mexican seafood"},
+  {n:"Citrin", s:1, city:"Santa Monica", region:"Southern California", c:"Californian"},
+  {n:"Pasjoli", s:1, city:"Santa Monica", region:"Southern California", c:"French"},
+  {n:"Rustic Canyon", s:1, city:"Santa Monica", region:"Southern California", c:"Californian"},
+  {n:"CUT by Wolfgang Puck", s:1, city:"Beverly Hills", region:"Southern California", c:"Steakhouse"},
+  {n:"Vespertine", s:1, city:"Culver City", region:"Southern California", c:"Avant-garde"},
+  // California — OC & San Diego
+  {n:"Hana re", s:1, city:"Costa Mesa", region:"Southern California", c:"Sushi"},
+  {n:"Knife Pleat", s:1, city:"Costa Mesa", region:"Southern California", c:"French"},
+  {n:"Soichi", s:1, city:"San Diego", region:"Southern California", c:"Sushi"},
+  {n:"Sushi Tadokoro", s:1, city:"San Diego", region:"Southern California", c:"Sushi"},
+  {n:"Jeune et Jolie", s:1, city:"Carlsbad", region:"Southern California", c:"French"},
+  {n:"Valle", s:1, city:"Oceanside", region:"Southern California", c:"Mexican tasting"},
+  // New York
+  {n:"Daniel", s:1, city:"New York", region:"New York", c:"French"},
+  {n:"Gramercy Tavern", s:1, city:"New York", region:"New York", c:"New American"},
+  {n:"Torrisi", s:1, city:"New York", region:"New York", c:"Italian-American"},
+  {n:"COTE", s:1, city:"New York", region:"New York", c:"Korean steakhouse"},
+  {n:"Sushi Nakazawa", s:1, city:"New York", region:"New York", c:"Sushi"},
+  {n:"Don Angie", s:1, city:"New York", region:"New York", c:"Italian-American"},
+  {n:"Rezdôra", s:1, city:"New York", region:"New York", c:"Emilian pasta"},
+  {n:"Oxomoco", s:1, city:"New York", region:"New York", c:"Mexican"},
+  {n:"Dirt Candy", s:1, city:"New York", region:"New York", c:"Vegetable tasting"},
+  {n:"Crown Shy", s:1, city:"New York", region:"New York", c:"Contemporary American"},
+  // Chicago
+  {n:"Topolobampo", s:1, city:"Chicago", region:"Chicago", c:"Mexican"},
+  {n:"Elske", s:1, city:"Chicago", region:"Chicago", c:"Contemporary"},
+  {n:"Boka", s:1, city:"Chicago", region:"Chicago", c:"Contemporary American"},
+  {n:"Galit", s:1, city:"Chicago", region:"Chicago", c:"Middle Eastern"},
+  {n:"Esmé", s:1, city:"Chicago", region:"Chicago", c:"Contemporary"},
+  {n:"Daisies", s:1, city:"Chicago", region:"Chicago", c:"Pasta · vegetable"},
+  // Washington DC
+  {n:"Albi", s:1, city:"Washington", region:"Washington DC", c:"Levantine"},
+  {n:"Rooster & Owl", s:1, city:"Washington", region:"Washington DC", c:"Contemporary"},
+  {n:"Bresca", s:1, city:"Washington", region:"Washington DC", c:"French"},
+  {n:"The Dabney", s:1, city:"Washington", region:"Washington DC", c:"Mid-Atlantic hearth"},
+  {n:"Tail Up Goat", s:1, city:"Washington", region:"Washington DC", c:"Mediterranean"},
+  // Florida
+  {n:"Los Félix", s:1, city:"Miami", region:"Florida", c:"Mexican"},
+  {n:"Boia De", s:1, city:"Miami", region:"Florida", c:"Contemporary"},
+  {n:"Stubborn Seed", s:1, city:"Miami Beach", region:"Florida", c:"Contemporary"},
+  {n:"Le Jardinier", s:1, city:"Miami", region:"Florida", c:"French"},
+  {n:"Shingo", s:1, city:"Coral Gables", region:"Florida", c:"Sushi"},
+  {n:"Ariete", s:1, city:"Miami", region:"Florida", c:"American · Cuban"},
+  {n:"Soseki", s:1, city:"Orlando", region:"Florida", c:"Omakase"},
+  {n:"Kadence", s:1, city:"Orlando", region:"Florida", c:"Sushi omakase"},
+  {n:"Victoria & Albert's", s:1, city:"Orlando", region:"Florida", c:"Contemporary · Disney"},
+  // Colorado
+  {n:"Frasca Food and Wine", s:1, city:"Boulder", region:"Colorado", c:"Friulian Italian"},
+  {n:"Beckon", s:1, city:"Denver", region:"Colorado", c:"Tasting counter"},
+  {n:"The Wolf's Tailor", s:1, city:"Denver", region:"Colorado", c:"Contemporary"},
+  {n:"Brutø", s:1, city:"Denver", region:"Colorado", c:"Nixtamal tasting"},
+  {n:"Bosq", s:1, city:"Aspen", region:"Colorado", c:"Contemporary"},
+  // Atlanta & the South
+  {n:"Bacchanalia", s:1, city:"Atlanta", region:"Atlanta & the South", c:"Contemporary American"},
+  {n:"Lazy Betty", s:1, city:"Atlanta", region:"Atlanta & the South", c:"Contemporary tasting"},
+  {n:"Mujō", s:1, city:"Atlanta", region:"Atlanta & the South", c:"Sushi"},
+  {n:"Hayakawa", s:1, city:"Atlanta", region:"Atlanta & the South", c:"Sushi"},
+  {n:"Atlas", s:1, city:"Atlanta", region:"Atlanta & the South", c:"Contemporary American"},
+  // Northeast (new in 2025)
+  {n:"Friday Saturday Sunday", s:1, city:"Philadelphia", region:"Northeast", c:"Contemporary"},
+  {n:"Her Place Supper Club", s:1, city:"Philadelphia", region:"Northeast", c:"Contemporary"},
+  {n:"Provenance", s:1, city:"Philadelphia", region:"Northeast", c:"Plant-forward"},
+];
+
+const plate = document.getElementById('plate');
+const grid = document.getElementById('grid');
+const regionSel = document.getElementById('region');
+const tierSeg = document.getElementById('tierSeg');
+const spinBtn = document.getElementById('spinBtn');
+const countEl = document.getElementById('count');
+const tallyEl = document.getElementById('tally');
+
+let tier = 0;      // 0 = all
+let spinning = false;
+
+function flor(n){ let s=''; for(let i=0;i<n;i++) s+='<svg class="flor"><use href="#florette"/></svg>'; return s; }
+function mapsUrl(r){ return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(r.n+' '+r.city+(r.region!=='Washington DC'?'':'')); }
+
+// region dropdown (in a sensible order)
+const order = ["Northern California","Southern California","New York","Chicago","Washington DC","Florida","Colorado","Atlanta & the South","Northeast"];
+order.forEach(rg=>{
+  if(R.some(x=>x.region===rg)){
+    const o=document.createElement('option'); o.value=rg; o.textContent=rg; regionSel.appendChild(o);
+  }
+});
+
+function filtered(){
+  const rg = regionSel.value;
+  return R.filter(r => (tier===0 || r.s===tier) && (!rg || r.region===rg));
+}
+
+function tally(){
+  const c3=R.filter(r=>r.s===3).length, c2=R.filter(r=>r.s===2).length, c1=R.filter(r=>r.s===1).length;
+  tallyEl.innerHTML = '<span><b>'+c3+'</b> '+flor(3)+'</span><span><b>'+c2+'</b> '+flor(2)+'</span><span><b>'+c1+'</b> '+flor(1)+'</span>';
+}
+
+function renderSlot(r, landed){
+  plate.className = 'plate' + (landed?' land':'') + (!landed&&spinning?' spin':'');
+  plate.innerHTML =
+    '<div class="stars-row">'+flor(r.s)+'</div>'+
+    '<div class="pick-name">'+r.n+'</div>'+
+    '<div class="pick-where">'+r.city+' &middot; '+r.region+'</div>'+
+    '<div class="pick-cuisine">'+r.c+'</div>'+
+    '<div class="pick-actions">'+
+      (landed ? '<a class="act" href="'+mapsUrl(r)+'" target="_blank" rel="noopener">Find it on Maps</a>' : '')+
+    '</div>';
+}
+
+function renderGrid(){
+  const pool = filtered();
+  countEl.textContent = pool.length + (pool.length===1?' table':' tables');
+  grid.innerHTML = '';
+  // sort: stars desc, then region, then name
+  pool.slice().sort((a,b)=> b.s-a.s || a.region.localeCompare(b.region) || a.n.localeCompare(b.n))
+  .forEach(r=>{
+    const card = document.createElement('div');
+    card.className='card';
+    card.innerHTML =
+      '<div class="cstars">'+flor(r.s)+'</div>'+
+      '<div class="cname">'+r.n+'</div>'+
+      '<div class="cwhere">'+r.city+' &middot; '+r.region+'</div>'+
+      '<div class="ccuisine">'+r.c+'</div>';
+    card.addEventListener('click', ()=>{ renderSlot(r,true); if(r.s===3) burst(); plate.scrollIntoView({block:'center',behavior:'smooth'}); });
+    grid.appendChild(card);
+  });
+}
+
+function spin(){
+  const pool = filtered();
+  if(!pool.length){ toast('No tables match — widen the filters.'); return; }
+  if(spinning) return;
+  spinning = true; spinBtn.disabled = true;
+  const reduce = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(reduce){
+    const win = pool[Math.floor(Math.random()*pool.length)];
+    renderSlot(win,true); if(win.s===3) burst(); spinning=false; spinBtn.disabled=false; return;
+  }
+  let i=0; const n=22;
+  const step=()=>{
+    renderSlot(pool[Math.floor(Math.random()*pool.length)], false);
+    i++;
+    if(i<n){ setTimeout(step, 38 + Math.pow(i/n,2.4)*240); }
+    else { const win=pool[Math.floor(Math.random()*pool.length)]; renderSlot(win,true); if(win.s===3) burst(); spinning=false; spinBtn.disabled=false; }
+  };
+  step();
+}
+
+// segmented star filter
+tierSeg.addEventListener('click', e=>{
+  const b = e.target.closest('button'); if(!b) return;
+  tier = +b.dataset.tier;
+  [...tierSeg.children].forEach(x=>x.setAttribute('aria-pressed', x===b ? 'true':'false'));
+  renderGrid();
+});
+regionSel.addEventListener('change', renderGrid);
+spinBtn.addEventListener('click', spin);
+
+/* ---- toast ---- */
+let toastT;
+function toast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2600);
+}
+
+/* ---- gold spark burst for three stars ---- */
+const cv=document.getElementById('spark'), cx=cv.getContext('2d');
+let parts=[], raf=null;
+function size(){ cv.width=innerWidth; cv.height=innerHeight; }
+size(); addEventListener('resize', size);
+function burst(){
+  if(window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  const r=plate.getBoundingClientRect(); const ox=r.left+r.width/2, oy=r.top+r.height/2;
+  for(let i=0;i<46;i++){
+    const a=Math.random()*Math.PI*2, sp=2+Math.random()*6;
+    parts.push({x:ox,y:oy,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-2,life:1,rot:Math.random()*6,vr:(Math.random()-.5)*.3,sz:3+Math.random()*4});
+  }
+  if(!raf) raf=requestAnimationFrame(tickParts);
+}
+function tickParts(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  parts.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; p.vy+=.16; p.vx*=.99; p.life-=.016; p.rot+=p.vr; });
+  parts=parts.filter(p=>p.life>0);
+  parts.forEach(p=>{
+    cx.save(); cx.globalAlpha=Math.max(0,p.life); cx.translate(p.x,p.y); cx.rotate(p.rot);
+    cx.fillStyle = p.life>.5 ? '#f6e6ad' : '#e3c264';
+    cx.beginPath(); for(let k=0;k<6;k++){ const ang=k*Math.PI/3; cx.ellipse(Math.cos(ang)*p.sz*.5, Math.sin(ang)*p.sz*.5, p.sz*.36, p.sz*.62, ang, 0, Math.PI*2);} cx.fill();
+    cx.restore();
+  });
+  if(parts.length) raf=requestAnimationFrame(tickParts); else { cx.clearRect(0,0,cv.width,cv.height); raf=null; }
+}
+
+tally();
+renderGrid();
+<\/script>
+</body>
+</html>
+`;
+  function show(mich){
+    document.body.classList.toggle("mich", mich);
+    frame.hidden = !mich;
+    bM.classList.toggle("on", mich); bM.setAttribute("aria-pressed", mich?"true":"false");
+    bL.classList.toggle("on", !mich); bL.setAttribute("aria-pressed", !mich?"true":"false");
+    if(mich && !loaded){ frame.srcdoc = MICHELIN_HTML; loaded=true; }
+    window.scrollTo(0,0);
+  }
+  bL.addEventListener("click", ()=>show(false));
+  bM.addEventListener("click", ()=>show(true));
+})();
 </script>
 </body>
 </html>
