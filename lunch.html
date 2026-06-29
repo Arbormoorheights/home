@@ -169,6 +169,8 @@
   .opts .opt-note{font-size:.68rem;font-style:italic;color:var(--dim);letter-spacing:.02em;margin-left:1px}
   .badge-dinner{display:inline-block;vertical-align:middle;font-size:.56rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-lt);background:rgba(177,135,58,.18);border:1px solid var(--gold-dp);border-radius:999px;padding:1px 7px;margin-left:7px;font-family:var(--sans);position:relative;top:-1px}
   .slot .badge-dinner{font-size:.6rem;margin-left:9px}
+  .badge-bib{display:inline-block;vertical-align:middle;font-size:.55rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:#b31217;border:1px solid #d6232c;border-radius:999px;padding:1px 7px;margin-left:7px;font-family:var(--sans);position:relative;top:-1px}
+  .slot .badge-bib{font-size:.6rem;margin-left:9px}
   .opts input:disabled{cursor:not-allowed}
   .opts select{
     font-family:var(--sans);font-size:.72rem;font-weight:500;color:var(--text);letter-spacing:.06em;
@@ -444,6 +446,15 @@ const REGIONS = {
     subtitle: "Lunch spots near 32746 \u00b7 Lake Mary / Sanford / Longwood / Heathrow (+ two Oviedo picks) \u00b7 ratings & review counts from Google Maps",
     note: "Tap the \u2665 next to a restaurant to mark it as a favorite. Heads up: a few spots are closed Mondays \u2014 it's noted on the card.",
     restaurants: [
+  {name:"Bánh Mì Boy", cuisine:"Vietnamese", area:"Mills50", rating:4.4, reviews:296, mich:"bib", note:"Bib Gourmand · banh mi · airy baguette", addr:"1110 E Colonial Dr, Orlando, FL 32803"},
+  {name:"Sushi Saint", cuisine:"Sushi · omakase", area:"Downtown Orlando", rating:4.7, reviews:908, mich:"bib", note:"Bib Gourmand · hand rolls · daily lunch", addr:"400 Pittman St Ste A, Orlando, FL 32801"},
+  {name:"UniGirl", cuisine:"Japanese · onigiri", area:"Mills50", rating:4.7, reviews:415, mich:"bib", note:"Bib Gourmand · onigiri · Mills Market · til 7", addr:"1110 E Colonial Dr, Orlando, FL 32803"},
+  {name:"Zaru", cuisine:"Japanese · udon", area:"Mills50", rating:4.5, reviews:815, mich:"bib", note:"Bib Gourmand · uni udon · daily lunch", addr:"1114 E Colonial Dr, Orlando, FL 32803"},
+  {name:"Isan Zaap", cuisine:"Thai · Isan", area:"Millenia", rating:4.6, reviews:1381, mich:"bib", note:"Bib Gourmand · som tum · great value", addr:"4693 Gardens Park Blvd Suite 119, Orlando, FL 32839"},
+  {name:"Smokemade Meats + Eats", cuisine:"Texas BBQ", area:"SoDo", rating:4.6, reviews:549, mich:"bib", note:"Bib Gourmand · brisket · closed Mon–Tue", addr:"1400 S Crystal Lake Dr, Orlando, FL 32806"},
+  {name:"Taste of Chengdu", cuisine:"Sichuan", area:"College Park", rating:4.3, reviews:877, mich:"bib", note:"Bib Gourmand · authentic Sichuan · closed Mon", addr:"2030 W Colonial Dr, Orlando, FL 32804"},
+  {name:"Norigami", cuisine:"Sushi · aburi", area:"Winter Garden", rating:4.8, reviews:280, mich:"bib", dinnerOnly:true, note:"Bib Gourmand · torched nigiri · wknd lunch", addr:"426 W Plant St Stall 19, Winter Garden, FL 34787"},
+
   {name:"Pisco Peruvian Gastrobar", cuisine:"Peruvian", area:"Lake Mary", rating:4.9, reviews:3108, note:"Opens noon Mon–Fri", addr:"3801 W Lake Mary Blvd #155, Lake Mary, FL 32746", maps:"https://maps.apple.com/?daddr=3801%20W%20Lake%20Mary%20Blvd%20%23155%2C%20Lake%20Mary%2C%20FL%2032746"},
   {name:"Cowboy Curry", cuisine:"Japanese curry", area:"Orlando · Mills Market", rating:4.9, reviews:253, note:"Opens noon", addr:"1110 E Colonial Dr, Orlando, FL 32803", maps:"https://maps.apple.com/?daddr=1110%20E%20Colonial%20Dr%2C%20Orlando%2C%20FL%2032803"},
   {name:"Queen's Cup Thai Cafe", cuisine:"Thai cafe · Boba", area:"Lake Mary", rating:4.9, reviews:136, note:"Closed Sun", addr:"185 N Country Club Rd, Lake Mary, FL 32746", maps:"https://maps.apple.com/?daddr=185%20N%20Country%20Club%20Rd%2C%20Lake%20Mary%2C%20FL%2032746"},
@@ -502,6 +513,8 @@ const REGIONS = {
     subtitle: "Brunch & lunch picks across Torrance / Redondo / Hermosa / Manhattan Beach / Gardena (+ a Peninsula spot) \u00b7 ratings from Google Maps",
     note: "Tap the \u2665 to favorite a spot. These are daytime-leaning places \u2014 check the card for closed days and kitchen hours before you head out. Keep spinning, too \u2014 a rare bonus round can whisk you up to K-Town.",
     restaurants: [
+  {name:"Vin Folk", cuisine:"New American", area:"Hermosa Beach", rating:4.6, reviews:93, mich:"bib", dinnerOnly:true, note:"Bib Gourmand · ocean view · chili crab · closed Sun–Mon", addr:"1501 Hermosa Ave, Hermosa Beach, CA 90254"},
+
   {name:"Mychal's Café", cuisine:"Café · Breakfast & lunch", area:"Redondo Beach", rating:4.9, reviews:299, note:"Daytime only", addr:"2302 Artesia Blvd, Redondo Beach, CA 90278"},
   {name:"Délices Du Chef", cuisine:"French café · Bakery", area:"Torrance", rating:4.8, reviews:135, note:"Open till 4", addr:"24416 Crenshaw Blvd Ste 4, Torrance, CA 90505"},
   {name:"Caffe Tre Venezie", cuisine:"Italian café · Panini", area:"Torrance", rating:4.8, reviews:373, note:"Closed Wed · till 3", addr:"3525 Pacific Coast Hwy Unit B, Torrance, CA 90505"},
@@ -561,6 +574,11 @@ const REGIONS = {
     subtitle: "Irvine, Newport Beach, Costa Mesa & Lake Forest \u00b7 seafood, tacos, French bistro, pastrami & boba \u00b7 ratings from Google Maps",
     note: "Central OC from the coast to the Spectrum. A few spots are brunch-only or close by mid-afternoon (Moulin, Cappy's, Burnt Crumbs) \u2014 check the card.",
     restaurants: [
+  {name:"CHAAK Kitchen", cuisine:"Mexican · Yucatán", area:"Tustin", rating:4.6, reviews:1051, mich:"bib", dinnerOnly:true, note:"Bib Gourmand · cochinita pibil · wknd lunch", addr:"215 El Camino Real, Tustin, CA 92780"},
+  {name:"Fable & Spirit", cuisine:"Irish · Californian", area:"Newport Beach", rating:4.5, reviews:432, mich:"bib", dinnerOnly:true, note:"Bib Gourmand · Guinness bread · wknd brunch", addr:"3441 Via Lido Suite A, Newport Beach, CA 92663"},
+  {name:"Lola Gaspar", cuisine:"Mexican", area:"Santa Ana", rating:4.4, reviews:519, mich:"bib", dinnerOnly:true, note:"Bib Gourmand · al pastor tacos · closed Sun–Mon", addr:"211 W 2nd St, Santa Ana, CA 92701"},
+  {name:"Heritage Barbecue", cuisine:"Texas BBQ", area:"San Juan Capistrano", rating:4.4, reviews:1051, mich:"bib", note:"Bib Gourmand · brisket · long lines · closed Mon–Tue", addr:"31721 Camino Capistrano, San Juan Capistrano, CA 92675"},
+
   {name:"Moulin", cuisine:"French bistro · Café", area:"Newport Beach", rating:4.6, reviews:2463, note:"Till 3 · pastries", addr:"1000 Bristol St N St. 10, Newport Beach, CA 92660"},
   {name:"The Hat", cuisine:"Pastrami · Sandwiches", area:"Lake Forest", rating:4.6, reviews:2622, note:"World-famous pastrami dip", addr:"23641 Rockfield Blvd, Lake Forest, CA 92630"},
   {name:"Habana", cuisine:"Cuban", area:"Costa Mesa", rating:4.5, reviews:1974, note:"The LAB · weekend brunch", addr:"2930 Bristol St, Costa Mesa, CA 92626"},
@@ -595,6 +613,11 @@ const REGIONS = {
     subtitle: "Gaslamp, Little Italy, East Village & the Embarcadero \u00b7 seafood, tacos, Italian, burgers & brunch \u00b7 ratings from Google Maps",
     note: "Downtown San Diego from Little Italy to the Gaslamp. A few spots are brunch-only or close mid-afternoon, and Las Cuatro Milpas is cash-only & closed Fri/Sun \u2014 check the card.",
     restaurants: [
+  {name:"Callie", cuisine:"Mediterranean", area:"East Village", rating:4.5, reviews:1141, mich:"bib", dinnerOnly:true, note:"Bib Gourmand · hummus · closed Mon & Sat", addr:"1195 Island Ave, San Diego, CA 92101"},
+  {name:"Ciccia Osteria", cuisine:"Italian", area:"Barrio Logan", rating:4.7, reviews:905, mich:"bib", dinnerOnly:true, note:"Bib Gourmand · fresh pasta · GF-friendly · closed Tue & Sat", addr:"2233 Logan Ave, San Diego, CA 92113"},
+  {name:"Cucina Urbana", cuisine:"Italian", area:"Bankers Hill", rating:4.6, reviews:2023, mich:"bib", dinnerOnly:true, note:"Bib Gourmand · ricotta gnudi · bottle shop", addr:"505 Laurel St, San Diego, CA 92101"},
+  {name:"Cesarina", cuisine:"Italian", area:"Point Loma", rating:4.7, reviews:2645, mich:"bib", note:"Bib Gourmand · housemade pasta · daily lunch 12–3", addr:"4161 Voltaire St, San Diego, CA 92107"},
+
   {name:"Hodad's Downtown", cuisine:"Burgers", area:"Downtown", rating:4.6, reviews:4445, note:"Huge burgers · onion rings", addr:"945 Broadway, San Diego, CA 92101"},
   {name:"Las Cuatro Milpas", cuisine:"Mexican · Cash only", area:"Barrio Logan", rating:4.6, reviews:4463, note:"Closed Fri/Sun · cash · til 3", addr:"1985 National Ave Ste 1131, San Diego, CA 92113"},
   {name:"Buona Forchetta", cuisine:"Italian · Pizza", area:"South Park", rating:4.6, reviews:3287, note:"Wood-fired · lunch til 3", addr:"3001 Beech St, San Diego, CA 92102"},
@@ -602,7 +625,7 @@ const REGIONS = {
   {name:"The Crack Shack", cuisine:"Fried chicken", area:"Little Italy", rating:4.5, reviews:6367, note:"Chicken sandwiches · patio", addr:"2266 Kettner Blvd, San Diego, CA 92101"},
   {name:"Puesto", cuisine:"Mexican · Tacos", area:"Seaport", rating:4.5, reviews:4445, note:"Taco Tuesday · waterfront", addr:"789 W Harbor Dr Unit 155, San Diego, CA 92101"},
   {name:"Lou & Mickey's", cuisine:"Steakhouse · Seafood", area:"Gaslamp", rating:4.5, reviews:2746, note:"Gaslamp classic", addr:"224 Fifth Ave, San Diego, CA 92101"},
-  {name:"Lola 55", cuisine:"Tacos · Cocktails", area:"East Village", rating:4.5, reviews:1434, note:"Modern tacos · birria", addr:"1290 F St, San Diego, CA 92101"},
+  {name:"Lola 55", mich:"bib", cuisine:"Tacos · Cocktails", area:"East Village", rating:4.5, reviews:1434, note:"Modern tacos · birria", addr:"1290 F St, San Diego, CA 92101"},
   {name:"Filippi's Pizza Grotto", cuisine:"Italian · Pizza", area:"Little Italy", rating:4.5, reviews:8792, note:"Walk through the deli", addr:"1747 India St, San Diego, CA 92101"},
   {name:"Richard Walker's", cuisine:"Breakfast · Pancakes", area:"Downtown", rating:4.5, reviews:4389, note:"Til 2:30 · German pancake", addr:"520 Front St, San Diego, CA 92101"},
   {name:"Carnitas' Snack Shack", cuisine:"Pork · Sandwiches", area:"Embarcadero", rating:4.4, reviews:3572, note:"Waterfront · DJ weekends", addr:"1004 N Harbor Dr, San Diego, CA 92101"},
@@ -610,7 +633,7 @@ const REGIONS = {
   {name:"Underbelly", cuisine:"Ramen · Bao", area:"Little Italy", rating:4.4, reviews:2243, note:"Ramen · beer garden", addr:"750 W Fir St #101, San Diego, CA 92101"},
   {name:"Cafe 21", cuisine:"Brunch · Small plates", area:"Gaslamp", rating:4.4, reviews:2668, note:"Farm-to-table brunch", addr:"802 Fifth Ave, San Diego, CA 92101"},
   {name:"Meze Greek Fusion", cuisine:"Greek · Mediterranean", area:"Gaslamp", rating:4.4, reviews:2474, note:"Lamb chops · baklava cheesecake", addr:"345 Sixth Ave, San Diego, CA 92101"},
-  {name:"Morning Glory", cuisine:"Brunch", area:"Little Italy", rating:4.3, reviews:3685, note:"Til 3 · soufflé pancakes", addr:"550 W Date St Ste C, San Diego, CA 92101"}
+  {name:"Morning Glory", mich:"bib", cuisine:"Brunch", area:"Little Italy", rating:4.3, reviews:3685, note:"Til 3 · soufflé pancakes", addr:"550 W Date St Ste C, San Diego, CA 92101"}
 ]
   },
   walnutcreek: {
@@ -659,6 +682,10 @@ const REGIONS = {
     subtitle: "K-Town landmarks \u00b7 KBBQ, tofu stew, knife noodles, bossam & more \u00b7 ratings from Google Maps",
     note: "Bonus round! These are destination spots \u2014 several close Tue or Sun, and parking is its own adventure. Worth it.",
     restaurants: [
+  {name:"Dha Rae Oak", cuisine:"Korean · duck", area:"Koreatown", rating:4.2, reviews:292, mich:"bib", note:"Bib Gourmand · clay-pot roast duck (pre-order)", addr:"1106 S Western Ave, Los Angeles, CA 90006"},
+  {name:"Liu's Cafe", cuisine:"Taiwanese", area:"Koreatown", rating:4.5, reviews:359, mich:"bib", note:"Bib Gourmand · beef noodle · HK toast · closed Mon–Tue", addr:"3915 1/2 W 6th St, Los Angeles, CA 90020"},
+  {name:"Pollo a la Brasa", cuisine:"Peruvian · chicken", area:"Koreatown", rating:4.2, reviews:802, mich:"bib", note:"Bib Gourmand · wood-fire chicken · closed Tue", addr:"764 S Western Ave, Los Angeles, CA 90005"},
+
   {name:"Hae Jang Chon", cuisine:"Korean BBQ · AYCE", area:"Koreatown", rating:4.5, reviews:3463, note:"Closed Tue", addr:"3821 W 6th St, Los Angeles, CA 90020"},
   {name:"Kang Ho Dong Baekjeong", cuisine:"Korean BBQ", area:"Koreatown", rating:4.4, reviews:2502, note:"", addr:"3465 W 6th St #20, Los Angeles, CA 90020"},
   {name:"Park's BBQ", cuisine:"Korean BBQ · Michelin", area:"Koreatown", rating:4.4, reviews:2254, note:"", addr:"955 S Vermont Ave G, Los Angeles, CA 90006"},
@@ -684,6 +711,19 @@ const REGIONS = {
     subtitle: "SGV landmarks \u00b7 dumplings, dim sum, Sichuan, Taiwanese & beef noodles \u00b7 ratings from Google Maps",
     note: "Bonus round! The best Chinese food in the country. Many spots are lunch-only or close Tue/Wed \u2014 check the card, and bring cash for the old-school ones.",
     restaurants: [
+  {name:"Union", cuisine:"Italian", area:"Pasadena", rating:4.5, reviews:870, mich:"bib", dinnerOnly:true, note:"Bib Gourmand · Old Town · squid-ink pasta", addr:"37 Union St, Pasadena, CA 91103"},
+
+  {name:"Chengdu Taste", cuisine:"Sichuan", area:"Alhambra", rating:4.3, reviews:845, mich:"bib", note:"Bib Gourmand · toothpick lamb · mapo tofu", addr:"828 W Valley Blvd, Alhambra, CA 91803"},
+  {name:"Ipoh Kopitiam", cuisine:"Malaysian", area:"Alhambra", rating:4.4, reviews:882, mich:"bib", note:"Bib Gourmand · laksa · roti canai · closed Wed", addr:"1411 S Garfield Ave #104, Alhambra, CA 91801"},
+  {name:"Sichuan Impression", cuisine:"Sichuan", area:"Alhambra", rating:4.3, reviews:923, mich:"bib", note:"Bib Gourmand · boiling fish · toothpick lamb", addr:"235 W Main St Suite B, Alhambra, CA 91801"},
+  {name:"Lunasia Dim Sum House", cuisine:"Dim sum · Cantonese", area:"Alhambra", rating:4.2, reviews:1670, mich:"bib", note:"Bib Gourmand · jumbo har gow · opens 10:30", addr:"500 W Main St, Alhambra, CA 91801"},
+  {name:"Longo Seafood", cuisine:"Dim sum · Cantonese", area:"Rosemead", rating:4.0, reviews:1039, mich:"bib", note:"Bib Gourmand · dim sum 10–3 · big portions", addr:"7540 Garvey Ave, Rosemead, CA 91770"},
+  {name:"Sea Harbour", cuisine:"Dim sum · Cantonese", area:"Rosemead", rating:4.1, reviews:1259, mich:"bib", note:"Bib Gourmand · Chef Tony · roast pork", addr:"3939 Rosemead Blvd, Rosemead, CA 91770"},
+  {name:"Dai Ho", cuisine:"Taiwanese · noodles", area:"Temple City", rating:4.2, reviews:291, mich:"bib", note:"Bib Gourmand · beef noodle soup · lunch only · closed Mon", addr:"9148 E Las Tunas Dr, Temple City, CA 91780"},
+  {name:"LaoXi Noodle House", cuisine:"Chinese · noodles", area:"Arcadia", rating:4.5, reviews:60, mich:"bib", note:"Bib Gourmand · hand-pulled house noodle", addr:"600 E Live Oak Ave, Arcadia, CA 91006"},
+  {name:"Luscious Dumplings", cuisine:"Chinese · dumplings", area:"Monrovia", rating:4.2, reviews:315, mich:"bib", note:"Bib Gourmand · juicy dumplings · closed Tue", addr:"919 W Duarte Rd, Monrovia, CA 91016"},
+  {name:"Eat Joy Food", cuisine:"Taiwanese", area:"Rowland Heights", rating:4.0, reviews:122, mich:"bib", note:"Bib Gourmand · banquet Taiwanese · closed Tue", addr:"18888 Labin Ct C113, Rowland Heights, CA 91748"},
+
   {name:"Din Tai Fung", cuisine:"Dumplings · Michelin", area:"Arcadia", rating:4.5, reviews:2817, note:"In Westfield mall · expect a wait", addr:"400 S Baldwin Ave #M5, Arcadia, CA 91007"},
   {name:"Golden Deli", cuisine:"Vietnamese · Pho", area:"San Gabriel", rating:4.6, reviews:1167, note:"Closed Wed", addr:"815 W Las Tunas Dr, San Gabriel, CA 91776"},
   {name:"Yang's Kitchen", cuisine:"Modern Asian · Brunch", area:"Alhambra", rating:4.5, reviews:472, note:"Closed Tue–Wed · lunch till 2", addr:"112 W Main St, Alhambra, CA 91801"},
@@ -708,6 +748,12 @@ const REGIONS = {
     subtitle: "Park Avenue & Baldwin Park \u00b7 brunch, bakeries, tapas, Italian & Taste of Chengdu \u00b7 ratings from Google Maps",
     note: "Bonus round! The leafy, upscale side of Orlando dining. A couple of bakeries close Mon–Tue and Seito does lunch on weekends only \u2014 check the card.",
     restaurants: [
+  {name:"The Ravenous Pig", cuisine:"Gastropub", area:"Winter Park", rating:4.5, reviews:3228, mich:"bib", dinnerOnly:true, note:"Bib Gourmand · pub burger · beignets · wknd brunch", addr:"565 W Fairbanks Ave, Winter Park, FL 32789"},
+  {name:"Coro", cuisine:"Contemporary", area:"Audubon Park", rating:4.9, reviews:225, mich:"bib", dinnerOnly:true, note:"Bib Gourmand · open kitchen · seafood", addr:"3022 Corrine Dr, Orlando, FL 32803"},
+  {name:"Domu", cuisine:"Ramen", area:"Audubon Park", rating:4.5, reviews:3308, mich:"bib", dinnerOnly:true, note:"Bib Gourmand · tonkotsu · East End Market", addr:"3201 Corrine Dr Ste 100, Orlando, FL 32803"},
+  {name:"Otto's High Dive", cuisine:"Cuban", area:"Audubon Park", rating:4.5, reviews:736, mich:"bib", dinnerOnly:true, note:"Bib Gourmand · ropa vieja · cocktails · wknd lunch", addr:"2304 E Robinson St, Orlando, FL 32803"},
+  {name:"The Strand", cuisine:"New American", area:"Mills50", rating:4.6, reviews:604, mich:"bib", dinnerOnly:true, note:"Bib Gourmand · seasonal · closed Sun–Mon", addr:"807 N Mills Ave, Orlando, FL 32803"},
+
   {name:"Bulla Gastrobar", cuisine:"Spanish tapas · Brunch", area:"Winter Park", rating:4.9, reviews:14873, note:"Till 10", addr:"110 S Orlando Ave #7, Winter Park, FL 32789"},
   {name:"The Glass Knife", cuisine:"Bakery · Brunch", area:"Winter Park", rating:4.9, reviews:585, note:"Pastries · all day", addr:"212 N Park Ave, Winter Park, FL 32789"},
   {name:"Buttermilk Bakery", cuisine:"Bakery · Brunch", area:"Winter Park", rating:4.7, reviews:830, note:"Closed Mon–Tue · till 2", addr:"1198 N Orange Ave, Winter Park, FL 32789"},
@@ -731,6 +777,10 @@ const REGIONS = {
     subtitle: "Culver City, Marina del Rey, Playa del Rey & Santa Monica \u00b7 delis, tacos, sushi, seafood & beachside brunch \u00b7 ratings from Google Maps",
     note: "Bonus round! Spans the whole West Side \u2014 from the Helms District out to the coast. A few spots close Mon or by mid-afternoon, and Bay Cities is closed Mon–Tue \u2014 check the card.",
     restaurants: [
+  {name:"Cobi's", cuisine:"SE Asian", area:"Santa Monica", rating:4.5, reviews:757, mich:"bib", dinnerOnly:true, note:"Bib Gourmand · roti · curries · wknd brunch", addr:"2104 Main St, Santa Monica, CA 90405"},
+  {name:"Colapasta", cuisine:"Italian", area:"Santa Monica", rating:4.6, reviews:668, mich:"bib", dinnerOnly:true, note:"Bib Gourmand · market pasta · closed Sun", addr:"1241 5th St, Santa Monica, CA 90401"},
+  {name:"Pizzana", cuisine:"Pizza", area:"Brentwood", rating:4.4, reviews:1110, mich:"bib", dinnerOnly:true, note:"Bib Gourmand · Neo-Neapolitan · Cacio e Pepe pie", addr:"11712 San Vicente Blvd, Los Angeles, CA 90049"},
+
   {name:"Mayura", cuisine:"South Indian · Kerala", area:"Culver City", rating:4.8, reviews:13390, note:"Closed Mon", addr:"10406 Venice Blvd, Culver City, CA 90232"},
   {name:"Lodge Bread Company", cuisine:"Bakery · Brunch", area:"Culver City", rating:4.6, reviews:1401, note:"Till 4", addr:"11918 Washington Blvd, Los Angeles, CA 90066"},
   {name:"Industry Cafe & Jazz", cuisine:"Ethiopian", area:"Culver City", rating:4.6, reviews:393, note:"Closed Mon–Tue", addr:"6039 Washington Blvd, Culver City, CA 90232"},
@@ -766,6 +816,11 @@ const REGIONS = {
     subtitle: "Little Tokyo, the Historic Core, Chinatown & the Arts District \u00b7 ramen, tacos, French dips, hand rolls & A5 wagyu \u00b7 ratings from Google Maps",
     note: "Bonus round! The heart of the city. A few spots are weekends-only (Howlin' Ray's) or close Mondays, and NikuX is mostly dinner with weekend lunch \u2014 check the card. Toggle Buffets only for the AYCE wagyu & hot pot.",
     restaurants: [
+  {name:"Langer's Deli", cuisine:"Jewish deli · pastrami", area:"Westlake", rating:4.6, reviews:3708, mich:"bib", note:"Bib Gourmand · the #19 pastrami · closed Sun", addr:"704 S Alvarado St, Los Angeles, CA 90057"},
+  {name:"The Factory Kitchen", cuisine:"Italian", area:"Arts District", rating:4.5, reviews:1079, mich:"bib", note:"Bib Gourmand · focaccina · handmade pasta", addr:"1300 Factory Pl, Los Angeles, CA 90013"},
+  {name:"Maccheroni Republic", cuisine:"Italian", area:"Downtown LA", rating:4.6, reviews:3102, mich:"bib", note:"Bib Gourmand · housemade pasta · patio", addr:"332 S Broadway, Los Angeles, CA 90013"},
+  {name:"Pizzeria Bianco", cuisine:"Pizza", area:"Arts District", rating:4.5, reviews:716, mich:"bib", note:"Bib Gourmand · Chris Bianco · white pizza", addr:"1320 E 7th St Ste 100, Los Angeles, CA 90021"},
+
   {name:"Howlin' Ray's", cuisine:"Nashville hot chicken", area:"Chinatown", rating:4.7, reviews:4440, note:"Fri–Sun only · long line", addr:"727 N Broadway #128, Los Angeles, CA 90012"},
   {name:"Sushi Gen", cuisine:"Sushi · Sashimi", area:"Little Tokyo", rating:4.6, reviews:1796, note:"Closed Mon · lunch till 2", addr:"422 E 2nd St, Los Angeles, CA 90012"},
   {name:"Guisados", cuisine:"Tacos · Braised", area:"Downtown LA", rating:4.6, reviews:2400, note:"Sampler plate", addr:"541 S Spring St Unit 101, Los Angeles, CA 90013"},
@@ -935,7 +990,10 @@ const ZIPS = {
   "92614":[33.685,-117.850],"92604":[33.690,-117.800],"92782":[33.730,-117.795],"92704":[33.700,-117.905],"92780":[33.740,-117.820],
   "92101":[32.715,-117.165],"92113":[32.695,-117.140],"92102":[32.715,-117.130],
   "94596":[37.898,-122.060],"94597":[37.920,-122.075],"94598":[37.925,-122.018],"94549":[37.892,-122.118],"94523":[37.948,-122.065],"94563":[37.877,-122.182],"94520":[37.978,-122.033],
-  "94526":[37.815,-121.995],"94583":[37.765,-121.965],"94568":[37.715,-121.910],"94566":[37.660,-121.876],"94550":[37.680,-121.775]
+  "94526":[37.815,-121.995],"94583":[37.765,-121.965],"94568":[37.715,-121.910],"94566":[37.660,-121.876],"94550":[37.680,-121.775],
+  "90021":[34.034,-118.241],"90405":[34.006,-118.474],"90049":[34.060,-118.474],"91006":[34.131,-118.031],"91748":[33.976,-117.899],
+  "92701":[33.748,-117.868],"92675":[33.502,-117.663],"91103":[34.158,-118.152],"92107":[32.740,-117.245],
+  "32801":[28.541,-81.376],"32839":[28.495,-81.424],"32806":[28.526,-81.357],"34787":[28.565,-81.586]
 };
 function zipOf(r){ const m = (r.addr||'').match(/(\d{5})(?!.*\d{5})/); return m ? m[1] : null; }
 function distMi(r){
@@ -994,7 +1052,7 @@ function render(){
     row.id = 'row-'+i;
     row.innerHTML =
       '<button class="fav-btn'+(favs().has(i)?' on':'')+'" title="Toggle favorite">\u2665</button>'+
-      '<div class="info"><div class="name">'+r.name+(r.dinnerOnly?' <span class="badge-dinner">dinner</span>':'')+'</div>'+
+      '<div class="info"><div class="name">'+r.name+(r.mich==='bib'?' <span class="badge-bib">Bib</span>':'')+(r.dinnerOnly?' <span class="badge-dinner">dinner</span>':'')+'</div>'+
       '<div class="meta">'+r.cuisine+' \u00b7 '+r.area+(r.note?' \u00b7 '+r.note:'')+
         (dl?' \u00b7 <span class="dist">'+dl+'</span>':'')+
         (closed?' \u00b7 <span class="closed-tag">Closed now</span>':'')+'</div>'+
@@ -1168,7 +1226,7 @@ function showInSlot(i, landed){
   const dl = distLabel(r);
   slotEl.className = 'slot' + (landed ? ' landed' : '');
   slotEl.innerHTML =
-    '<div class="pick-name">'+r.name+(r.dinnerOnly?' <span class="badge-dinner">dinner</span>':'')+'</div>'+
+    '<div class="pick-name">'+r.name+(r.mich==='bib'?' <span class="badge-bib">Bib</span>':'')+(r.dinnerOnly?' <span class="badge-dinner">dinner</span>':'')+'</div>'+
     '<div class="pick-meta">'+r.cuisine+' \u00b7 '+r.area+(r.note?' \u00b7 '+r.note:'')+(landed&&dl?' \u00b7 <span class="dist">'+dl+'</span>':'')+'</div>'+
     '<div class="pick-rating">'+stars(r.rating)+' '+r.rating.toFixed(1)+' ('+r.reviews.toLocaleString()+')</div>'+
     '<div class="pick-addr"><a href="'+mapsUrl(r)+'" target="_blank" rel="noopener">\ud83d\udccd '+r.addr+' \u2192 Directions</a></div>'+
